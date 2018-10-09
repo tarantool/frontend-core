@@ -1,0 +1,23 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react",
+    "fbjs"
+  ],
+  "plugins": [
+    "flowtype",
+    "react",
+    "prettier"
+  ],
+  "rules": {
+    "no-var": "error",
+    "prefer-const": ["error"],
+    "prefer-arrow-callback": ["error"],
+    "semi": [0],
+    "max-len": [1, {
+      "code": 120
+    }]
+  }
+}
