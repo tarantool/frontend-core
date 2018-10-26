@@ -461,4 +461,3 @@ injectGlobal(`template {
 injectGlobal(`[hidden] {
   display: none;
 }`)
-

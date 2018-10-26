@@ -11,6 +11,7 @@ const styles = {
     height: 100vh;
     width: 300px;
     flex-grow: 0;
+    background: black;
   `,
   content: css`
     height: 100vh;

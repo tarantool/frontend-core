@@ -1,23 +1,25 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import mainReducer from './reducers'
-import { load, save } from 'redux-localstorage-simple'
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
+import mainReducer from './reducer'
 import thunk from 'redux-thunk'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import history from './history'
 import CoreInstance from '../coreInstance'
+import * as constants from './constants'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(
-  connectRouter(history)(mainReducer.reduce),
-  composeEnhancers(applyMiddleware(thunk, routerMiddleware(history)))
+  connectRouter(history)(combineReducers({menu: mainReducer.reduce})),
+  composeEnhancers(applyMiddleware(thunk, routerMiddleware(history), mainReducer.middleware))
 )
 
-CoreInstance.subscribe(() => {
+CoreInstance.subscribe('registerModule', () => {
   const modules = CoreInstance.getModules()
-  const menuReducers = modules.map(x => x.menu)
-  for (const menuReducer of menuReducers) {
-    mainReducer.addUnusedReducer(menuReducer)
+  for (const module of modules) {
+    const added = mainReducer.processModule(module)
+    if (added) {
+      store.dispatch({type: constants.RESET, payload: {namespace: module.namespace}})
+    }
   }
 })
 

@@ -9,7 +9,8 @@
   "plugins": [
     "flowtype",
     "react",
-    "prettier"
+    "prettier",
+    "emotion"
   ],
   "rules": {
     "no-var": "error",
@@ -18,6 +19,7 @@
     "semi": [0],
     "max-len": [1, {
       "code": 120
-    }]
+    }],
+    "no-undef": 0
   }
 }

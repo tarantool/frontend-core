@@ -1,26 +1,89 @@
-import * as React from 'react'
+import {css, keyframes} from 'react-emotion'
+import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {css} from 'react-emotion'
+import {mainColor} from '../colorConfig';
 import {push} from 'connected-react-router'
+import * as constants from '../store/constants'
+
+const translateFromRight = keyframes`
+	from{
+		transform: translate3d(200px, 0, 0);
+	}
+	to{
+		transform: translate3d(0, 0, 0);
+	}
+`;
+
 
 const styles = {
-  menu: css``,
+  container: css`
+		display: block;
+		border-top: none;
+		overflow: hidden;
+	`,
+  menuTitle: css`
+		display: block;
+		font-size: 14px;
+		margin-left: 20px;
+		margin-top: 10px;
+		color: rgba(0, 0, 0, 0.65);
+	`,
+  menuList: css`
+		
+	`,
   item: css``,
-  itemSelected: css``,
-  itemLabel: css``,
-  itemLoading: css``,
-  itemSubItems: css``,
-}
+  menuItem: css`
+		display: block;
+		font-size: 20px;
+		padding-left: 20px;
+		cursor: pointer;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		color: black;
+		:hover{
+			color: ${mainColor};
+		}
+	`,
+  selectedMenuItem: css`
+		background: ${mainColor};
+		color: white;
+		cursor: default;
+		:hover{
+			color: white;
+		}
+	`,
+  submenuItem: css`
+		display: block;
+		margin-bottom: 15px;
+		font-size: 18px;
+		color: black;
+		margin-left: 30px;
+		cursor: pointer;
+		:before{ content: '> '; display: inline-block; width: 20px; position: relative;}
+		:hover{
+			color: #ca0009;
+			:before{ content: '@'; display: inline-block; width: 20px; position: relative;}
+		}
+		animation: ${translateFromRight} 1s;
+	`,
+  submenuList: css`
+		display: block;
+		margin-top: 10px;
+	`,
+  itemLoading: css`
+  `
+};
 
 const MenuItem = ({path, selected, label, loading, expanded, items, onClick}) => {
   let subItems = null
-  if (expanded){
-    subItems = <div className={styles.itemSubItems}>
+  if (expanded) {
+    subItems = <div className={styles.submenuList}>
       {items.map(x => <MenuItem {...x} onClick={onClick}/>)}
     </div>
   }
   return <div className={styles.item}>
-    <div className={`${styles.itemLabel} ${selected?styles.itemSelected:''}`} onClick={() => onClick(path)}>
+    <div className={`${styles.menuItem} ${selected?styles.selectedMenuItem:''}`}
+         onClick={() => onClick(path)}>
       {label}
     </div>
     {loading && <div className={styles.itemLoading}></div>}
@@ -28,24 +91,23 @@ const MenuItem = ({path, selected, label, loading, expanded, items, onClick}) =>
   </div>
 }
 
-@connect((menu) => {
+@connect(({menu}) => {
   return {
-    menu
+    menu,
   }
 })
-export default class Menu extends React.Component{
+export default class Menu extends Component{
 
-  onClick(path){
+  onClick = (path) => {
+    this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
     this.props.dispatch(push(path))
   }
-
-  render() {
-    const menu = this.props.menu
-    return (
-      <div>
-        {menu.map(x => <MenuItem {...x} onClick={this.onClick} />)}
+  render(){
+    const {menu} = this.props
+    return <div className={styles.container}>
+      <div className={styles.menuList}>
+        {menu.map(x => <MenuItem {...x} key={x.path} onClick={this.onClick} />)}
       </div>
-    )
+    </div> ;
   }
-
 }
