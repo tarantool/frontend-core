@@ -37,10 +37,7 @@ local index_handler = function(req)
 end
 
 local file_handler = function(req)
-    print('static')
     local file_path = req.path:sub(#STATIC_PATH + 2 )
-    print('file_path')
-    print(file_path)
     if files[file_path] ~= nil then
         local file = files[file_path]
         return {
@@ -76,8 +73,6 @@ local function process_module(module)
             end
             include_string = includes
             index_body = OPEN_BODY .. include_string .. CLOSE_BODY
-            print('index_body')
-            print(include_string)
         end
     end
 end
