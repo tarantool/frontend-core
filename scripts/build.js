@@ -2,7 +2,7 @@
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'production';
-// process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'production';
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -17,6 +17,8 @@ require('../config/env');
 const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
+const mime = require('mime-types');
+const mainFs = require('fs');
 const webpack = require('webpack');
 const config = require('../config/webpack.config.prod');
 const paths = require('../config/paths');
@@ -98,7 +100,20 @@ measureFileSizesBeforeBuild(paths.appBuild)
       printBuildError(err);
       process.exit(1);
     }
-  );
+  )
+  .then(() => {
+    const buildFolder = path.relative(process.cwd(), paths.appBuild);
+    const filemap = {};
+    const fileName = path.resolve(buildFolder + '/static/js/core.js');
+    const fileBody = mainFs.readFileSync(fileName, {encoding: 'utf8'});
+    filemap['core.js'] = {
+      is_entry: true,
+      body: fileBody,
+      mime: mime.lookup(fileName),
+    }
+    mainFs.writeFileSync(buildFolder + '/bundle.json', JSON.stringify(filemap), {encoding: 'utf8'})
+    console.log('compile bundle.json')
+  });
 
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
