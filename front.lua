@@ -25,8 +25,8 @@ local CLOSE_BODY = [[
 
 local index_body = OPEN_BODY .. CLOSE_BODY
 
-local STATIC_PATH = '/static/'
-local FRONT_PATH = '/front/.*'
+local STATIC_PATH = '/static'
+local FRONT_PATH = '/front'
 
 local index_handler = function(req)
     return {
@@ -38,7 +38,7 @@ end
 
 local file_handler = function(req)
     print('static')
-    local file_path = req.path:sub(#STATIC_PATH +1 )
+    local file_path = req.path:sub(#STATIC_PATH + 2 )
     print('file_path')
     print(file_path)
     if files[file_path] ~= nil then
@@ -55,8 +55,11 @@ local file_handler = function(req)
 end
 
 function front.http_regsiter(httpd)
+    httpd:route({path = FRONT_PATH .. '/.*', }, index_handler)
     httpd:route({path = FRONT_PATH, }, index_handler)
-    httpd:route({path = STATIC_PATH .. '.*', }, file_handler)
+    httpd:route({path = STATIC_PATH .. '/.*', }, file_handler)
+    httpd:route({path = STATIC_PATH, }, file_handler)
+    httpd:route({path = '/', }, function (cx) return cx:redirect_to(FRONT_PATH) end)
 end
 
 local function process_module(module)
