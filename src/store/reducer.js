@@ -33,7 +33,7 @@ const defaultReducer = (defaultState = []) => (state = defaultState, {type, payl
     case '@@router/LOCATION_CHANGE':
       return state.map(updateLink(payload.location.pathname))
     case constants.RESET:
-      return defaultState
+      return defaultState.map(updateLink(payload.path))
     default:
       return state
   }
