@@ -2,8 +2,8 @@
 
 httpd = require('http.server').new('0.0.0.0', '5050')
 front = require('front')
-my_cluster = require('my-cluster')
-front.register_module('my-cluster', my_cluster)
+super_test = require('super-test')
+front.register_module('super-test', super_test)
 front.http_regsiter(httpd)
 
 
