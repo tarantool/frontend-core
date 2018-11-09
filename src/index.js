@@ -23,29 +23,4 @@ class Test extends React.Component{
       </div>
     )
   }
-
 }
-
-// setTimeout(() => {
-  core.register('test', [
-    {
-      label: 'test',
-      path: '/test/test',
-    },
-    {
-      label: 'test2',
-      path: '/test/test2',
-    },
-  ], Test, 'react')
-
-  core.register('megatest', [
-    {
-      label: 'megatest 1',
-      path: '/megatest/test',
-    },
-    {
-      label: 'test2 23',
-      path: '/megatest/test2',
-    },
-  ], Test, 'react')
-// }, 1000)
