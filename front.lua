@@ -88,11 +88,6 @@ function front.register_module(namespace, filemap) -- return err, ok
     process_module(module)
 end
 
--- generate filemap from json
-function front.preprocess_module(bundle_path)
-
-end
-
 -- for user's mapping
 function front.get_modules()
     return modules_includes
