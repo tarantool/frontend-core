@@ -6,6 +6,8 @@ local bundle_core = require('front.bundle')
 
 local front =  {}
 
+local inited_http = {}
+
 local modules = {}
 local modules_includes = {}
 local files = {}
@@ -51,12 +53,16 @@ local file_handler = function(req)
     }
 end
 
-function front.http_regsiter(httpd)
+function front.http_register(httpd)
+    if inited_http[httpd] ~= nil then
+      return
+    end
     httpd:route({path = FRONT_PATH .. '/.*', }, index_handler)
     httpd:route({path = FRONT_PATH, }, index_handler)
     httpd:route({path = STATIC_PATH .. '/.*', }, file_handler)
     httpd:route({path = STATIC_PATH, }, file_handler)
     httpd:route({path = '/', }, function (cx) return cx:redirect_to(FRONT_PATH) end)
+    inited_http[httpd] = true
 end
 
 local function process_module(module)
@@ -77,7 +83,7 @@ local function process_module(module)
     end
 end
 
-function front.register_module(namespace, filemap) -- return err, ok
+function front.module_register(namespace, filemap) -- return err, ok
     checks('string', 'table')
     if modules[namespace] ~= nil then
         return 'already_exists'
@@ -93,7 +99,7 @@ function front.get_modules()
     return modules_includes
 end
 
-front.register_module('core', bundle_core)
+front.module_register('core', bundle_core)
 
 
 return front

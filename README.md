@@ -178,7 +178,7 @@ Command above make a bundle. Then it could be included as module at Tarantool En
 ```
 local front = require('front')
 local httpd = require('http.server').new('0.0.0.0', '5050')
-front.http_regsiter(httpd)
+front.http_register(httpd)
 httpd:start()
 ```
 
@@ -187,7 +187,7 @@ This start a Tarantool Enterprise Admin without modules.
 You can register a module in this way:
 
 ```
-front.register_module('module_namespace', require('module_namespace'))
+front.module_register('module_namespace', require('module_namespace'))
 ```
 
 ### front.http_register(httpd: httpd)
@@ -200,7 +200,7 @@ Register routes `/front/` and `/static/`, and redirect from `/` to `/front/` in 
 
 `/static/` - route for static files that will be used at application.
 
-### front.register_module(namespace: string, bundle: bundle)
+### front.module_register(namespace: string, bundle: bundle)
 
 `namespace` - using for namespace module. Should be same name as your JS namespace module.
 
