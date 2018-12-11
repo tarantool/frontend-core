@@ -22,14 +22,14 @@ const core = window.tarantool_enterprise_core;
 core.register('module', [{label: 'Module', path: '/module/'}], Root);
 ```
 
-### core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, engine: engines = 'react', menuMiddleware?: (Object) => void)
+### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void)
 
 #### namespace
 
 name of namespace. It will be used as namespace of your module. Prepend for routing.
 
 #### menu
-Menu can be reducer for your menu or some static menu.
+It can be [reducer](https://redux.js.org/basics/reducers) for your menu or some static menu.
 
 
 Default reducer(you can use something like this):
@@ -101,7 +101,7 @@ class Root extends React.Component{
     return (
       <div>
         test namespace:
-        <Router history={core.history}>
+        <Router history={window.tarantool_enterprise_core.history}>
           <Switch>
             <Route path={'/test/test2'}  component={() => <div>2</div>}/>
             <Route path={'/test/test1'} component={() => <div>1</div>}/>
@@ -114,31 +114,26 @@ class Root extends React.Component{
 }
 ```
 
-
-Route should using same namespace of module. So if it would be 'test' all route should countain 'test' in begin of path.
+Route should using same namespace of module. You shold start all of your routes with `/test`.
 
 You can use any technology inside that you want.
 
-#### engine
-
-Engine now is only react.
-
 #### menuMiddleware
 
-This is a redux middleware for dispatch some custom events or react on some events.
+This is a redux middleware for dispatch some custom events or add reaction on your custom events.
 
-It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want react on memu events from other modules.
+It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want dispatch action on menu events from other modules.
 
 
-### core.checkNamespace(module: string)
+### window.tarantool_enterprise_core.checkNamespace(module: string)
 
 Throw error if module is already registered.
 
-### core.getModules() : Array\<module\>
+### window.tarantool_enterprise_core.getModules() : Array\<module\>
 
 Return registered modules.
 
-### core.subscribe(eventType: string, callback: Function) : unsubscribe function
+### window.tarantool_enterprise_core.subscribe(eventType: string, callback: Function) : unsubscribe function
 
 Return unsubscribe function.
 
@@ -159,7 +154,7 @@ const unwait = this.subscribe('registerModule', () => {
 ```
 
 
-### core.dispatch(eventType: stirng, event: any)
+### window.tarantool_enterprise_core.dispatch(eventType: stirng, event: any)
 
 It's for cross module reaction. You can dispatch anything that you want.
 
