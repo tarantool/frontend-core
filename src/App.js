@@ -11,8 +11,9 @@ import {css} from 'react-emotion'
 import NoComponent from './components/NoComponent'
 import TNTHeader from "./components/TNTHeader";
 import Menu from "./components/Menu";
+import { Header } from './components/Header'
 
-const sideColor = '#fff';
+const sideColor = '#343434;';
 const styles = {
   layout: css`
     display: flex;
@@ -21,10 +22,8 @@ const styles = {
     flex-direction: column;
 	`,
   head: css`
-		display: block;
-		background: white;
-		justify-content: flex-start;
-		align-items: flex-start;
+		height: 100px;
+		background: rgba(97, 0, 13,	1);
 		flex-grow: 0;
     flex-shrink: 0;
 	`,
@@ -52,7 +51,9 @@ const styles = {
     display: block;
     flex-grow: 0;
     flex-shrink: 0;
-    width: 320px;
+    width: 243px;
+    box-sizing: border-box;
+    padding: 35px 30px 35px 30px;
     background: white;
     border-right: 2px solid black;
     background: ${sideColor};
@@ -74,21 +75,24 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <div className={styles.layout}>
-        <div className={styles.main}>
+          <div className={styles.head}>
+            <Header/>
+          </div>
+          <div className={styles.main}>
 
-            <div className={styles.sidemenu}>
-              <Menu/>
-            </div>
-            <div className={styles.content}>
-              <ConnectedRouter history={history}>
-                  <Switch >
-                    {mapRoutesModule()}
-                    <Route path={'/'} component={NoComponent}/>
-                  </Switch>
-              </ConnectedRouter>
-            </div>
+              <div className={styles.sidemenu}>
+                <Menu/>
+              </div>
+              <div className={styles.content}>
+                <ConnectedRouter history={history}>
+                    <Switch >
+                      {mapRoutesModule()}
+                      <Route path={'/'} component={NoComponent}/>
+                    </Switch>
+                </ConnectedRouter>
+              </div>
 
-        </div>
+          </div>
         </div>
       </Provider>
     )

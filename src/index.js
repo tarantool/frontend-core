@@ -24,3 +24,4 @@ class Test extends React.Component{
     )
   }
 }
+core.register('test', [{label: 'Cluster', path: '/test/test2'}, {label: 'Dashboard', path: '/test/test'}], Test, 'react')

@@ -35,28 +35,29 @@ const styles = {
   menuItem: css`
 		display: block;
 		font-size: 20px;
-		padding-left: 20px;
+		font-family: Roboto;
+		font-weight: 400;
 		cursor: pointer;
-		padding-top: 10px;
-		padding-bottom: 10px;
-		color: black;
+		color: white;
+		margin-bottom: 15px;
+		width: 160px;
+		transition: color 300ms;
 		:hover{
-			color: ${mainColor};
+			color: #e32636;
 		}
 	`,
   selectedMenuItem: css`
-		background: ${mainColor};
-		color: white;
+		border-bottom: 1px solid rgba(255, 39, 44, 1);   
 		cursor: default;
 		:hover{
-			color: white;
+			color: rgba(255, 39, 44, 1);
 		}
 	`,
   submenuItem: css`
 		display: block;
 		margin-bottom: 15px;
 		font-size: 18px;
-		color: black;
+		color: white;
 		margin-left: 30px;
 		cursor: pointer;
 		:before{ content: '> '; display: inline-block; width: 20px; position: relative;}

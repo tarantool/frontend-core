@@ -461,3 +461,7 @@ injectGlobal(`template {
 injectGlobal(`[hidden] {
   display: none;
 }`)
+
+injectGlobal(`
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500');
+`)
