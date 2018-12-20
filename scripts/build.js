@@ -19,6 +19,7 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const mime = require('mime-types');
 const mainFs = require('fs');
+const cp = require('child_process');
 const webpack = require('webpack');
 const config = require('../config/webpack.config.prod');
 const paths = require('../config/paths');
@@ -113,6 +114,8 @@ measureFileSizesBeforeBuild(paths.appBuild)
     }
     mainFs.writeFileSync(buildFolder + '/bundle.json', JSON.stringify(filemap), {encoding: 'utf8'})
     console.log('compile bundle.json')
+    cp.execSync('tarantool -l pack-front - build/bundle.json build/bundle.lua')
+    console.log('build bundle.lua')
   });
 
 // Create the production build and print the deployment instructions.

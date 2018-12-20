@@ -12,7 +12,9 @@ build = {
     type = 'make';
     install = {
         lua = {
-            ['front'] = 'front.lua'
+            ['front'] = 'front.lua',
+            ['pack-front'] = 'pack-front.lua',
+            -- ['front.bundle'] -- installed with make
         },
     },
     install_variables = {

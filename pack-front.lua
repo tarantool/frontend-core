@@ -1,4 +1,5 @@
 #!/usr/bin/env tarantool
+
 local log = require('log')
 local fio = require('fio')
 local ffi = require('ffi')
@@ -11,8 +12,12 @@ if not src_json or not dst_name then
     error("Usage: pack.lua SRC.json DST.lua")
 end
 
+log.info("-- Cwd %s", fio.cwd())
+
 local abspath = fio.abspath(src_json)
-assert(fio.stat(abspath), 'Error: can not pack %s: file does not exist')
+assert(fio.stat(abspath),
+    ('Error: can not pack %q: file does not exist'):format(src_json)
+)
 
 log.info('-- Pack %s', abspath)
 local f = io.open(abspath, "r")

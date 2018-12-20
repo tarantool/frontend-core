@@ -1,13 +1,16 @@
 # Changelog
+All notable changes to this project will be documented in this file.
 
-### 2.0.1
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Change dependency on checks 2.1.1 for cluster compaitibility.
+## [Unreleased]
 
-### 2.0.0
+### Changed
 
-Change typo at method name. http_regsiter -> http_register, register_module -> module_register.
+- Refactor lua api
+- Pack static lua bundle during npm build
 
-### 1.0.0
+## [2.0.2] - 2018-12-13
 
-Release version.
+Unstable intermediate release
