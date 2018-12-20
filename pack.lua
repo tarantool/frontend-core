@@ -1,4 +1,5 @@
 #!/usr/bin/env tarantool
+
 local log = require('log')
 local fio = require('fio')
 local ffi = require('ffi')

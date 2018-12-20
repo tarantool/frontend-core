@@ -171,10 +171,12 @@ Command above make a bundle. Then it could be included as module at Tarantool En
 ## Lua
 
 ```
-local front = require('front')
-local httpd = require('http.server').new('0.0.0.0', '5050')
-front.http_register(httpd)
+local http = require('http.server')
+local httpd = http.new('0.0.0.0', '5050')
 httpd:start()
+
+local front = require('front')
+front.init(httpd)
 ```
 
 This start a Tarantool Enterprise Admin without modules.
@@ -182,10 +184,11 @@ This start a Tarantool Enterprise Admin without modules.
 You can register a module in this way:
 
 ```
-front.module_register('module_namespace', require('module_namespace'))
+local my_module_bundle = require('my_module.bundle')
+front.add('module_namespace', my_module_bundle)
 ```
 
-### front.http_register(httpd: httpd)
+### front.init(httpd: httpd)
 
 `httpd` argument - should be an instance of http tarantool module.
 
@@ -195,7 +198,7 @@ Register routes `/front/` and `/static/`, and redirect from `/` to `/front/` in 
 
 `/static/` - route for static files that will be used at application.
 
-### front.module_register(namespace: string, bundle: bundle)
+### front.add(namespace, bundle)
 
 `namespace` - using for namespace module. Should be same name as your JS namespace module.
 
@@ -208,9 +211,3 @@ Register routes `/front/` and `/static/`, and redirect from `/` to `/front/` in 
 `mime` - mime-type of file.
 
 `filename` - filename or filepath.
-
-### front.get_modules()
-
-Return all registered modules.
-
-You can use this method if you want using your own routing.
