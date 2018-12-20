@@ -1,7 +1,7 @@
 #!/usr/bin/env tarantool
 
 local checks = require('checks')
-local core_bundle = require('front.core_bundle')
+local core_bundle = require('front.bundle')
 
 local index_body = nil
 local modules = {
@@ -73,13 +73,24 @@ local function add(namespace, filemap)
 end
 
 local function init(httpd)
+    checks('table')
+
     httpd:route({
         path = '/static/:namespace/*filename',
         method = 'GET',
     }, static_handler)
-    httpd:route({path = '/front/*'}, index_handler)
-    httpd:route({path = '/front'}, index_handler)
-    httpd:route({path = '/', }, function (cx) return cx:redirect_to('/front') end)
+
+    httpd:route({
+        path = '/front*any',
+        method = 'GET',
+    }, index_handler)
+
+    httpd:route({
+        path = '/',
+        method = 'GET',
+    }, function (cx)
+        return cx:redirect_to('/front')
+    end)
 
     add('core', core_bundle)
     return true

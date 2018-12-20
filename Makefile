@@ -8,6 +8,5 @@ node_modules: package.json
 	@ touch $@
 
 install:
-	tarantool pack.lua build/bundle.json build/bundle.lua
 	mkdir -p $(INST_LUADIR)/front/
 	cp build/bundle.lua $(INST_LUADIR)/front/bundle.lua
