@@ -81,7 +81,12 @@ local function init(httpd)
     }, static_handler)
 
     httpd:route({
-        path = '/front*any',
+        path = '/front',
+        method = 'GET',
+    }, index_handler)
+
+    httpd:route({
+        path = '/front/*any',
         method = 'GET',
     }, index_handler)
 
