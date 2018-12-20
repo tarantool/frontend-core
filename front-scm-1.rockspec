@@ -6,7 +6,7 @@ source  = {
 }
 dependencies = {
     'lua >= 5.1',
-    'checks == 2.1.1-1',
+    'checks == 3.0.0-1',
 }
 build = {
     type = 'make';
