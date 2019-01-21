@@ -15,6 +15,8 @@ const installedStores: {[string]: true} ={}
 const initedReducers = []
 
 const matchPath = (path, link) => {
+  if (path.length === 0)
+    return false;
   const point = link.indexOf(path)
   return point === 0 && (link.length === path.length || link[path.length] === '/')
 }
@@ -26,7 +28,6 @@ const selected = path => menuItem => ({
 const updateLink = path => menuItem => ({...menuItem, selected: matchPath(path, menuItem.path)})
 
 const defaultReducer = (defaultState = []) => (state = defaultState, {type, payload}) => {
-  console.log('default reducer', state, type, payload, defaultState)
   switch (type) {
     case constants.SELECT_MENU:
       return state.map(selected(payload.path))
@@ -93,7 +94,6 @@ export default {
       middleware: module.middleware || noop,
       namespace: module.namespace,
     }
-    console.log(reducer)
     subStores.push(reducer)
     installedStores[module.namespace] = true
     return true

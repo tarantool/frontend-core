@@ -31,16 +31,40 @@ const styles = {
   menuList: css`
 		
 	`,
-  item: css``,
+  item: css`
+    margin-bottom: 12px;
+    position: relative;
+  `,
+  expandButton: css`
+    position: absolute;
+    right: 28px;
+    top: 11px;
+    &:after{
+      width: 0; 
+      height: 0; 
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 7px solid #fff;
+    }
+  `,
+  expandButtonUnexpand: css`
+    &:after{
+      width: 0; 
+      height: 0; 
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid #fff;
+    }
+  `,
   menuItem: css`
 		display: block;
-		font-size: 20px;
+		font-size: 19px;
 		font-family: Roboto;
 		font-weight: 400;
 		cursor: pointer;
 		color: white;
-		margin-bottom: 15px;
-		width: 160px;
+		width: 154px;
+		padding-bottom: 5px;
 		transition: color 300ms;
 		:hover{
 			color: #e32636;
@@ -82,11 +106,14 @@ const MenuItem = ({path, selected, label, loading, expanded, items, onClick}) =>
       {items.map(x => <MenuItem {...x} onClick={onClick}/>)}
     </div>
   }
+  const expandButton = items.length
+    ? <div className={`${styles.expandButton} ${expanded ? '' : styles.expandButtonUnexpand }`}></div> : null;
   return <div className={styles.item}>
     <div className={`${styles.menuItem} ${selected?styles.selectedMenuItem:''}`}
          onClick={() => onClick(path)}>
       {label}
     </div>
+    {expandButton}
     {loading && <div className={styles.itemLoading}></div>}
     {subItems}
   </div>
@@ -97,18 +124,35 @@ const MenuItem = ({path, selected, label, loading, expanded, items, onClick}) =>
     menu,
   }
 })
-export default class Menu extends Component{
-
+export default class Menu extends Component {
+  componentDidMount() {
+    const {menu} = this.props;
+    const notSelected = menu.filter(x => x.selected).length === 0
+    if (notSelected && menu.length > 0) {
+      const path = menu[0].path;
+      this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
+      this.props.dispatch(push(path))
+    }
+  }
+  componentDidUpdate() {
+    const {menu} = this.props;
+    const notSelected = menu.filter(x => x.selected).length === 0
+    if (notSelected && menu.length > 0) {
+      const path = menu[0].path;
+      this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
+      this.props.dispatch(push(path))
+    }
+  }
   onClick = (path) => {
     this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
     this.props.dispatch(push(path))
   }
-  render(){
+  render() {
     const {menu} = this.props
     return <div className={styles.container}>
       <div className={styles.menuList}>
         {menu.map(x => <MenuItem {...x} key={x.path} onClick={this.onClick} />)}
       </div>
-    </div> ;
+    </div>
   }
 }

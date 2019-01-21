@@ -9,7 +9,6 @@ import './styles/reset'
 import coreInstance from './coreInstance'
 import {css} from 'react-emotion'
 import NoComponent from './components/NoComponent'
-import TNTHeader from "./components/TNTHeader";
 import Menu from "./components/Menu";
 import { Header } from './components/Header'
 
@@ -22,8 +21,8 @@ const styles = {
     flex-direction: column;
 	`,
   head: css`
-		height: 100px;
-		background: rgba(97, 0, 13,	1);
+		height: 50px;
+		background: #61000D;
 		flex-grow: 0;
     flex-shrink: 0;
 	`,
@@ -53,7 +52,7 @@ const styles = {
     flex-shrink: 0;
     width: 243px;
     box-sizing: border-box;
-    padding: 35px 30px 35px 30px;
+    padding: 30px 0px 30px 21px;
     background: white;
     border-right: 2px solid black;
     background: ${sideColor};
