@@ -35,16 +35,15 @@ const styles = {
 		justify-content: flex-start;
 		align-items: stretch;
 		position: relative;
+		max-width: 100vw;
 	`,
   flexMain: css`
 		display: flex;
-		
 	`,
   content: css`
     display: block;
-    flex-grow: 1;
-    flex-shrink: 0;
     background: white;
+    flex-grow: 1;
   `,
   sidemenu: css`
     display: block;
@@ -56,13 +55,13 @@ const styles = {
     background: white;
     border-right: 2px solid black;
     background: ${sideColor};
-  `
+  `,
 };
 
 const mapRoutesModule = () => {
   const modules = coreInstance.getModules()
   return modules.map(module => <Route key={module.namespace} path={'/'+module.namespace} component={module.RootComponent}/>)
-}
+};
 
 export default class App extends Component {
   componentDidMount() {

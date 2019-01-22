@@ -15,7 +15,11 @@ class Test extends React.Component{
         test namespace:
         <Router history={core.history}>
           <Switch>
-            <Route path={'/test/test2'}  component={() => <div>2</div>}/>
+            <Route path={'/test/test2'}  component={() => <div>
+
+      ыфаафыыаф
+
+            </div>}/>
             <Route path={'/test/test'} component={() => <div>1</div>}/>
             <Route path={'/'} component={() => <div>ЬЬЬ</div>}/>
           </Switch>
