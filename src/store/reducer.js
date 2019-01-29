@@ -17,8 +17,8 @@ const initedReducers = []
 const matchPath = (path, link) => {
   if (path.length === 0)
     return false;
-  const point = link.indexOf(path)
-  return point === 0 && (link.length === path.length || link[path.length] === '/')
+  const point = path.indexOf(link);
+  return point === 0 && (link.length === path.length || path[link.length] === '/')
 }
 
 const selected = path => menuItem => ({
@@ -27,11 +27,11 @@ const selected = path => menuItem => ({
 })
 const updateLink = path => menuItem => ({...menuItem, selected: matchPath(path, menuItem.path)})
 
-const defaultReducer = (defaultState = []) => (state = defaultState, {type, payload}) => {
+export const defaultReducer = (defaultState = []) => (state = defaultState, {type, payload}) => {
   switch (type) {
     case constants.SELECT_MENU:
       return state.map(selected(payload.path))
-    case '@@router/LOCATION_CHANGE':
+    case constants.LOCATION_CHANGE:
       return state.map(updateLink(payload.location.pathname))
     case constants.RESET:
       return defaultState.map(updateLink(payload.path))

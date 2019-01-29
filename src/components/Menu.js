@@ -125,6 +125,9 @@ const MenuItem = ({path, selected, label, loading, expanded, items, onClick}) =>
   }
 })
 export default class Menu extends Component {
+  state = {
+    isInited: false,
+  }
   componentDidMount() {
     const {menu} = this.props;
     const notSelected = menu.filter(x => x.selected).length === 0
