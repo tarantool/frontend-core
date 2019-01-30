@@ -119,32 +119,33 @@ const MenuItem = ({path, selected, label, loading, expanded, items, onClick}) =>
   </div>
 }
 
-@connect(({menu}) => {
-  return {
-    menu,
-  }
-})
-export default class Menu extends Component {
+
+export class Menu extends Component {
   state = {
     isInited: false,
   }
-  componentDidMount() {
-    const {menu} = this.props;
-    const notSelected = menu.filter(x => x.selected).length === 0
-    if (notSelected && menu.length > 0) {
-      const path = menu[0].path;
-      this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
-      this.props.dispatch(push(path))
+  checkSelected() {
+    if (!this.state.isInited) {
+      const {menu} = this.props;
+      if (menu.length > 0) {
+        const notSelected = menu.filter(x => x.selected).length === 0;
+        if (notSelected) {
+          const path = menu[0].path;
+          this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
+          this.props.dispatch(push(path));
+
+        }
+        this.setState(() => ({
+          isInited: true,
+        }));
+      }
     }
   }
+  componentDidMount() {
+    this.checkSelected();
+  }
   componentDidUpdate() {
-    const {menu} = this.props;
-    const notSelected = menu.filter(x => x.selected).length === 0
-    if (notSelected && menu.length > 0) {
-      const path = menu[0].path;
-      this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
-      this.props.dispatch(push(path))
-    }
+    this.checkSelected();
   }
   onClick = (path) => {
     this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
@@ -159,3 +160,9 @@ export default class Menu extends Component {
     </div>
   }
 }
+
+export default connect(({menu}) => {
+  return {
+    menu,
+  }
+})(Menu)
