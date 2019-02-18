@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.4] - 2019-02-18
+
+Upgrade react version and hooks.
+
 ## [3.0.3] - 2019-01-30
 
 ### Fixed
