@@ -1,5 +1,5 @@
 import {css, keyframes} from 'react-emotion'
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {connect} from 'react-redux'
 import {mainColor} from '../colorConfig';
 import {push} from 'connected-react-router'
@@ -120,45 +120,32 @@ const MenuItem = ({path, selected, label, loading, expanded, items, onClick}) =>
 }
 
 
-export class Menu extends Component {
-  state = {
-    isInited: false,
-  }
-  checkSelected() {
-    if (!this.state.isInited) {
-      const {menu} = this.props;
-      if (menu.length > 0) {
-        const notSelected = menu.filter(x => x.selected).length === 0;
-        if (notSelected) {
-          const path = menu[0].path;
-          this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
-          this.props.dispatch(push(path));
+export function Menu(props) {
+  const [isInited, setIsInited] = useState(false);
+  const {menu, dispatch} = props;
 
-        }
-        this.setState(() => ({
-          isInited: true,
-        }));
+  if (!isInited) {
+    if (menu.length > 0) {
+      const notSelected = menu.filter(x => x.selected).length === 0;
+      if (notSelected) {
+        const path = menu[0].path;
+        dispatch({type: constants.SELECT_MENU, payload: {path: path}})
+        dispatch(push(path));
       }
+      setIsInited(true);
     }
   }
-  componentDidMount() {
-    this.checkSelected();
-  }
-  componentDidUpdate() {
-    this.checkSelected();
-  }
-  onClick = (path) => {
-    this.props.dispatch({type: constants.SELECT_MENU, payload: {path: path}})
-    this.props.dispatch(push(path))
-  }
-  render() {
-    const {menu} = this.props
-    return <div className={styles.container}>
-      <div className={styles.menuList}>
-        {menu.map(x => <MenuItem {...x} key={x.path} onClick={this.onClick} />)}
-      </div>
+
+  const onClick = (path) => {
+    dispatch({type: constants.SELECT_MENU, payload: {path: path}})
+    dispatch(push(path))
+  };
+
+  return <div className={styles.container}>
+    <div className={styles.menuList}>
+      {menu.map(x => <MenuItem {...x} key={x.path} onClick={onClick} />)}
     </div>
-  }
+  </div>;
 }
 
 export default connect(({menu}) => {
