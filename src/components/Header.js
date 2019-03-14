@@ -21,29 +21,9 @@ const styles = {
     left: 20px;
     top: 13px;
   `,
-  menuLine: css`
-    position: relative;
-    ${menuLine}
-    &:after{
-      position: absolute;
-      top: 10px;
-      left: 0;
-      ${menuLine};
-      display: block;
-      content: '';
-    }
-    &:before{
-      position: absolute;
-      top: 20px;
-      left: 0;
-      ${menuLine};
-      display: block;
-      content: '';
-    }
-  `,
   logo: css`
     position: absolute;
-    left: 69px; 
+    left: 12px; 
     top: -1px;
   `
 }
@@ -53,9 +33,6 @@ export class Header extends React.Component{
   render() {
     return (
       <div className={styles.header}>
-        <div className={styles.menuBox}>
-          <div className={styles.menuLine}></div>
-        </div>
         <img className={styles.logo} src={logo} style={{width: 146, height: 53}}/>
       </div>
     )

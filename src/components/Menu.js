@@ -121,15 +121,15 @@ const MenuItem = ({path, selected, label, loading, expanded, items, onClick}) =>
 
 
 export function Menu(props) {
-  const [isInited, setIsInited] = useState(false);
-  const {menu, dispatch} = props;
+  const {menu, dispatch, path} = props;
+  const [isInited, setIsInited] = useState(path !== '/');
 
   if (!isInited) {
     if (menu.length > 0) {
       const notSelected = menu.filter(x => x.selected).length === 0;
       if (notSelected) {
         const path = menu[0].path;
-        dispatch({type: constants.SELECT_MENU, payload: {path: path}})
+          dispatch({type: constants.SELECT_MENU, payload: {path: path}})
         dispatch(push(path));
       }
       setIsInited(true);
@@ -148,8 +148,9 @@ export function Menu(props) {
   </div>;
 }
 
-export default connect(({menu}) => {
+export default connect(({menu, router}) => {
   return {
     menu,
+    path: router.location.pathname,
   }
 })(Menu)

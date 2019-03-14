@@ -18,7 +18,7 @@ CoreInstance.subscribe('registerModule', () => {
   for (const module of modules) {
     const added = mainReducer.processModule(module)
     if (added) {
-      store.dispatch({type: constants.RESET, payload: {namespace: module.namespace, path: window.location.pathname.slice('/front'.length)}})
+      store.dispatch({type: constants.RESET, payload: {namespace: module.namespace, path: window.location.pathname.slice('/admin'.length)}})
     }
   }
 })
