@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {css} from 'react-emotion'
 import logo from './logo.svg'
+import core from '../coreInstance'
 
 const menuLine = `
   width: 32px;
@@ -28,13 +29,24 @@ const styles = {
   `
 }
 
-export class Header extends React.Component{
+export class Header extends React.Component {
+
+  componentDidMount(): void {
+    core.subscribe('setHeaderComponent', () => {
+      this.forceUpdate()
+    })
+  }
+
+
 
   render() {
     return (
-      <div className={styles.header}>
-        <img className={styles.logo} src={logo} style={{width: 146, height: 53}}/>
-      </div>
+      <React.Fragment>
+        <div className={styles.header}>
+          <img className={styles.logo} src={logo} style={{width: 146, height: 53}}/>
+        </div>
+        {core.getHeaderComponent()}
+      </React.Fragment>
     )
   }
 

@@ -30,3 +30,10 @@ class Test extends React.Component{
 }
 core.register('test', [{label: 'Cluster', path: '/test/test2'}, {label: 'Dashboard', path: '/test/test'}], Test, 'react')
 core.register('space', [{label: 'Space Cluster', path: '/space/test2'}, {label: 'Space Dashboard', path: '/space/test'}], Test, 'react')
+
+core.setHeaderComponent(<div style={{position: 'absolute', right: 0, top: 0}}><span >Absolute</span></div>)
+setTimeout(() => {
+  core.setHeaderComponent(
+    null
+  )
+}, 3000)

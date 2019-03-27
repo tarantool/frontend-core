@@ -63,6 +63,14 @@ export default class Core {
   activeEngines : {[name: engines]: moduleStatus} = {react: 'loaded'}
   notifiers: {[string]: Array<Function>} = {}
   history = history
+  header = null
+  setHeaderComponent(headerComponent) {
+    this.header = headerComponent
+    this.dispatch('setHeaderComponent')
+  }
+  getHeaderComponent() {
+    return this.header
+  }
   waitForModule(namespace) {
     return new Promise((resolve, reject) => {
       const unwait = this.subscribe('registerModule', () => {

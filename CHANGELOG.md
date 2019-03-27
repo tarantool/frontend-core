@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.0.0] - 2019-03-14
+
+- Change base URI to /admin
+- Remove burger
+- Fix bugs
+- Add setHeaderComponent
+
 ## [3.0.4] - 2019-02-18
 
 Upgrade react version and hooks.
