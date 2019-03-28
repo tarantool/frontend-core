@@ -133,6 +133,10 @@ Throw error if module is already registered.
 
 Return registered modules.
 
+### window.tarantool_enterprise_core.setHeaderComponent(\<ReactComponent />)
+
+Set component at header. Dispatch 'setHeaderComponent' event.
+
 ### window.tarantool_enterprise_core.subscribe(eventType: string, callback: Function) : unsubscribe function
 
 Return unsubscribe function.
