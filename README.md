@@ -160,13 +160,32 @@ It's for cross module reaction. You can dispatch anything that you want.
 
 ## Rock
 
-Core module and other UI modules bundled as Lua file that contains bundle files.
+Core module and other UI modules bundled as Lua files that contains bundle files.
 
-```
-tarantoolctl rock make
+```console
+$ tarantoolctl rocks install frontend-core
+$ tarantool -l pack-front - build/bundle.json build/bundle.lua
 ```
 
 Command above make a bundle. Then it could be included as module at Tarantool Enterprise Admin.
+
+Bundle usually contains a table
+
+```lua
+{
+  [filename] = {
+    is_entry = boolean,
+    body = string,
+    mime = string
+  },
+  ...
+}
+```
+
+- `is_entry` - indicate that's JS enter file of your module.
+- `body` - content of file.
+- `mime` - mime-type of file.
+- `filename` - filename or filepath.
 
 ## Lua
 
@@ -175,7 +194,7 @@ local http = require('http.server')
 local httpd = http.new('0.0.0.0', '5050')
 httpd:start()
 
-local front = require('front')
+local front = require('frontend-core')
 front.init(httpd)
 ```
 
@@ -188,26 +207,18 @@ local my_module_bundle = require('my_module.bundle')
 front.add('module_namespace', my_module_bundle)
 ```
 
-### front.init(httpd: httpd)
+### init(httpd: httpd)
 
-`httpd` argument - should be an instance of http tarantool module.
+`httpd` argument - should be an instance of a Tarantool HTTP server.
 
-Register routes `/front/` and `/static/`, and redirect from `/` to `/front/` in `httpd`.
+Register routes `/admin/` and `/static/`, and redirect from `/` to `/admin/` in `httpd`.
 
-`/front/` - route for SPA admin module front-end.
+`/admin/` - route for single page application admin module front-end.
 
 `/static/` - route for static files that will be used at application.
 
-### front.add(namespace, bundle)
+### add(namespace, bundle)
 
 `namespace` - using for namespace module. Should be same name as your JS namespace module.
 
-`bundle` - table that consists of `{[filename] = {is_entry = boolean, body = string, mime = string}}`
-
-`is_entry` - indicate that's JS enter file of your module.
-
-`body` - content of file.
-
-`mime` - mime-type of file.
-
-`filename` - filename or filepath.
+`bundle` - a frontend bundle loaded as a lua table.
