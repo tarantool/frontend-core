@@ -81,12 +81,12 @@ local function init(httpd)
     }, static_handler)
 
     httpd:route({
-        path = '/front',
+        path = '/admin',
         method = 'GET',
     }, index_handler)
 
     httpd:route({
-        path = '/front/*any',
+        path = '/admin/*any',
         method = 'GET',
     }, index_handler)
 
@@ -94,7 +94,7 @@ local function init(httpd)
         path = '/',
         method = 'GET',
     }, function (cx)
-        return cx:redirect_to('/front')
+        return cx:redirect_to('/admin')
     end)
 
     add('core', core_bundle)
