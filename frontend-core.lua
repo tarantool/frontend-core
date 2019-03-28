@@ -1,7 +1,7 @@
 #!/usr/bin/env tarantool
 
 local checks = require('checks')
-local core_bundle = require('front.bundle')
+local core_bundle = require('frontend-core.bundle')
 
 local index_body = nil
 local modules = {

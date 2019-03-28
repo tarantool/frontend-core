@@ -6,24 +6,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Rename rock to "frontend-core"
 - Change base URI to /admin
-
 - Remove burger
-
 - Fix bugs
-
 - Add setHeaderComponent
 
 ## [3.0.4] - 2019-02-18
 
-Upgrade react version and hooks.
+### Fixed
+
+- Upgrade react version and hooks
 
 ## [3.0.3] - 2019-01-30
 
 ### Fixed
 
 - Improve layout
-
 - Improve link detection
 
 ## [3.0.2] - 2019-01-21

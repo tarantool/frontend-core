@@ -1,7 +1,7 @@
-package = "front"
-version = "scm-1"
+package = 'frontend-core'
+version = 'scm-1'
 source  = {
-    url = 'git+ssh://git@gitlab.com:tarantool/enterprise/front.git',
+    url = 'git+ssh://git@gitlab.com:tarantool/enterprise/enterprise-frontend-core.git',
     branch = 'master',
 }
 dependencies = {
@@ -12,9 +12,9 @@ build = {
     type = 'make';
     install = {
         lua = {
-            ['front'] = 'front.lua',
             ['pack-front'] = 'pack-front.lua',
-            -- ['front.bundle'] -- installed with make
+            ['frontend-core'] = 'frontend-core.lua',
+            -- ['frontend-core.bundle'] -- installed with make
         },
     },
     install_variables = {
