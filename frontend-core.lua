@@ -23,6 +23,7 @@ local function index_handler(req)
         end
 
         index_body =
+            '<!doctype html>' ..
             '<html>' ..
                 '<head>' ..
                     '<title>Tarantool Enterprise</title>'..
