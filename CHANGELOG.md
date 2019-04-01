@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-- Add doctype
+## [4.0.1] - 2019-04-01
+
+- Set proper doctype in index.html
 
 ## [4.0.0] - 2019-03-28
 
