@@ -158,9 +158,18 @@ const unwait = this.subscribe('registerModule', () => {
 ```
 
 
-### window.tarantool_enterprise_core.dispatch(eventType: stirng, event: any)
+### window.tarantool_enterprise_core.dispatch(eventType: string, event: any)
 
 It's for cross module reaction. You can dispatch anything that you want.
+
+### Core events
+
+`dispatchToken` - transmits action to core redux store.
+
+Example:
+```
+window.tarantool_enterprise_core.dispatch('dispatchToken', { type: 'ADD_CLUSTER_USERS_MENU_ITEM' });
+```
 
 ## Rock
 

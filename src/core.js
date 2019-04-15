@@ -1,5 +1,5 @@
 // @flow
-import React, {type ComponentType} from 'react'
+import React, { type ComponentType } from 'react'
 import ReactDom from 'react-dom'
 import * as R from 'ramda'
 import history from './store/history'
@@ -18,7 +18,13 @@ type halfMenuItem = {
   path: string,
 }
 
-type FSA = {type: string, payload: Object, error?: string}
+export type FSA = {
+  type: string,
+  payload?: any,
+  error?: boolean,
+  meta?: any,
+}
+
 type menuShape = (action: FSA, state: [menuItem]) => [menuItem] | Array<menuItem> | Array<halfMenuItem>
 
 const engineMap = {
@@ -59,9 +65,9 @@ const defaultMenuItem = (item) => ({
 })
 
 export default class Core {
-  modules : Array<module>  = []
-  activeEngines : {[name: engines]: moduleStatus} = {react: 'loaded'}
-  notifiers: {[string]: Array<Function>} = {}
+  modules: Array<module> = []
+  activeEngines: { [name: engines]: moduleStatus } = { react: 'loaded' }
+  notifiers: { [string]: Array<Function> } = {}
   history = history
   header = null
   setHeaderComponent(headerComponent) {
@@ -145,7 +151,7 @@ export default class Core {
     }
     this.notifiers[eventType].push(callback)
     return () => {
-      this.notifiers[eventType] = this.notifiers[eventType].filter(f => f !== callback )
+      this.notifiers[eventType] = this.notifiers[eventType].filter(f => f !== callback)
     }
   }
 }

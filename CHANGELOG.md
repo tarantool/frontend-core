@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Added 'dispatchToken' event which transmits action object to core redux store.
+
 ## [4.0.1] - 2019-04-01
 
 - Set proper doctype in index.html
