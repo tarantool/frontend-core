@@ -2,100 +2,118 @@
 import * as R from 'ramda'
 import * as constants from './constants'
 import noop from 'lodash/noop'
+import type { menuItem, FSA, module } from '../core'
 
 const initialState = []
 
 type SubStore = {
-  reducer: (Object, Object) => Object,
+  reducer: Function,
   middleware: (Object) => void,
   namespace: string,
 }
-const subStores: Array<SubStore> = []
-const installedStores: {[string]: true} ={}
-const initedReducers = []
 
 const matchPath = (path, link) => {
-  if (path.length === 0)
-    return false;
-  const point = path.indexOf(link);
+  if (path.length === 0) {
+    return false
+  }
+  const point = path.indexOf(link)
   return point === 0 && (link.length === path.length || path[link.length] === '/')
 }
 
-const selected = path => menuItem => ({
+const selected = (path: string) => (menuItem: menuItem): menuItem => ({
   ...menuItem,
-  expanded: menuItem.items.length > 0 ?( menuItem.path === path ? !menuItem.expanded : menuItem.expanded) : false,
+  expanded: menuItem.items.length > 0 ? (menuItem.path === path ? !menuItem.expanded : menuItem.expanded) : false
 })
-const updateLink = path => menuItem => ({...menuItem, selected: matchPath(path, menuItem.path)})
+const updateLink = path => menuItem => ({ ...menuItem, selected: matchPath(path, menuItem.path) })
 
-export const defaultReducer = (defaultState = []) => (state = defaultState, {type, payload}) => {
-  switch (type) {
-    case constants.SELECT_MENU:
-      return state.map(selected(payload.path))
-    case constants.LOCATION_CHANGE:
-      return state.map(updateLink(payload.location.pathname))
-    case constants.RESET:
-      return defaultState.map(updateLink(payload.path))
-    default:
-      return state
+export const defaultReducer = (defaultState: Array<menuItem> = []) =>
+  (state: Array<menuItem> = defaultState, { type, payload }: FSA): Array<menuItem> => {
+    switch (type) {
+      case constants.SELECT_MENU:
+        if (payload && payload.path) {
+          return state.map(selected(payload.path))
+        } else {
+          return state
+        }
+      case constants.LOCATION_CHANGE:
+        if (payload && payload.location && payload.location.pathname) {
+          return state.map(updateLink(payload.location.pathname))
+        } else {
+          return state
+        }
+      case constants.RESET:
+        if (payload && payload.path) {
+          return defaultState.map(updateLink(payload.path))
+        } else {
+          return state
+        }
+      default:
+        return state
+    }
   }
-}
-
-const regNameExp = /\/([^\/])\//
-const getNamespaceFromPath = (path) => {
-  regNameExp.exec(path)
-}
 
 const concat = Array.prototype.concat.bind([])
 
-export default {
-  reduce(state = initialState, {type, payload}) {
+export class MainReducer {
+  subStores: Array<SubStore> = []
+  installedStores: { [string]: true } = {}
+
+  reduce(state: any = initialState, { type, payload }: FSA) {
     const subState = R.groupBy(R.prop('namespace'), state)
     switch (type) {
       case constants.RESET: {
-        const {namespace} = payload;
+        if (payload && payload.namespace) {
+          const { namespace } = payload
+          return R.compose(
+            R.apply(concat),
+            R.map(x => {
+              if (x.namespace === namespace) {
+                return x.reducer(subState[x.namespace], { type, payload }).map(z => ({ ...z, namespace }))
+              }
+              return subState[x.namespace]
+            })
+          )(this.subStores)
+        } else {
+          return state
+        }
+      }
+      default: {
         return R.compose(
           R.apply(concat),
           R.map(x => {
-            if (x.namespace === namespace) {
-              return x.reducer(subState[x.namespace], { type, payload }).map(z => ({...z, namespace}))
-            }
-            return subState[x.namespace]
+            return x.reducer(subState[x.namespace], { type, payload }).map(z => ({ ...z, namespace: x.namespace }))
           })
-        )(subStores)
-      }
-      default: {
-
-        const res = R.compose(
-          R.apply(concat),
-          R.map(x => {
-            return x.reducer(subState[x.namespace], { type, payload }).map(z => ({...z, namespace: x.namespace}))
-          })
-        )(subStores)
-        return res
+        )(this.subStores)
       }
     }
-  },
-  middleware: store => next => action => {
-    R.map(R.prop('middleware'), subStores).forEach(m => m(action))
+  }
+
+  middleware = (store: Object) => (next: Function) => (action: FSA) => {
+    R.map(R.prop('middleware'), this.subStores).forEach(m => m(action))
     next(action)
-  },
-  processModule(module) {
-    if (installedStores[module.namespace]) {
+  }
+
+  processModule(module: module) {
+    if (this.installedStores[module.namespace]) {
       return false
     }
     const reducer = Array.isArray(module.menu) ? {
       state: module.menu,
       reducer: defaultReducer(module.menu),
-      middleware: module.middleware || noop,
+      middleware: module.menuMiddleware || noop,
       namespace: module.namespace,
     } : {
       state: initialState,
       reducer: module.menu,
-      middleware: module.middleware || noop,
+      middleware: module.menuMiddleware || noop,
       namespace: module.namespace,
     }
-    subStores.push(reducer)
-    installedStores[module.namespace] = true
+    this.subStores.push(reducer)
+    this.installedStores[module.namespace] = true
     return true
   }
 }
+
+export const generateInstance = () => new MainReducer()
+
+export default new MainReducer()

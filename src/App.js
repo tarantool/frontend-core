@@ -11,6 +11,7 @@ import {css} from 'react-emotion'
 import NoComponent from './components/NoComponent'
 import Menu from "./components/Menu";
 import { Header } from './components/Header'
+import 'antd/dist/antd.less';
 
 const sideColor = '#343434;';
 const styles = {

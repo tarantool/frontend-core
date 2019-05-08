@@ -1,6 +1,6 @@
 {
   "name": "enterprise-frontend-core",
-  "version": "4.0.0",
+  "version": "4.2.0",
   "private": true,
   "main": "compiled_module/core.js",
   "dependencies": {
@@ -42,6 +42,8 @@
     "html-webpack-plugin": "2.29.0",
     "husky": "^0.14.3",
     "jest": "23.6.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
     "lodash": "^4.17.10",
     "mime-types": "^2.1.21",
     "object-assign": "4.1.1",
@@ -75,12 +77,13 @@
     "build": "node ./scripts/build.js",
     "build_module": "node ./scripts/build_module.js",
     "test": "node ./scripts/test.js test --env=jsdom",
+    "test_once": "node ./scripts/test.js test --env=jsdom --once",
     "prettier": "./node_modules/.bin/prettier './src/**/*.js'",
     "eslint": "./node_modules/.bin/eslint src",
     "lint": "npm run prettier && npm run eslint",
     "fix": "./node_modules/.bin/prettier --write './src/**/*.js' && ./node_modules/.bin/eslint --fix src",
     "flow": "./node_modules/.bin/flow",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint && npm run flow && npm run test_once"
   },
   "husky": {
     "hooks": {

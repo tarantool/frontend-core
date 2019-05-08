@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import {Router, Route, Switch} from 'react-router-dom'
+import {Button} from 'antd'
 
 
 const core = window.tarantool_enterprise_core
@@ -16,7 +17,11 @@ class Test extends React.Component{
         <Router history={core.history}>
           <Switch>
             <Route path={'/test/test2'}  component={() => <div>
-
+<p>
+  <Button type={'primary'}>
+    status
+  </Button>
+</p>
       ыфаафыыаф
 
             </div>}/>

@@ -4,13 +4,13 @@ import ReactDom from 'react-dom'
 import * as R from 'ramda'
 import history from './store/history'
 
-type menuItem = {
+export type menuItem = {
   label: string,
   path: string,
   selected: boolean,
   expanded: boolean,
   loading: boolean,
-  items: [menuItem],
+  items: Array<menuItem>,
 }
 
 type halfMenuItem = {
@@ -25,7 +25,15 @@ export type FSA = {
   meta?: any,
 }
 
-type menuShape = (action: FSA, state: [menuItem]) => [menuItem] | Array<menuItem> | Array<halfMenuItem>
+type menuShape = (action: FSA, state: [menuItem]) => Array<menuItem> | Array<menuItem> | Array<halfMenuItem>
+
+const refineMenuItem = (item: menuItem | halfMenuItem) : menuItem => ({
+  selected: false,
+  expanded: false,
+  loading: false,
+  items: [],
+  ...item,
+})
 
 const engineMap = {
   'react': 'react.js',
@@ -34,7 +42,7 @@ const engineMap = {
 
 type engines = $Keys<typeof engineMap>
 
-type module = {
+export type module = {
   namespace: string,
   menu: menuShape,
   menuMiddleware?: (Object) => void,
@@ -56,28 +64,20 @@ const loadEngine = (engineSrc: string): Promise<boolean> => {
   })
 }
 
-const defaultMenuItem = (item) => ({
-  selected: false,
-  expanded: false,
-  loading: false,
-  items: [],
-  ...item,
-})
-
 export default class Core {
   modules: Array<module> = []
   activeEngines: { [name: engines]: moduleStatus } = { react: 'loaded' }
   notifiers: { [string]: Array<Function> } = {}
   history = history
   header = null
-  setHeaderComponent(headerComponent) {
+  setHeaderComponent(headerComponent: any) {
     this.header = headerComponent
     this.dispatch('setHeaderComponent')
   }
   getHeaderComponent() {
     return this.header
   }
-  waitForModule(namespace) {
+  waitForModule(namespace: string) {
     return new Promise((resolve, reject) => {
       const unwait = this.subscribe('registerModule', () => {
         const modules = this.getModules().filter(x => x.namespace === namespace)
@@ -88,7 +88,7 @@ export default class Core {
       })
     })
   }
-  dispatch(eventType, event = null) {
+  dispatch(eventType: string, event: ?Object = null) {
     if (!this.notifiers[eventType]) {
       this.notifiers[eventType] = []
     }
@@ -102,13 +102,9 @@ export default class Core {
     RootComponent: ComponentType<any>,
     engine: engines = 'react',
     menuMiddleware?: (Object) => void) {
-    let processedMenu: Array<menuItem> = []
-    if (Array.isArray(menu)) {
-      processedMenu = menu.map(defaultMenuItem)
-    }
     const addingModule = {
       namespace,
-      menu: processedMenu.length ? processedMenu : menu,
+      menu: Array.isArray(menu) ? menu.map(refineMenuItem) : menu,
       menuMiddleware,
       RootComponent,
       engine,
