@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [5.0.0] - 2019-05-08
+
 - Add ANT Design to core and fonts
 
 ## [4.1.0] - 2019-04-30
