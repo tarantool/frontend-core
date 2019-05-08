@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
@@ -6,9 +8,12 @@ import {Button} from 'antd'
 
 
 const core = window.tarantool_enterprise_core
-ReactDOM.render(<App />, document.getElementById('root'))
+const rootElement = document.getElementById('root')
+if (rootElement) {
+  ReactDOM.render(<App/>, rootElement)
+}
 
-class Test extends React.Component{
+class Test extends React.Component<null> {
 
   render() {
     return (

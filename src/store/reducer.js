@@ -58,7 +58,7 @@ export class MainReducer {
   subStores: Array<SubStore> = []
   installedStores: { [string]: true } = {}
 
-  reduce(state: any = initialState, { type, payload }: FSA) {
+  reduce = (state: any = initialState, { type, payload }: FSA) => {
     const subState = R.groupBy(R.prop('namespace'), state)
     switch (type) {
       case constants.RESET: {
@@ -93,7 +93,7 @@ export class MainReducer {
     next(action)
   }
 
-  processModule(module: module) {
+  processModule = (module: module) => {
     if (this.installedStores[module.namespace]) {
       return false
     }

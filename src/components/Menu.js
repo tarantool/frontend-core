@@ -1,3 +1,5 @@
+// @flow
+
 import { css, keyframes } from 'react-emotion'
 import React, { Component, useState } from 'react';
 import { connect } from 'react-redux'
@@ -5,6 +7,7 @@ import { mainColor } from '../colorConfig';
 import { push } from 'connected-react-router'
 import * as constants from '../store/constants'
 import { APP_PATH_PREFIX } from '../store/history';
+import type {menuItem} from '../core'
 
 const translateFromRight = keyframes`
   from{
@@ -152,7 +155,13 @@ const MenuItem = ({ path, selected, label, loading, expanded, items = [], onClic
 }
 
 
-export function Menu(props) {
+type MenuProps = {
+  menu: Array<menuItem>,
+  dispatch: Function,
+  path: string,
+}
+
+export function Menu(props: MenuProps) {
   const { menu, dispatch, path } = props;
   const [isInited, setIsInited] = useState(path !== '/');
 

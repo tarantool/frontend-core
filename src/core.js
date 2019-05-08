@@ -77,7 +77,7 @@ export default class Core {
   getHeaderComponent() {
     return this.header
   }
-  waitForModule(namespace: string) {
+  waitForModule(namespace: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const unwait = this.subscribe('registerModule', () => {
         const modules = this.getModules().filter(x => x.namespace === namespace)

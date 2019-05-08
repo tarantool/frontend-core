@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import ReactDom from 'react-dom'
 import { Route, Switch,  } from 'react-router-dom'
@@ -11,7 +13,8 @@ import {css} from 'react-emotion'
 import NoComponent from './components/NoComponent'
 import Menu from "./components/Menu";
 import { Header } from './components/Header'
-import 'antd/dist/antd.less';
+// $FlowFixMe
+import 'antd/dist/antd.less'
 
 const sideColor = '#343434;';
 const styles = {
@@ -64,7 +67,7 @@ const mapRoutesModule = () => {
   return modules.map(module => <Route key={module.namespace} path={'/'+module.namespace} component={module.RootComponent}/>)
 };
 
-export default class App extends Component {
+export default class App extends Component<any> {
   componentDidMount() {
     coreInstance.subscribe('registerModule', () => {
       this.forceUpdate()
