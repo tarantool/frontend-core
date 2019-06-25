@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [5.0.2] - 2019-06-25
+
 - Hide bundled data behind getter function.
   This is to avoid large output of `package.loaded` table.
 
