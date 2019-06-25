@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+- Hide bundled data behind getter function.
+  This is to avoid large output of `package.loaded` table.
+
 ## [5.0.1] - 2019-05-08
 
 - Update ANT Design to 3.18.2

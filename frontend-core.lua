@@ -13,7 +13,16 @@ local function index_handler(req)
     if index_body == nil then
         local entries = {}
         for _, namespace in ipairs(modules) do
-            for filename, file in pairs(modules[namespace]) do
+            local mod = modules[namespace]
+
+            local data
+            if type(mod.__data) == 'function' then
+                data = mod.__data()
+            else
+                data = mod
+            end
+
+            for filename, file in pairs(data) do
                 if file.is_entry then
                     table.insert(entries,
                         string.format('<script src="/static/%s/%s"></script>', namespace, filename)
@@ -43,9 +52,19 @@ local function index_handler(req)
 end
 
 local function static_handler(req)
-    local namespace = modules[req:stash('namespace')]
-    local file = namespace and namespace[req:stash('filename')]
+    local mod = modules[req:stash('namespace')]
+    if mod == nil then
+        return { status = 404 }
+    end
 
+    local data
+    if type(mod.__data) == 'function' then
+        data = mod.__data()
+    else
+        data = mod
+    end
+
+    local file = data[req:stash('filename')]
     if file == nil then
         return { status = 404 }
     end

@@ -98,8 +98,22 @@ end
 
 
 local data = json.decode(body)
-local mod_str = string.format('return %s', pack(data))
-assert(deepcmp(data, loadstring(mod_str)()))
+local mod_str = string.format([[
+local data = %s
+
+return {
+    __data = function()
+        return data
+    end
+}
+]], pack(data))
+
+-- Check that bundling doesn't damage data
+do
+    local mod = assert(loadstring(mod_str, dst_name))()
+    assert(deepcmp(data, mod.__data()))
+end
+
 log.info('-- Save %s', dst_name)
 
 log.info('Total: %.0f KiB', (#mod_str)/1024)
