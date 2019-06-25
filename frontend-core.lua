@@ -1,6 +1,5 @@
 #!/usr/bin/env tarantool
 
-local checks = require('checks')
 local core_bundle = require('frontend-core.bundle')
 
 local index_body = nil
@@ -79,7 +78,14 @@ local function static_handler(req)
 end
 
 local function add(namespace, filemap)
-    checks('string', 'table')
+    if type(namespace) ~= 'string' then
+        error('Bad argument #1 to add' ..
+            ' (string expected, got ' .. type(namespace) .. ')', 2)
+    end
+    if type(filemap) ~= 'table' then
+        error('Bad argument #2 to add' ..
+            ' (table expected, got ' .. type(filemap) .. ')', 2)
+    end
 
     if modules[namespace] ~= nil then
         return nil, string.format('Front module %q already added', namespace)
@@ -93,8 +99,6 @@ local function add(namespace, filemap)
 end
 
 local function init(httpd)
-    checks('table')
-
     httpd:route({
         path = '/static/:namespace/*filename',
         method = 'GET',
