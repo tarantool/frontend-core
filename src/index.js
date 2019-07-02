@@ -5,9 +5,9 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import {Router, Route, Switch} from 'react-router-dom'
 import {Button} from 'antd'
+import AppTitle from './components/AppTitle';
+import core from './coreInstance';
 
-
-const core = window.tarantool_enterprise_core
 const rootElement = document.getElementById('root')
 if (rootElement) {
   ReactDOM.render(<App/>, rootElement)
@@ -18,19 +18,25 @@ class Test extends React.Component<null> {
   render() {
     return (
       <div>
+        <AppTitle title="Root" />
         test namespace:
         <Router history={core.history}>
           <Switch>
-            <Route path={'/test/test2'}  component={() => <div>
-<p>
-  <Button type={'primary'}>
-    status
-  </Button>
-</p>
-      ыфаафыыаф
-
-            </div>}/>
-            <Route path={'/test/test'} component={() => <div>1</div>}/>
+            <Route
+              path={'/test/test2'}
+              component={() => (
+                <div>
+                  <AppTitle title="Test 2" />
+                  <p>
+                    <Button type={'primary'}>
+                      status
+                    </Button>
+                  </p>
+                  ыфаафыыаф
+                </div>
+              )}
+            />
+            <Route path={'/test/test'} component={() => <div><AppTitle title="Test" />1</div>}/>
             <Route path={'/'} component={() => <div>ЬЬЬ</div>}/>
           </Switch>
         </Router>

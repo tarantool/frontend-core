@@ -1,24 +1,34 @@
 // @flow
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import mainReducer from './reducer'
-import thunk from 'redux-thunk'
-import { connectRouter, routerMiddleware } from 'connected-react-router'
-import history, { APP_PATH_PREFIX } from './history'
-import CoreInstance from '../coreInstance'
-import * as constants from './constants'
-import { type FSA } from '../core'
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import mainReducer, { type MenuState } from './reducer';
+import { changeTitleMiddleware } from './title/middleware';
+import appTitleReducer, { type AppTitleState } from './title/reducer';
+import thunk from 'redux-thunk';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import history, { APP_PATH_PREFIX } from './history';
+import CoreInstance from '../coreInstance';
+import * as constants from './constants';
+import { type FSA } from '../core';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+export type State = {
+  menu: MenuState,
+  appTitle: AppTitleState
+}
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
-  connectRouter(history)(combineReducers({ menu: mainReducer.reduce })),
-  composeEnhancers(applyMiddleware(thunk, routerMiddleware(history), mainReducer.middleware))
-)
+  connectRouter(history)(combineReducers({
+    menu: mainReducer.reduce,
+    appTitle: appTitleReducer,
+  })),
+  composeEnhancers(applyMiddleware(thunk, routerMiddleware(history), mainReducer.middleware, changeTitleMiddleware))
+);
 
 CoreInstance.subscribe('registerModule', () => {
-  const modules = CoreInstance.getModules()
+  const modules = CoreInstance.getModules();
   for (const module of modules) {
-    const added = mainReducer.processModule(module)
+    const added = mainReducer.processModule(module);
     if (added) {
       store.dispatch({
         type: constants.RESET,
@@ -29,8 +39,8 @@ CoreInstance.subscribe('registerModule', () => {
       });
     }
   }
-})
+});
 
-CoreInstance.subscribe('dispatchToken', (token: FSA) => store.dispatch(token))
+CoreInstance.subscribe('dispatchToken', (token: FSA) => store.dispatch(token));
 
-export default store
+export default store;

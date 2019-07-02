@@ -6,6 +6,8 @@ import type { menuItem, FSA, module } from '../core'
 
 const initialState = []
 
+export type MenuState = menuItem[];
+
 type SubStore = {
   reducer: Function,
   middleware: (Object) => void,
@@ -22,12 +24,12 @@ const matchPath = (path, link) => {
 
 const selected = (path: string) => (menuItem: menuItem): menuItem => ({
   ...menuItem,
-  expanded: menuItem.items.length > 0 ? (menuItem.path === path ? !menuItem.expanded : menuItem.expanded) : false
+  expanded: menuItem.items.length > 0 ? (menuItem.path === path ? !menuItem.expanded : menuItem.expanded) : false,
 })
 const updateLink = path => menuItem => ({ ...menuItem, selected: matchPath(path, menuItem.path) })
 
-export const defaultReducer = (defaultState: Array<menuItem> = []) =>
-  (state: Array<menuItem> = defaultState, { type, payload }: FSA): Array<menuItem> => {
+export const defaultReducer = (defaultState: MenuState = []) =>
+  (state: MenuState = defaultState, { type, payload }: FSA): MenuState => {
     switch (type) {
       case constants.SELECT_MENU:
         if (payload && payload.path) {

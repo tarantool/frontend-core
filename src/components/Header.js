@@ -1,53 +1,69 @@
-import * as React from 'react'
-import {css} from 'react-emotion'
-import logo from './logo.svg'
-import core from '../coreInstance'
-
-const menuLine = `
-  width: 32px;
-  height: 3px;
-  border-radius: 3px;
-  background: white;
-`;
+// @flow
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { css } from 'react-emotion';
+import { selectTitle } from '../store/title/selectors';
+import logo from './logo.svg';
+import core from '../coreInstance';
 
 const styles = {
   header: css`
-    position: relative;
-    
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 50px;
+    background: #61000D;
   `,
-  menuBox: css`
-    height: 23px;
-    width: 32px;
-    position: absolute;
-    left: 20px;
-    top: 13px;
+  logoWrap: css`
+    position: relative;
+    flex-shrink: 0;
+    width: 243px;
   `,
   logo: css`
     position: absolute;
     left: 12px; 
     top: -1px;
-  `
-}
+    width: 146px;
+    height: 53px;
+  `,
+  title: css`
+    flex-grow: 0;
+    align-self: center;
+    margin: 10px 20px 10px 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    color: white;
+  `,
+};
 
-export class Header extends React.Component {
+type HeaderProps = {
+  title: string
+};
 
-  componentDidMount(): void {
+class Header extends React.Component<HeaderProps> {
+  componentDidMount() {
     core.subscribe('setHeaderComponent', () => {
-      this.forceUpdate()
-    })
+      this.forceUpdate();
+    });
   }
-
-
 
   render() {
     return (
-      <React.Fragment>
-        <div className={styles.header}>
-          <img className={styles.logo} src={logo} style={{width: 146, height: 53}}/>
+      <div className={styles.header}>
+        <div className={styles.logoWrap}>
+          <img className={styles.logo} src={logo} />
         </div>
+        <h1 className={styles.title}>{this.props.title}</h1>
         {core.getHeaderComponent()}
-      </React.Fragment>
-    )
+      </div>
+    );
   }
-
 }
+
+const mapStateToProps = state => ({
+  title: selectTitle(state),
+});
+
+export default connect(mapStateToProps)(Header);

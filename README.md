@@ -162,6 +162,14 @@ const unwait = this.subscribe('registerModule', () => {
 
 It's for cross module reaction. You can dispatch anything that you want.
 
+### window.tarantool_enterprise_core.components
+
+Collection of React components working with frontend core.
+
+Example:
+
+`AppTitle` - sets application title
+
 ### Core events
 
 `dispatchToken` - transmits action to core redux store.
@@ -169,6 +177,7 @@ It's for cross module reaction. You can dispatch anything that you want.
 Example:
 ```
 window.tarantool_enterprise_core.dispatch('dispatchToken', { type: 'ADD_CLUSTER_USERS_MENU_ITEM' });
+window.tarantool_enterprise_core.dispatch('dispatchToken', { type: 'TITLE_SET', payload: 'New title' });
 ```
 
 ## Rock
