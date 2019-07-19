@@ -135,13 +135,10 @@ describe('Menu', () => {
     const component = renderer.create(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
     component.update(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
     expect(dispatch).toBeCalled();
-    expect(actions).toHaveLength(2);
-    const menuAction = actions[0];
-    const pushAction = actions[1];
+    expect(actions).toHaveLength(1);
+    const pushAction = actions[0];
     expect(pushAction.payload.method).toBe('push');
     expect(pushAction.payload.args).toEqual(['/test']);
-    expect(menuAction.type).toEqual(constants.SELECT_MENU);
-    expect(menuAction.payload.path).toEqual('/test');
   })
 
   it('should be called if have menu items with no selection - multi', () => {
@@ -168,12 +165,9 @@ describe('Menu', () => {
     const component = renderer.create(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
     component.update(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
     expect(dispatch).toBeCalled();
-    expect(actions).toHaveLength(2);
-    const menuAction = actions[0];
-    const pushAction = actions[1];
+    expect(actions).toHaveLength(1);
+    const pushAction = actions[0];
     expect(pushAction.payload.method).toBe('push');
     expect(pushAction.payload.args).toEqual(['/test']);
-    expect(menuAction.type).toEqual(constants.SELECT_MENU);
-    expect(menuAction.payload.path).toEqual('/test');
   })
 })

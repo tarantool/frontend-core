@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased
 
 - Add title in app header and sets window title.
+- Fix side menu bug because of it subitems couldn't be rendered as selected.
 
 ## [5.0.2] - 2019-06-25
 

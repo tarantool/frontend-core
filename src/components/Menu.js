@@ -170,7 +170,6 @@ export function Menu(props: MenuProps) {
       const notSelected = menu.filter(x => x.selected).length === 0;
       if (notSelected) {
         const path = menu[0].path;
-        dispatch({ type: constants.SELECT_MENU, payload: { path: path } })
         dispatch(push(path));
       }
       setIsInited(true);
@@ -179,7 +178,6 @@ export function Menu(props: MenuProps) {
 
   const onClick = (evt, path) => {
     evt.preventDefault();
-    dispatch({ type: constants.SELECT_MENU, payload: { path: path } });
     dispatch(push(path));
   };
 

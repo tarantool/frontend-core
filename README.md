@@ -177,7 +177,6 @@ Example:
 Example:
 ```
 window.tarantool_enterprise_core.dispatch('dispatchToken', { type: 'ADD_CLUSTER_USERS_MENU_ITEM' });
-window.tarantool_enterprise_core.dispatch('dispatchToken', { type: 'TITLE_SET', payload: 'New title' });
 ```
 
 ## Rock

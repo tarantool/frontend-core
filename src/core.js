@@ -10,7 +10,7 @@ export type menuItem = {
   selected: boolean,
   expanded: boolean,
   loading: boolean,
-  items: Array<menuItem>,
+  items?: Array<menuItem>,
 }
 
 type halfMenuItem = {

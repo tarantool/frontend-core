@@ -44,8 +44,33 @@ class Test extends React.Component<null> {
     )
   }
 }
-core.register('test', [{label: 'Cluster', path: '/test/test2'}, {label: 'Dashboard', path: '/test/test'}], Test, 'react')
-core.register('space', [{label: 'Space Cluster', path: '/space/test2'}, {label: 'Space Dashboard', path: '/space/test'}], Test, 'react')
+
+core.register(
+  'test',
+  [
+    { label: 'Cluster', path: '/test/test2' },
+    {
+      label: 'Dashboard',
+      path: '/test/test',
+      items: [
+        { label: 'Subitem', path: '/test/test/test' },
+        { label: 'Subitem 2', path: '/test/test/test2' },
+      ],
+    },
+  ],
+  Test,
+  'react'
+)
+
+core.register(
+  'space',
+  [
+    { label: 'Space Cluster', path: '/space/test2' },
+    { label: 'Space Dashboard', path: '/space/test' },
+  ],
+  Test,
+  'react'
+)
 
 core.setHeaderComponent(<div style={{position: 'absolute', right: 0, top: 0}}><span >Absolute</span></div>)
 setTimeout(() => {

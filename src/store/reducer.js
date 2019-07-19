@@ -14,41 +14,83 @@ type SubStore = {
   namespace: string,
 }
 
-const matchPath = (path, link) => {
+export const matchPath = (path: string, link: string, exact: boolean = false): boolean => {
   if (path.length === 0) {
     return false
   }
-  const point = path.indexOf(link)
-  return point === 0 && (link.length === path.length || path[link.length] === '/')
+
+  path = path.split('?')[0]
+  path = R.last(path) === '/' ? path.slice(0, -1) : path
+
+  return link === path || (!exact && path.indexOf(link) === 0 && path[link.length] === '/')
 }
 
-const selected = (path: string) => (menuItem: menuItem): menuItem => ({
-  ...menuItem,
-  expanded: menuItem.items.length > 0 ? (menuItem.path === path ? !menuItem.expanded : menuItem.expanded) : false,
-})
-const updateLink = path => menuItem => ({ ...menuItem, selected: matchPath(path, menuItem.path) })
+const getStrongestMatchingLink = (state: menuItem[], path: string): ?string => {
+  let selected = null
+  const flattened = [...state]
+
+  for (let i = 0; i < flattened.length; i++) {
+    const item = flattened[i]
+
+    if (item && item.items && item.items.length) {
+      flattened.push(...item.items)
+    }
+
+    const matched = matchPath(path, item.path)
+
+    if (matched && (!selected || selected.length < item.path.length)) {
+      selected = item.path
+    }
+  }
+
+  return selected
+}
+
+const updateLink = (activeLink: string) => (menuItem: menuItem): menuItem => {
+  const { items = [], path } = menuItem
+  const isPatchMatching: boolean = matchPath(activeLink, path)
+
+  return {
+    ...menuItem,
+    expanded: isPatchMatching && !!items.length,
+    selected: matchPath(activeLink, path, true),
+  }
+}
+
+const mapMenuTree = (menuState: menuItem[], fn: (item: menuItem) => menuItem) => {
+  const stack = [...menuState.map(fn)]
+  const result = [...stack]
+
+  for (let i = 0; i < stack.length; i++) {
+    const menuItem = stack[i]
+    if (menuItem.items) {
+      menuItem.items = [...menuItem.items.map(fn)]
+      stack.push(...menuItem.items)
+    }
+  }
+
+  return result
+}
 
 export const defaultReducer = (defaultState: MenuState = []) =>
   (state: MenuState = defaultState, { type, payload }: FSA): MenuState => {
     switch (type) {
-      case constants.SELECT_MENU:
-        if (payload && payload.path) {
-          return state.map(selected(payload.path))
-        } else {
-          return state
-        }
       case constants.LOCATION_CHANGE:
         if (payload && payload.location && payload.location.pathname) {
-          return state.map(updateLink(payload.location.pathname))
+          const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
+          return activeLink ? mapMenuTree(state, updateLink(activeLink)) : state
         } else {
           return state
         }
+
       case constants.RESET:
         if (payload && payload.path) {
-          return defaultState.map(updateLink(payload.path))
+          const activeLink = getStrongestMatchingLink(state, payload.path)
+          return activeLink ? mapMenuTree(defaultState, updateLink(activeLink)) : state
         } else {
           return state
         }
+
       default:
         return state
     }
