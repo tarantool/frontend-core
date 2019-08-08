@@ -3,10 +3,7 @@
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
@@ -15,9 +12,6 @@ const getClientEnvironment = require('./env');
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
-// Some apps do not use client-side routing with pushState.
-// For these, "homepage" can be set to "." to enable relative asset paths.
-const shouldUseRelativeAssetPaths = publicPath === './';
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
@@ -33,17 +27,11 @@ const env = getClientEnvironment(publicUrl);
 //   throw new Error('Production builds must have NODE_ENV=production.');
 // }
 
-// Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].[contenthash:8].css';
-
-// ExtractTextPlugin expects the build output to be flat.
-// (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
-// However, our output is structured with css, js and media folders.
-
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
 module.exports = {
+  mode: 'production',
   // Don't attempt to continue if there are any errors.
   bail: true,
   // We generate sourcemaps in production. This is slow but gives good results.
@@ -143,8 +131,32 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-
               compact: true,
+            },
+          },
+          // Process any JS outside of the app with Babel.
+          // Unlike the application JS, we only compile the standard ES features.
+          {
+            test: /\.(js|mjs)$/,
+            exclude: /@babel(?:\/|\\{1,2})runtime/,
+            loader: require.resolve('babel-loader'),
+            options: {
+              babelrc: false,
+              configFile: false,
+              compact: false,
+              presets: [
+                [
+                  require.resolve('babel-preset-react-app/dependencies'),
+                  { helpers: true },
+                ],
+              ],
+              cacheDirectory: true,
+              cacheCompression: true,
+              // If an error happens in a package, it's possible to be
+              // because it was compiled. Thus, we don't want the browser
+              // debugger to show the original code. Instead, the code
+              // being evaluated would be much more helpful.
+              sourceMaps: shouldUseSourceMap,
             },
           },
           // The notation here is somewhat confusing.
@@ -191,14 +203,12 @@ module.exports = {
                 },
               },
             ],
-
-            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
           },
           {
             test: /\.less$/,
             use: [
               {
-                loader: require.resolve('style-loader')
+                loader: require.resolve('style-loader'),
               },
               {
                 loader: require.resolve('css-loader'),
@@ -210,9 +220,9 @@ module.exports = {
                 loader: require.resolve('less-loader'),
                 options: {
                   javascriptEnabled: true,
-                }
-              }
-            ]
+                },
+              },
+            ],
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
@@ -236,56 +246,11 @@ module.exports = {
     ],
   },
   plugins: [
-    // Makes some environment variables available in index.html.
-    // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
-    // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    // In production, it will be an empty string unless you specify "homepage"
-    // in `package.json`, in which case it will be the pathname of that URL.
-    new InterpolateHtmlPlugin(env.raw),
-    // Generates an `index.html` file with the <script> injected.
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: paths.appHtml,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-    }),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
     // It is absolutely essential that NODE_ENV was set to production here.
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
-    // Minify the code.
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false,
-    //     // Disabled because of an issue with Uglify breaking seemingly valid code:
-    //     // https://github.com/facebookincubator/create-react-app/issues/2376
-    //     // Pending further investigation:
-    //     // https://github.com/mishoo/UglifyJS2/issues/2011
-    //     comparisons: false,
-    //   },
-    //   mangle: {
-    //     safari10: true,
-    //   },
-    //   output: {
-    //     comments: false,
-    //     // Turned on because emoji and regex is not minified properly using default
-    //     // https://github.com/facebookincubator/create-react-app/issues/2488
-    //     ascii_only: true,
-    //   },
-    //   sourceMap: shouldUseSourceMap,
-    // }),
-    // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
@@ -307,5 +272,9 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty',
+  },
+  performance: {
+    maxEntrypointSize: 2000000,
+    maxAssetSize: 2000000,
   },
 };

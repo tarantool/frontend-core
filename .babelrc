@@ -1,4 +1,7 @@
 {
-  "presets": ["react-app"],
-  "plugins": ["transform-flow-strip-types", "transform-decorators-legacy", "emotion"]
+  "presets": ["react-app", "@babel/preset-flow"],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "emotion"
+  ]
 }

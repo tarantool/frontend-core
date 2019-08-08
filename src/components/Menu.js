@@ -1,11 +1,9 @@
 // @flow
 
 import { css, keyframes } from 'react-emotion'
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux'
-import { mainColor } from '../colorConfig';
 import { push } from 'connected-react-router'
-import * as constants from '../store/constants'
 import { APP_PATH_PREFIX } from '../store/history';
 import type {menuItem} from '../core'
 
