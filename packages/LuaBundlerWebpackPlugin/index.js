@@ -2,7 +2,7 @@ const mime = require('mime-types');
 const path = require('path');
 const mainFs = require('fs');
 const cp = require('child_process');
-const debug = require('debug')('LuaBundlePlugin');
+const debug = require('debug')('lua-bundler');
 
 const walkSync = function(dir, filelist) {
   const files = mainFs.readdirSync(dir);
