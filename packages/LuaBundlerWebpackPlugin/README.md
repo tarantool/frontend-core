@@ -9,13 +9,13 @@ Example:
 ```
 plugins: [
 ....
-new LuaBundlePlugin({bundleName: 'customBundleName', namespace: 'cluster', entryRegExp: /main.+js$/})
+new LuaBundlePlugin({bundleName: 'customBundleName.lua', namespace: 'cluster', entryRegExp: /main.+js$/})
 ]
 ```
 
 ##Defaults
 
-bundleName = 'bundle'<br/>
+bundleName = 'bundle.lua'<br/>
 namespace = ''<br/>
 entryRegExp: /main.+js$/<br/>
 
