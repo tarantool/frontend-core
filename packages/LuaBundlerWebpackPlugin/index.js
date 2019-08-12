@@ -27,6 +27,7 @@ class LuaBundlePlugin {
     compiler.hooks.afterEmit.tap('LuaBundlePlugin', compilation => {
       const outputPath = compiler.options.output.path;
       const buildFoler = path.relative(process.cwd(), outputPath);
+      const bundleName = (this.options.bundleName|| 'bundle' ) + '.lua';
       const namespace = this.options.namespace || '';
       const namespaceFolder = buildFoler + '/static/' + (namespace ? namespace + '/' : '');
       const files = walkSync(namespaceFolder);
@@ -43,8 +44,11 @@ class LuaBundlePlugin {
       }
       mainFs.writeFileSync(buildFoler + '/bundle.json', JSON.stringify(filemap), { encoding: 'utf8' })
       debug('compile bundle.json')
-      cp.execSync('tarantool -l pack-front - build/bundle.json build/bundle.lua')
-      debug('build bundle.lua')
+      cp.execSync('tarantool -l pack-front - build/bundle.json build/' + bundleName)
+      debug('build ' + bundleName)
+      mainFs.unlink(buildFoler + '/bundle.json')
+      debug('delete bundle.json')
+
     });
   }
 }
