@@ -3,6 +3,7 @@ version = 'scm-1'
 source  = {
     url = 'git+https://github.com/tarantool/frontend-core.git',
     branch = 'master',
+    dir = 'packages/core'
 }
 dependencies = {
     'lua >= 5.1',

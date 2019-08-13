@@ -1,12 +1,12 @@
 .PHONY: all install
 
-all: $(shell find src -type f) node_modules
-	npm run build
+all: $(shell find packages/core/src -type f) packages/core/node_modules
+	npm run build --prefix packages/core/
 
-node_modules: package.json
-	npm ci
+packages/core/node_modules: packages/core/package.json
+	npm ci --prefix packages/core/
 	@ touch $@
 
 install:
 	mkdir -p $(INST_LUADIR)/frontend-core/
-	cp build/bundle.lua $(INST_LUADIR)/frontend-core/bundle.lua
+	cp packages/core/build/bundle.lua $(INST_LUADIR)/frontend-core/bundle.lua

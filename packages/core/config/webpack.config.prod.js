@@ -9,7 +9,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
-const LuaBundlePlugin = require('../packages/LuaBundlerWebpackPlugin');
+const LuaBundlePlugin = require('@tarantool-front/lua-bundler-webpack-plugin');
 
 
 // Webpack uses `publicPath` to determine where the app is being served from.

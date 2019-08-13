@@ -1,8 +1,13 @@
 {
-  "name": "tarantool-uikit",
+  "name": "@tarantool-front/ui-kit",
   "version": "0.1.0",
-  "description": "UI components lib for Tarantool",
+  "description": "UI component library for Tarantool",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/tarantool/enterprise/enterprise-frontend-core.git",
+    "directory": "packages/ui-kit"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "styleguidist server",
