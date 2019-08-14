@@ -12,7 +12,6 @@ build = {
     type = 'make';
     install = {
         lua = {
-            ['pack-front'] = 'pack-front.lua',
             ['frontend-core'] = 'frontend-core.lua',
             -- ['frontend-core.bundle'] -- installed with make
         },

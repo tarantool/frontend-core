@@ -1,8 +1,0 @@
-node_modules
-/.DS_Store
-.idea
-build
-.rocks
-compiled_module
-*.snap
-*.xlog
