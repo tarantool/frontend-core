@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
+// $FlowFixMe
+import 'antd/dist/antd.less'
 import history from './store/history';
 import store from './store';
 import './styles/reset';

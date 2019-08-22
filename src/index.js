@@ -8,8 +8,6 @@ import {Button} from 'antd'
 import AppTitle from './components/AppTitle';
 import core from './coreInstance';
 import testSvg from './components/Notification/success-circle.svg'
-import { sendNotification } from './store/actions/notifications'
-import store from './store'
 
 const rootElement = document.getElementById('root')
 if (rootElement) {

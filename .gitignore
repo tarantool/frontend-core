@@ -3,6 +3,6 @@ node_modules
 .idea
 build
 .rocks
-compiled_module
+
 *.snap
 *.xlog
