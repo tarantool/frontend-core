@@ -11,10 +11,9 @@ import { css } from 'react-emotion';
 import NoComponent from './components/NoComponent';
 import Menu from './components/Menu';
 import Header from './components/Header';
-// $FlowFixMe
-import 'antd/dist/antd.less';
+import NotificationList from './components/NotificationList'
 
-const sideColor = '#343434;';
+const sideColor = '#000000;';
 const styles = {
   layout: css`
     display: flex;
@@ -38,19 +37,17 @@ const styles = {
 	`,
   content: css`
     display: block;
-    background: white;
+    background: #f0f2f5;
     flex-grow: 1;
+    max-height: 100vh;
+    overflow: auto;
   `,
   sidemenu: css`
-    display: block;
     flex-grow: 0;
     flex-shrink: 0;
-    width: 243px;
     box-sizing: border-box;
-    padding: 30px 0px 30px 21px;
-    background: white;
-    border-right: 2px solid black;
     background: ${sideColor};
+    z-index: 1;
   `,
 };
 
@@ -71,13 +68,10 @@ export default class App extends Component<any> {
     return (
       <Provider store={store}>
         <div className={styles.layout}>
-          <Header/>
           <div className={styles.main}>
-
-            <div className={styles.sidemenu}>
-              <Menu/>
-            </div>
+            <Menu className={styles.sidemenu}/>
             <div className={styles.content}>
+              <Header/>
               <ConnectedRouter history={history}>
                 <Switch >
                   {mapRoutesModule()}
@@ -85,6 +79,7 @@ export default class App extends Component<any> {
                 </Switch>
               </ConnectedRouter>
             </div>
+            <NotificationList />
           </div>
         </div>
       </Provider>

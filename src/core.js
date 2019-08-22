@@ -3,6 +3,7 @@ import React, { type ComponentType } from 'react'
 import ReactDom from 'react-dom'
 import * as R from 'ramda'
 import history from './store/history'
+import { sendNotification } from './store/actions/notifications'
 
 export type menuItem = {
   label: string,
@@ -10,12 +11,14 @@ export type menuItem = {
   selected: boolean,
   expanded: boolean,
   loading: boolean,
+  icon: string | Object,
   items?: Array<menuItem>,
 }
 
 type halfMenuItem = {
   label: string,
   path: string,
+  icon?: string | Object,
 }
 
 export type FSA = {
@@ -32,6 +35,7 @@ const refineMenuItem = (item: menuItem | halfMenuItem) : menuItem => ({
   expanded: false,
   loading: false,
   items: [],
+  icon: 'menu',
   ...item,
 })
 
@@ -149,6 +153,9 @@ export default class Core {
     return () => {
       this.notifiers[eventType] = this.notifiers[eventType].filter(f => f !== callback)
     }
+  }
+  notify({type, title, message, timeout}: {type: 'default' | 'success' | 'error', title: string, message?: string, timeout?: number}) {
+    this.dispatch('dispatchToken', sendNotification({type, title, message, timeout}))
   }
 }
 

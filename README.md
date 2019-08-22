@@ -133,9 +133,14 @@ Throw error if module is already registered.
 
 Return registered modules.
 
-### window.tarantool_enterprise_core.setHeaderComponent(\<ReactComponent />)
+### window.tarantool_enterprise_core.notify({ title: string, message: string, type: 'default' | 'success' | 'error', timeout: number}) : void
 
-Set component at header. Dispatch 'setHeaderComponent' event.
+Show notification. Title and message are text of notication.
+
+Type influence on view of notification.
+
+Timeout is time in miliseconds for automatic hide notification. If timeout = 0. It's infinite time. You only can close it by your hands.
+
 
 ### window.tarantool_enterprise_core.subscribe(eventType: string, callback: Function) : unsubscribe function
 

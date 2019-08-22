@@ -1,8 +1,8 @@
 // @flow
 import * as R from 'ramda'
-import * as constants from './constants'
+import * as constants from '../constants'
 import noop from 'lodash/noop'
-import type { menuItem, FSA, module } from '../core'
+import type { menuItem, FSA, module } from '../../core'
 
 const initialState = []
 
@@ -57,6 +57,16 @@ const updateLink = (activeLink: string) => (menuItem: menuItem): menuItem => {
   }
 }
 
+const expand = (activeLink: string) => (menuItem: menuItem): menuItem => {
+  const { items = [], path } = menuItem
+  const isPatchMatching: boolean = matchPath(activeLink, path)
+
+  return {
+    ...menuItem,
+    expanded: matchPath(activeLink, path, true),
+  }
+}
+
 const mapMenuTree = (menuState: menuItem[], fn: (item: menuItem) => menuItem) => {
   const stack = [...menuState.map(fn)]
   const result = [...stack]
@@ -79,6 +89,14 @@ export const defaultReducer = (defaultState: MenuState = []) =>
         if (payload && payload.location && payload.location.pathname) {
           const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
           return activeLink ? mapMenuTree(state, updateLink(activeLink)) : state
+        } else {
+          return state
+        }
+
+      case constants.EXPAND:
+        if (payload && payload.location && payload.location.pathname) {
+          const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
+          return activeLink ? mapMenuTree(state, expand(activeLink)) : state
         } else {
           return state
         }

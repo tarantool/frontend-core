@@ -1,21 +1,17 @@
 // @flow
 import withSideEffect from 'react-side-effect';
-import { setTitle } from '../store/title/actions';
+import { setTitle } from '../store/actions/title';
 import core from '../coreInstance';
 import * as R from 'ramda';
 
-type AppTitleProps = {
-  title: string
+const reducePropsToState = (propsList: AppTitleProps[]): {title: string, propsList: AppTitleProps[]} => {
+  return {title: (R.last(propsList) || {title: ''}).title, propsList: propsList || [] };
 };
 
-const reducePropsToState = (propsList: AppTitleProps[]): string => {
-  return (R.last(propsList) || {title: ''}).title;
-};
-
-const handleStateChange = (title: string): void => {
+const handleStateChange = ({title, propsList = []} : {title: string, propsList: AppTitleProps[]}): void => {
   core.dispatch(
     'dispatchToken',
-    setTitle(title)
+    setTitle({title, propsList})
   );
 };
 

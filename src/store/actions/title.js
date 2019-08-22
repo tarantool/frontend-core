@@ -4,18 +4,19 @@ import {
   TITLE_RESET,
 } from '../constants';
 
+
 export type SetTitleAction = {
   type: 'TITLE_SET',
-  payload: string
+  payload: {title: string, propsList: AppTitleProps[]}
 };
 
 export type ResetTitleAction = {
   type: 'TITLE_RESET'
 };
 
-export const setTitle = (title: string): SetTitleAction => ({
+export const setTitle = ({title, propsList}: {title: string, propsList: AppTitleProps[]}): SetTitleAction => ({
   type: TITLE_SET,
-  payload: title,
+  payload: {title, propsList}
 });
 
 export const resetTitle = (): ResetTitleAction => ({ type: TITLE_RESET });

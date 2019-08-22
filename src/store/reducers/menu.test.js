@@ -1,5 +1,5 @@
-import { defaultReducer, generateInstance, matchPath } from './reducer'
-import * as constants from './constants'
+import { defaultReducer, generateInstance, matchPath } from './menu'
+import * as constants from '../constants'
 
 // Only one level of nesting depth allowed in side menu
 
@@ -41,7 +41,7 @@ describe('reduce choose by part of path', () => {
         },
       },
     };
-  
+
     const state = [{
       label: 'space_explorer',
       path: '/space_explorer',

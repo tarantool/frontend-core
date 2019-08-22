@@ -1,20 +1,20 @@
-import {Menu} from './Menu'
+import {Index} from '.'
 import renderer from 'react-test-renderer';
 import * as React from 'react';
-import * as constants from '../store/constants';
+import * as constants from '../../store/constants';
 
 describe('Menu', () => {
   const rootPath = '/';
   const testPath = '/test';
   it('should not be called if no menu items', () => {
     const dispatch = jest.fn();
-    const component = renderer.create(<Menu
+    const component = renderer.create(<Index
       path={rootPath}
       menu={[]}
       key={'menu'}
       dispatch={dispatch}
     />);
-    component.update(<Menu
+    component.update(<Index
       path={rootPath}
       menu={[]}
       key={'menu'}
@@ -25,8 +25,8 @@ describe('Menu', () => {
   it('should not be called if no root location and menu', () => {
     const dispatch = jest.fn();
 
-    const component = renderer.create(<Menu path={testPath} menu={[]} key={'menu'} dispatch={dispatch}/>);
-    component.update(<Menu path={testPath} menu={[]} key={'menu'} dispatch={dispatch}/>)
+    const component = renderer.create(<Index path={testPath} menu={[]} key={'menu'} dispatch={dispatch}/>);
+    component.update(<Index path={testPath} menu={[]} key={'menu'} dispatch={dispatch}/>)
     expect(dispatch).not.toBeCalled();
   })
   it('should not be called if no root location', () => {
@@ -41,8 +41,8 @@ describe('Menu', () => {
         items: [],
       },
     ];
-    const component = renderer.create(<Menu path={testPath} menu={otherMenu} key={'menu'} dispatch={dispatch}/>);
-    component.update(<Menu path={testPath} menu={otherMenu} key={'menu'} dispatch={dispatch}/>)
+    const component = renderer.create(<Index path={testPath} menu={otherMenu} key={'menu'} dispatch={dispatch}/>);
+    component.update(<Index path={testPath} menu={otherMenu} key={'menu'} dispatch={dispatch}/>)
     expect(dispatch).not.toBeCalled();
   })
   it('should not be called if no root location and change menu items in progress', () => {
@@ -75,8 +75,8 @@ describe('Menu', () => {
         items: [],
       },
     ];
-    const component = renderer.create(<Menu path={testPath} menu={otherMenu} key={'menu'} dispatch={dispatch}/>);
-    component.update(<Menu path={testPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>)
+    const component = renderer.create(<Index path={testPath} menu={otherMenu} key={'menu'} dispatch={dispatch}/>);
+    component.update(<Index path={testPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>)
     expect(dispatch).not.toBeCalled();
   })
   it('should not be called if has a selected item - single', () => {
@@ -91,8 +91,8 @@ describe('Menu', () => {
         items: [],
       },
     ];
-    const component = renderer.create(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
-    component.update(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
+    const component = renderer.create(<Index path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
+    component.update(<Index path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
     expect(dispatch).not.toBeCalled();
   })
   it('should not be called if no has a selected item - multi items', () => {
@@ -115,8 +115,8 @@ describe('Menu', () => {
         items: [],
       },
     ];
-    const component = renderer.create(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
-    component.update(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>)
+    const component = renderer.create(<Index path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
+    component.update(<Index path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>)
     expect(dispatch).not.toBeCalled();
   })
   it('should be called if have menu items with no selection - single', () => {
@@ -132,8 +132,8 @@ describe('Menu', () => {
         items: [],
       },
     ];
-    const component = renderer.create(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
-    component.update(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
+    const component = renderer.create(<Index path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
+    component.update(<Index path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
     expect(dispatch).toBeCalled();
     expect(actions).toHaveLength(1);
     const pushAction = actions[0];
@@ -162,8 +162,8 @@ describe('Menu', () => {
         items: [],
       },
     ];
-    const component = renderer.create(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
-    component.update(<Menu path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
+    const component = renderer.create(<Index path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
+    component.update(<Index path={rootPath} menu={testMenu} key={'menu'} dispatch={dispatch}/>);
     expect(dispatch).toBeCalled();
     expect(actions).toHaveLength(1);
     const pushAction = actions[0];
