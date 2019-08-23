@@ -7,11 +7,11 @@ import {
   PAUSE_NOTIFICATION_TIMER,
   UNPAUSE_NOTIFICATION_TIMER,
   SEND_NOTIFICATION,
-  SHOW_NOTIFICATION_LIST
+  SHOW_NOTIFICATION_LIST, CLEAR_NOTIFICATIONS
 } from '../constants'
 import type { FSA } from '../../core'
 import type {
-  CheckNotificationsAction,
+  CheckNotificationsAction, ClearNotificationsAction,
   HideNotificationAction,
   HideNotificationListAction, PauseNotificationTimerAction,
   SendNotificationAction,
@@ -35,7 +35,7 @@ export type NotificationState = Array<NotificationItem>
 
 type NotificationActions = SendNotificationAction | HideNotificationAction |
   ShowNotificationListAction | HideNotificationListAction | CheckNotificationsAction |
-  PauseNotificationTimerAction | UnpauseNotificationTimerAction
+  PauseNotificationTimerAction | UnpauseNotificationTimerAction | ClearNotificationsAction
 
 const isTimeouted = (ts) => ({createdAt, timeout, pausedAt, hidden}) => {
   if (pausedAt || hidden || timeout === 0)
@@ -97,6 +97,9 @@ export default (state: NotificationState = initialState, action: NotificationAct
     }
     case HIDE_NOTIFICATION: {
       return state.map(updateOps(action.payload.uuid, R.mergeDeepLeft({ hidden: true })))
+    }
+    case CLEAR_NOTIFICATIONS: {
+      return state.filter(x => !x.hidden)
     }
   }
   return state

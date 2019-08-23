@@ -1,6 +1,6 @@
 // @flow
 
-import { HIDE_NOTIFICATION_LIST, SHOW_NOTIFICATION_LIST } from '../constants'
+import { CLEAR_NOTIFICATIONS, HIDE_NOTIFICATION_LIST, SHOW_NOTIFICATION_LIST } from '../constants'
 import type { FSA } from '../../core'
 
 export type UiState = {
@@ -20,6 +20,12 @@ export default (state: UiState = initialState, { type } : FSA): UiState => {
       }
     }
     case HIDE_NOTIFICATION_LIST: {
+      return {
+        ...state,
+        showNotificationList: false,
+      }
+    }
+    case CLEAR_NOTIFICATIONS: {
       return {
         ...state,
         showNotificationList: false,

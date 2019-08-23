@@ -62,6 +62,9 @@ const itemStyles = {
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 170px;
+    &:hover, &:visited{
+      color: #fff;
+    }
   `,
   icon: css`
     position: absolute;
@@ -71,7 +74,7 @@ const itemStyles = {
     transform: translateY(-50%);
     left: 24px;
     font-size: 14px;
-    display: inline-block;
+    display: flex;
     color: #fff;
     user-select: none; /* supported by Chrome and Opera */
    -webkit-user-select: none; /* Safari */
@@ -153,6 +156,13 @@ const shortStyles = {
     transform: translate3d(-50%, -50%, 0);
     font-size: 14px;
     color: #fff;
+    display: flex;
+    color: #fff;
+    user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
   `,
 };
 

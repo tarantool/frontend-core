@@ -1,7 +1,7 @@
 // @flow
 import nanoid from 'nanoid'
 import {
-  CHECK_NOTIFICATIONS,
+  CHECK_NOTIFICATIONS, CLEAR_NOTIFICATIONS,
   HIDE_NOTIFICATION,
   HIDE_NOTIFICATION_LIST,
   PAUSE_NOTIFICATION_TIMER,
@@ -70,8 +70,13 @@ export type UnpauseNotificationTimerAction = {
   }
 }
 
+export type ClearNotificationsAction = {
+  type: typeof CLEAR_NOTIFICATIONS,
+  payload: {},
+}
 
-export const sendNotification = ({type = 'default', title, message, timeout = 3000}: SendNotification): SendNotificationAction => {
+
+export const sendNotification = ({type = 'default', title, message, timeout = 30000}: SendNotification): SendNotificationAction => {
   const uuid = nanoid()
 
   const now = Date.now()
@@ -128,4 +133,9 @@ export const showNotificationList = (): ShowNotificationListAction => ({
 export const hideNotificationList = (): HideNotificationListAction => ({
   type: HIDE_NOTIFICATION_LIST,
   payload: {}
+})
+
+export const clearNotifications = (): ClearNotificationsAction => ({
+  type: CLEAR_NOTIFICATIONS,
+  payload: {},
 })

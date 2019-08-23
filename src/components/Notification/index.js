@@ -4,6 +4,7 @@ import close from './close.svg'
 import failCircle from './fail-circle.svg'
 import successCircle from './success-circle.svg'
 import { hideNotification } from '../../store/actions/notifications'
+import { format } from 'date-fns'
 
 const styles = {
   container: css`
@@ -28,7 +29,7 @@ const styles = {
   icon: css`
     position: absolute;
     left: 16px;
-    top: 16px;
+    top: 19px;
     width: 22px;
     height: 22px;
   `,
@@ -65,6 +66,34 @@ const styles = {
   `,
 }
 
+const shortStyles = {
+  container: css`
+    padding-bottom: 7px;
+    padding-left: 24px;
+    position: relative;
+  `,
+  icon: css`
+    position: absolute;
+    left: 0;
+    top: 3px;
+    width: 16px;
+    height: 16px;
+  `,
+  content: css`
+    font-family: Open Sans;
+    font-size: 14px;
+    color: #000;
+    display: block;
+    margin: 0 0 4px 0;
+  `,
+  date: css`
+    font-family: Open Sans;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.65);
+    padding-bottom: 7px
+  `,
+}
+
 const styleMap = {
   'success': styles.success,
   'error': styles.error,
@@ -75,8 +104,17 @@ const iconMap = {
   'error': failCircle,
 }
 
-export default ({ title, message, type, uuid, dispatch, className='' }) => {
-  const icon = iconMap[type] ? <img src={iconMap[type]} className={styles.icon} /> : null
+export default ({ title, message, type, uuid, dispatch, initedAt, className='', isShort = false }) => {
+
+  const icon = iconMap[type] ? <img src={iconMap[type]} className={isShort ? shortStyles.icon : styles.icon} /> : null
+  if (isShort) {
+    return <div className={cx(shortStyles.container, className)}>
+      {icon}
+      <div className={shortStyles.content}>{title}</div>
+      {message ? <div className={shortStyles.content} dangerouslySetInnerHTML={{__html: message}}></div> : null }
+      <div className={shortStyles.date}>{format(initedAt, 'hh:mm d MMM yyyy')}</div>
+    </div>
+  }
   return <div
     className={cx(styles.container, styleMap[type], className)}
     onClick={() => dispatch(hideNotification(uuid)) }
