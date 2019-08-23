@@ -217,7 +217,7 @@ export const MenuItem = ({
   if (expanded && !short) {
     subItems = (
       <div className={itemStyles.submenuList}>
-        {items.map(x => <MenuItem {...x} onClick={onClick} isSubitem={true}/>)}
+        {items.map(x => <MenuItem key={x.path} {...x} onClick={onClick} isSubitem={true}/>)}
       </div>
     )
   }

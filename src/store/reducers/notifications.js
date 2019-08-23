@@ -96,7 +96,7 @@ export default (state: NotificationState = initialState, action: NotificationAct
       return state.map(x => ({...x, read: true}))
     }
     case HIDE_NOTIFICATION: {
-      return state.map(updateOps(action.payload.uuid, R.mergeDeepLeft({ hidden: true })))
+      return state.map(updateOps(action.payload.uuid, R.mergeDeepLeft({ hidden: true, read: true })))
     }
     case CLEAR_NOTIFICATIONS: {
       return state.filter(x => !x.hidden)

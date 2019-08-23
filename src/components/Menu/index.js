@@ -210,15 +210,17 @@ export function Index(props: MenuProps) {
     </div>
     <div className={styles.separator}></div>
     <div className={styles.menuList}>
-      {menu.map(x => <MenuItem {...x} key={x.path} onClick={onClick} expand={onExpand} short={isShort} />)}
+      {menu.map((x, i) => <MenuItem key={i} {...x} onClick={onClick} expand={onExpand} short={isShort} />)}
     </div>
     <div className={styles.bottomButtons}>
       <MenuItem
+        key={'documentation'}
         icon={
           <img src={information}
            style={{height: 14, width: 14}}
           />
         }
+
         label={'Documentation'}
         onClick={() => window.open('https://www.tarantool.io/ru/', '_blank')}
         path={'https://www.tarantool.io/ru/'}
@@ -228,6 +230,7 @@ export function Index(props: MenuProps) {
 
       />
       <MenuItem
+        key={'collapse'}
         isCollapse={true}
         icon={
           <img src={leftArrow}
@@ -238,6 +241,7 @@ export function Index(props: MenuProps) {
                }}
           />
         }
+
         label={'Collapse menu'}
         path={'collapse'}
         onClick={(e) => {e.preventDefault(); setIsShort(!isShort)}}

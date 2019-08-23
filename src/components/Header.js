@@ -1,7 +1,7 @@
 // @flow
 import    * as React from 'react';
 import { connect } from 'react-redux';
-import { css } from 'react-emotion';
+import { css, cx } from 'react-emotion';
 import { selectTitle } from '../store/selectors'
 import { push } from 'connected-react-router';
 import core from '../coreInstance';
@@ -94,15 +94,24 @@ class Header extends React.Component<HeaderProps> {
   render() {
     const { title, breadcrumbs, dispatch } = this.props;
     const breadcrumbsComponents = R.flatten(breadcrumbs.map(
-      ({link, title}) => [
-        <span className={`${styles.breadcrumbDelimeter} ${styles.breadcrumbElement}`}>/</span>,
+      ({link, title}, i) => [
+        <span key={`delimiter_${i}`} className={`${styles.breadcrumbDelimeter} ${styles.breadcrumbElement}`}>/</span>,
         link
           ?
-          <a href={link} onClick={(e) => {e.preventDefault(); dispatch(push(link))}} className={`${styles.breadcrumbActive} ${styles.breadcrumbElement}`}>
+          <a
+            key={`title_${i}`}
+            href={link}
+            onClick={(e) => {e.preventDefault(); dispatch(push(link))}}
+            className={cx(styles.breadcrumbActive, styles.breadcrumbElement)}>
             {title}
           </a>
           :
-          <span className={`${styles.breadcrumbActive} ${styles.breadcrumbElement}`}>{title}</span>
+          <span
+            key={`title_${i}`}
+            className={cx(styles.breadcrumbActive, styles.breadcrumbElement)}
+          >
+            {title}
+          </span>
       ]
     ))
     return (
@@ -110,7 +119,7 @@ class Header extends React.Component<HeaderProps> {
         <div className={styles.titleContainer}>
           <h1 className={styles.title}>{title}</h1>
           <div className={styles.breadcrumbs}>
-            <span className={`${styles.breadcrumbNoInteract} ${styles.breadcrumbElement}`}>Tarantool</span>
+            <span className={cx(styles.breadcrumbNoInteract, styles.breadcrumbElement)}>Tarantool</span>
             {breadcrumbsComponents}
           </div>
         </div>
