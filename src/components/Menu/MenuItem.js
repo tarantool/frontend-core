@@ -196,10 +196,10 @@ export const MenuItem = ({
       {path
         ? (
           <a
-            className={`${shortStyles.icon}`}
+            className={shortStyles.icon}
             href={APP_PATH_PREFIX + path}
           >
-            <MenuIcon icon={icon} />
+            <MenuIcon icon={icon} className={shortStyles.icon} />
           </a>
         )
         : (
@@ -207,7 +207,7 @@ export const MenuItem = ({
             className={`${shortStyles.icon}`}
             type="button"
           >
-            <MenuIcon icon={icon} />
+            <MenuIcon icon={icon} className={shortStyles.icon} />
           </button>
         )}
 
