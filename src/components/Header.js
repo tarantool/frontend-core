@@ -53,6 +53,7 @@ const styles = {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    align-items: center;
   `,
   breadcrumbs: css`
     font-family: Open Sans;
