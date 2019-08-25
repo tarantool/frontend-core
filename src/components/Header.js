@@ -50,6 +50,9 @@ const styles = {
   infoContainer: css`
     flex-grow: 0;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
   `,
   breadcrumbs: css`
     font-family: Open Sans;

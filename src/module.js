@@ -8,6 +8,8 @@ core.components = {
   AppTitle,
 }
 
+core.logo = require('./components/logo.svg')
+
 ReactDOM.render(<App />, document.getElementById('root'))
 
 export default core

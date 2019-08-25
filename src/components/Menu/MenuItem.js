@@ -210,11 +210,10 @@ export const MenuItem = ({
             <MenuIcon icon={icon} className={shortStyles.icon} />
           </button>
         )}
-
     </div>
   }
   let subItems = null
-  if (expanded && !short) {
+  if (expanded && !short && items && items.length > 0) {
     subItems = (
       <div className={itemStyles.submenuList}>
         {items.map(x => <MenuItem key={x.path} {...x} onClick={onClick} isSubitem={true}/>)}
@@ -222,7 +221,7 @@ export const MenuItem = ({
     )
   }
 
-  const expandButton = items.length
+  const expandButton = items && items.length > 0
     ? <img src={chevron} className={`${itemStyles.expandButton} ${expanded ? '' : itemStyles.expandButtonUnexpand}`}></img>
     : null
 
