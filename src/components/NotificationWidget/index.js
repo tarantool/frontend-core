@@ -35,6 +35,7 @@ const styles = {
     height: 16px;
   `,
   notificationList: css`
+    z-index: 1;
     position: absolute;
     top: 100%;
     right: 0;
