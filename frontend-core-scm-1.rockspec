@@ -1,7 +1,7 @@
 package = 'frontend-core'
 version = 'scm-1'
 source  = {
-    url = 'git+ssh://git@gitlab.com:tarantool/enterprise/enterprise-frontend-core.git',
+    url = 'git+https://github.com/tarantool/frontend-core.git',
     branch = 'master',
 }
 dependencies = {
