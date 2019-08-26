@@ -1,4 +1,4 @@
-# Tarantool Enterprise Front-end Core
+# Tarantool Front-end Core
 
 It's core module for admin UI. Any UI submodules should be register at core.
 
