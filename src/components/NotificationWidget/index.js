@@ -5,6 +5,7 @@ import bell from './notification.svg'
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
 import type { NotificationItem } from '../../store/reducers/notifications'
 import Notification from '../Notification';
+import Button from '../Button'
 
 const styles = {
   container: css`
@@ -50,8 +51,10 @@ const styles = {
     padding: 16px 0;
   `,
   clearButton: css`
-    margin-top: 10px;
-    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 10px 16px 0;
   `,
   notificationListContent: css`
     max-height: 230px;
@@ -114,9 +117,12 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
         </div>
         {
           notifications.length > 0 &&
-          <div className={styles.clearButton} onClick={() => dispatch(clearNotifications())}>
-            Clear
-          </div>
+            <div className={styles.clearButton}>
+              <Button
+                text={'Clear'}
+                onClick={() => dispatch(clearNotifications())}
+              />
+            </div>
         }
       </div>
       }

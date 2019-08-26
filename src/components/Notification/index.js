@@ -34,25 +34,24 @@ const styles = {
     height: 22px;
   `,
   close: css`
-    position: absolute;
-    right: 16px;
-    top: 22px;
+    float: right;
     width: 12px;
     height: 12px;
     cursor: pointer;
+    margin-left: 10px;
+    margin-bottom: 4px;
   `,
   content: css`
     margin-left: 30px;
   `,
   title: css`
-    display: inline-block;
+    display: inline;
     font-weight: 600;
     font-family: Open Sans;
     margin-bottom: 4px;
     line-height: 1.5;
     letter-spacing: 0.32px;
     color: #000000;
-    
   `,
   text: css`
     font-family: Open Sans;
@@ -64,6 +63,10 @@ const styles = {
       font-weight: 600;
     }
   `,
+  delimiter: css`
+    display: block;
+    height: 4px;
+  `
 }
 
 const shortStyles = {
@@ -121,9 +124,10 @@ export default ({ title, message, type, uuid, dispatch, initedAt, className='', 
   >
     {icon}
     <div className={styles.content}>
-      {title ? <div className={styles.title}>{title}</div> : null }
-      {message ? <div className={styles.text} dangerouslySetInnerHTML={{__html: message}}></div> : null }
+      <img src={close} className={styles.close}/>
+      {title ? <React.Fragment><span className={styles.title}>{title}</span><div className={styles.delimiter}></div></React.Fragment> : null }
+      {message ? <span className={styles.text} dangerouslySetInnerHTML={{__html: message}}></span> : null }
     </div>
-    <img src={close} className={styles.close}/>
+
   </div>
 }
