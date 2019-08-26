@@ -8,7 +8,7 @@ core.components = {
   AppTitle,
 }
 
-core.logo = require('./components/logo.svg')
+core.logo = require('./components/tarantool-logo.svg')
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
