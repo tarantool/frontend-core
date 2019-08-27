@@ -36,11 +36,10 @@ const thumbYProps = {
 type ScrollbarProps = {
   children?: React.Node,
   track?: string,
-  thumb?: string,
-  height?: string
+  thumb?: string
 }
 
-function Scrollbar({ children, height = 'auto', track, thumb }: ScrollbarProps) {
+function Scrollbar({ children, track, thumb }: ScrollbarProps) {
   return (
     <ScrollWrapper>
       <ReactScroll
