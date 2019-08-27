@@ -1,6 +1,11 @@
 import * as React from 'react';
 import ReactScroll from 'react-scrollbars-custom';
+import { css } from 'emotion';
 import styled from 'react-emotion';
+
+const ScrollWrapper = styled.div`
+  height: 100%;
+`
 
 const Track = styled.div`
   width: 4px !important;
@@ -37,15 +42,17 @@ type ScrollbarProps = {
 
 function Scrollbar({ children, height = 'auto', track, thumb }: ScrollbarProps) {
   return (
-    <ReactScroll
-      track={track}
-      thumb={thumb}
-      trackYProps={{ ...trackYProps, track }}
-      thumbYProps={{ ...thumbYProps, thumb }}
-      style={{ width: '100%', height }}
-    >
-      {children}
-    </ReactScroll>
+    <ScrollWrapper>
+      <ReactScroll
+        track={track}
+        thumb={thumb}
+        trackYProps={{ ...trackYProps, track }}
+        thumbYProps={{ ...thumbYProps, thumb }}
+        style={{ width: '100%', height: '100%' }}
+      >
+        {children}
+      </ReactScroll>
+    </ScrollWrapper>
   )
 }
 

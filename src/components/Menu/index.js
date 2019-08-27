@@ -210,7 +210,7 @@ export function Index(props: MenuProps) {
       }
     </div>
     <div className={styles.separator}></div>
-    <Scrollbar height={'600px'} track={'#212121'}>
+    <Scrollbar track={'#212121'}>
       <div className={styles.menuList}>
         {menu.map((x, i) => <MenuItem key={i} {...x} onClick={onClick} expand={onExpand} short={isShort} />)}
       </div>
