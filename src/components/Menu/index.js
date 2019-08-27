@@ -8,6 +8,7 @@ import type { menuItem } from '../../core'
 import logo from '../tarantool-logo.svg'
 import shortLogo from './tarantool-logo-collapse.svg'
 import { MenuItem } from './MenuItem'
+import Scrollbar from '../Scrollbar'
 import { expand } from '../../store/actions/menu'
 import information from './information.svg'
 import leftArrow from './arrow-left.svg'
@@ -209,9 +210,11 @@ export function Index(props: MenuProps) {
       }
     </div>
     <div className={styles.separator}></div>
-    <div className={styles.menuList}>
-      {menu.map((x, i) => <MenuItem key={i} {...x} onClick={onClick} expand={onExpand} short={isShort} />)}
-    </div>
+    <Scrollbar height={'600px'} track={'#212121'}>
+      <div className={styles.menuList}>
+        {menu.map((x, i) => <MenuItem key={i} {...x} onClick={onClick} expand={onExpand} short={isShort} />)}
+      </div>
+    </Scrollbar>
     <div className={styles.bottomButtons}>
       <MenuItem
         key={'documentation'}
