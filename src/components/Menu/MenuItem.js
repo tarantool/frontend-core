@@ -190,7 +190,7 @@ export const MenuItem = ({
   if (short) {
     return <div
       className={`${shortStyles.item} ${(selected || (items && items.find(x => x.selected))) ? shortStyles.itemSelected : ''}`}
-      onClick={evt => items.length > 0 ? expand(evt, path) : onClick(evt, path)}
+      onClick={evt => items && items.length > 0 ? expand(evt, path) : onClick(evt, path)}
       title={label}
     >
       {path
@@ -238,26 +238,13 @@ export const MenuItem = ({
 
       >
         { isSubitem ? null : <MenuIcon icon={icon} className={itemStyles.icon} /> }
-        {path
-          ? (
-            <a
-              className={cx(styleMap.title, selected ? styleMap.titleSelected : '')}
-              title={label}
-              href={APP_PATH_PREFIX + path}
-            >
-              {label}
-            </a>
-          )
-          : (
-            <button
-              className={cx(styleMap.title, selected ? styleMap.titleSelected : '')}
-              title={label}
-              type="button"
-            >
-              {label}
-            </button>
-          )}
-
+        <a
+          className={cx(styleMap.title, selected ? styleMap.titleSelected : '')}
+          title={label}
+          href={APP_PATH_PREFIX + path}
+        >
+          {label}
+        </a>
         {expandButton}
 
       </div>

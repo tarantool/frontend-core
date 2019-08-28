@@ -222,7 +222,7 @@ export function Index(props: MenuProps) {
         }
 
         label={'Documentation'}
-        onClick={() => window.open('https://www.tarantool.io/ru/', '_blank')}
+        onClick={() => window.open('https://www.tarantool.io/en/doc', '_blank')}
         path={'https://www.tarantool.io/ru/'}
         selected={false}
         items={[]}
