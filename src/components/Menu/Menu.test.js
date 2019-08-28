@@ -3,6 +3,9 @@ import renderer from 'react-test-renderer';
 import * as React from 'react';
 import * as constants from '../../store/constants';
 
+jest.mock('../Scrollbar.js', () => ({ children }) => <div>{children}</div>)
+
+
 describe('Menu', () => {
   const rootPath = '/';
   const testPath = '/test';

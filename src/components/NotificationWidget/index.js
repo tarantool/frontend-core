@@ -6,6 +6,8 @@ import { clearNotifications, hideNotificationList, showNotificationList } from '
 import type { NotificationItem } from '../../store/reducers/notifications'
 import Notification from '../Notification';
 import Button from '../Button'
+import { isExistsHiddenNonRead, selectHiddenNotifications } from '../../store/selectors'
+import { AutoScroll } from '../AutoScroll'
 
 const styles = {
   container: css`
@@ -58,8 +60,11 @@ const styles = {
   `,
   notificationListContent: css`
     max-height: 230px;
-    padding: 0 16px;
+    
     overflow: auto;
+  `,
+  notificationInner: css`
+    padding: 0 16px;
   `,
   noNotification: css`
     font-size: 14px;
@@ -112,17 +117,21 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
       </div>
       {showList && <div className={styles.notificationList}>
         <div className={styles.notificationListContent}>
-          {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
-          {notifications.map(x => <Notification className={styles.listItem} {...x} isShort={true}/>)}
+          <AutoScroll maxHeight={230}>
+            <div className={styles.notificationInner}>
+              {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
+              {notifications.map(x => <Notification className={styles.listItem} {...x} isShort={true}/>)}
+            </div>
+          </AutoScroll>
         </div>
         {
           notifications.length > 0 &&
-            <div className={styles.clearButton}>
-              <Button
-                text={'Clear'}
-                onClick={() => dispatch(clearNotifications())}
-              />
-            </div>
+          <div className={styles.clearButton}>
+            <Button
+              text={'Clear'}
+              onClick={() => dispatch(clearNotifications())}
+            />
+          </div>
         }
       </div>
       }
@@ -131,7 +140,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
 }
 
 export default connect((state) => ({
-  notifications: state.notifications.filter(x => x.hidden),
-  active: state.notifications.filter(x => !x.read && x.hidden).length > 0,
+  notifications: selectHiddenNotifications(state),
+  active: isExistsHiddenNonRead(state),
   showList: state.ui.showNotificationList,
 }))(NotificationWidget)

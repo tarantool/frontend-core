@@ -250,7 +250,7 @@ export const MenuItem = ({
             <a
               className={cx(
                 styleMap.title, {
-                  [styleMap.titleSelected]: selected,
+                  [itemStyles.titleSelected]: selected,
                   [itemStyles.expanded]: expanded,
                 }
               )}
@@ -263,7 +263,7 @@ export const MenuItem = ({
             <span
               className={cx(
                 styleMap.title, {
-                  [styleMap.titleSelected]: selected,
+                  [itemStyles.titleSelected]: selected,
                   [itemStyles.expanded]: expanded,
                 }
               )}

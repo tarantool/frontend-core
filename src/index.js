@@ -16,7 +16,7 @@ if (rootElement) {
 const textElements = [];
 
 for (let i =0; i < 100; i++) {
-  textElements.push(<div styles={{marginBottom: '20px'}} key={i}>Test text overflow row: {i}</div>)
+  textElements.push(<div style={{marginBottom: '20px'}} key={i}>Test text overflow row: {i}</div>)
 }
 
 class Test extends React.Component<null> {
