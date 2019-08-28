@@ -52,7 +52,6 @@
     "less": "^3.9.0",
     "less-loader": "5.0.0",
     "lodash": "^4.17.10",
-    "mime-types": "^2.1.21",
     "nanoid": "^2.0.3",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",

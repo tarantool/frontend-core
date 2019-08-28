@@ -105,6 +105,12 @@ const itemStyles = {
       opacity: 1;
     }
   `,
+  expanded: css`
+    cursor: default;
+    &:hover{
+      background: none;
+    }
+  `,
 }
 
 const subitemStyles = {
@@ -203,12 +209,11 @@ export const MenuItem = ({
           </a>
         )
         : (
-          <button
+          <span
             className={`${shortStyles.icon}`}
-            type="button"
           >
             <MenuIcon icon={icon} className={shortStyles.icon} />
-          </button>
+          </span>
         )}
     </div>
   }
@@ -233,18 +238,40 @@ export const MenuItem = ({
           [styleMap.item]: true,
           [styleMap.itemSelected]: selected,
           [itemStyles.collapse]: isCollapse,
+          [itemStyles.expanded]: expanded,
         })}
         onClick={items && items.length ? evt => expand(evt, path) : evt => onClick(evt, path)}
 
       >
         { isSubitem ? null : <MenuIcon icon={icon} className={itemStyles.icon} /> }
-        <a
-          className={cx(styleMap.title, selected ? styleMap.titleSelected : '')}
-          title={label}
-          href={APP_PATH_PREFIX + path}
-        >
-          {label}
-        </a>
+        {
+          path
+            ?
+            <a
+              className={cx(
+                styleMap.title, {
+                  [styleMap.titleSelected]: selected,
+                  [itemStyles.expanded]: expanded,
+                }
+              )}
+              title={label}
+              href={APP_PATH_PREFIX + path}
+            >
+              {label}
+            </a>
+            :
+            <span
+              className={cx(
+                styleMap.title, {
+                  [styleMap.titleSelected]: selected,
+                  [itemStyles.expanded]: expanded,
+                }
+              )}
+              title={label}
+            >
+              {label}
+            </span>
+        }
         {expandButton}
 
       </div>
