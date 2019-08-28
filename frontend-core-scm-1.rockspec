@@ -3,6 +3,7 @@ version = 'scm-1'
 source  = {
     url = 'git+https://github.com/tarantool/frontend-core.git',
     branch = 'master',
+    dir = 'packages/core'
 }
 dependencies = {
     'lua >= 5.1',
@@ -11,7 +12,6 @@ build = {
     type = 'make';
     install = {
         lua = {
-            ['pack-front'] = 'pack-front.lua',
             ['frontend-core'] = 'frontend-core.lua',
             -- ['frontend-core.bundle'] -- installed with make
         },

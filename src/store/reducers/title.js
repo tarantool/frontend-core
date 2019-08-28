@@ -4,16 +4,18 @@ import {
   TITLE_RESET,
 } from '../constants';
 
-import type { SetTitleAction, ResetTitleAction } from './actions';
+import type { SetTitleAction, ResetTitleAction } from '../actions/title';
 
 export type AppTitleState = {
-  title: string
+  title: string,
+  propsList: Array<AppTitleProps>,
 };
 
 type Action = SetTitleAction | ResetTitleAction;
 
 const initialState = {
   title: '',
+  propsList: [],
 };
 
 export default (state: AppTitleState = initialState, action: Action): AppTitleState => {
@@ -21,7 +23,8 @@ export default (state: AppTitleState = initialState, action: Action): AppTitleSt
     case TITLE_SET:
       return {
         ...state,
-        title: action.payload,
+        title: action.payload.title,
+        propsList: action.payload.propsList,
       };
 
     case TITLE_RESET:

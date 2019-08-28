@@ -28,7 +28,12 @@ describe('Header component', () => {
     ],
     appTitle: {
       title: '',
+      propsList: [],
     },
+    notifications: [],
+    ui: {
+      showNotificationList: false,
+    }
   }
 
   const initialStateWithTitle = {
@@ -36,6 +41,7 @@ describe('Header component', () => {
     appTitle: {
       ...initialState.appTitle,
       title: 'App Title',
+      propsList: [ { title: 'App Title'} ]
     },
   }
 
@@ -44,6 +50,8 @@ describe('Header component', () => {
       combineReducers({
         menu: (state = initialState.menu) => state,
         appTitle: (state = initialState.appTitle) => state,
+        notifications: (state = initialState.notifications) => state,
+        ui: (state = initialState.ui) => state,
       })
     )
 
@@ -57,6 +65,8 @@ describe('Header component', () => {
       combineReducers({
         menu: (state = initialStateWithTitle.menu) => state,
         appTitle: (state = initialStateWithTitle.appTitle) => state,
+        notifications: (state = initialState.notifications) => state,
+        ui: (state = initialState.ui) => state,
       })
     )
 

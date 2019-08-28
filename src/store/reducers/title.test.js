@@ -1,4 +1,4 @@
-import reducer from './reducer';
+import reducer from './title';
 import * as constants from '../constants';
 
 test('title should be changed', () => {
@@ -6,11 +6,12 @@ test('title should be changed', () => {
 
   const action = {
     type: constants.TITLE_SET,
-    payload: title,
+    payload: { title, propsList: [{ title }] }
   };
 
   const initialState = {
     title: '',
+    propsList: [],
   };
 
   const newState = reducer(initialState, action);
@@ -23,6 +24,7 @@ test('title should be cleared', () => {
 
   const initialState = {
     title: 'Section second',
+    propsList: [{title: 'Section changed'}],
   };
 
   const newState = reducer(initialState, action);
@@ -33,7 +35,7 @@ test('title should be cleared', () => {
 test('title should be the same', () => {
   const title = 'Section second';
   const action = { type: 'SOME_ACTION', payload: { data: 'Big' } };
-  const initialState = { title };
+  const initialState = { title, propsList: [{ title }] };
 
   const newState = reducer(initialState, action);
 
