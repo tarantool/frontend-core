@@ -34,7 +34,7 @@ local function index_handler(req)
             '<!doctype html>' ..
             '<html>' ..
                 '<head>' ..
-                    '<title>Tarantool Enterprise</title>'..
+                    '<title>Tarantool Cartridge</title>'..
                 '</head>' ..
                 '<body>' ..
                     '<div id="root"></div>' ..
