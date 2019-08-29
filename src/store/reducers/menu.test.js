@@ -18,7 +18,7 @@ describe('reduce choose by part of path', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: [],
+          items: []
         },
         {
           label: 'kitties',
@@ -26,98 +26,100 @@ describe('reduce choose by part of path', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: [],
-        },
-      ],
-    },
-  ];
+          items: []
+        }
+      ]
+    }
+  ]
 
   it('without nested items', () => {
     const action = {
       type: constants.LOCATION_CHANGE,
       payload: {
         location: {
-          pathname: '/space_explorer/hosts',
-        },
-      },
-    };
+          pathname: '/space_explorer/hosts'
+        }
+      }
+    }
 
-    const state = [{
-      label: 'space_explorer',
-      path: '/space_explorer',
-      selected: false,
-      expanded: false,
-      loading: false,
-      items: [],
-    }];
+    const state = [
+      {
+        label: 'space_explorer',
+        path: '/space_explorer',
+        selected: false,
+        expanded: false,
+        loading: false,
+        items: []
+      }
+    ]
 
-    const newState = defaultReducer()(state, action);
+    const newState = defaultReducer()(state, action)
 
-    expect(newState[0].selected).toBe(true);
-  });
+    expect(newState[0].selected).toBe(true)
+  })
 
   it('with nested items', () => {
     const action = {
       type: constants.LOCATION_CHANGE,
       payload: {
         location: {
-          pathname: '/space_explorer/hosts',
-        },
-      },
-    };
+          pathname: '/space_explorer/hosts'
+        }
+      }
+    }
 
-    const newState = defaultReducer()(nestedMenuState, action);
+    const newState = defaultReducer()(nestedMenuState, action)
 
-    expect(newState[0].selected).toBe(false);
-    expect(newState[0].expanded).toBe(true);
-    expect(newState[0].items[0].selected).toBe(true);
-  });
+    expect(newState[0].selected).toBe(false)
+    expect(newState[0].expanded).toBe(true)
+    expect(newState[0].items[0].selected).toBe(true)
+  })
 
   it('with nested items and deep path', () => {
     const action = {
       type: constants.LOCATION_CHANGE,
       payload: {
         location: {
-          pathname: '/space_explorer/spaces/space4/',
-        },
-      },
-    };
+          pathname: '/space_explorer/spaces/space4/'
+        }
+      }
+    }
 
-    const newState = defaultReducer()(nestedMenuState, action);
+    const newState = defaultReducer()(nestedMenuState, action)
 
-    expect(newState[0].selected).toBe(true);
-    expect(newState[0].expanded).toBe(true);
-    expect(newState[0].items[0].selected).toBe(false);
-  });
+    expect(newState[0].selected).toBe(true)
+    expect(newState[0].expanded).toBe(true)
+    expect(newState[0].items[0].selected).toBe(false)
+  })
 
   it('with nested items and deep path, second case', () => {
     const action = {
       type: constants.LOCATION_CHANGE,
       payload: {
         location: {
-          pathname: '/space_explorer/kitties/kitty4/',
-        },
-      },
-    };
+          pathname: '/space_explorer/kitties/kitty4/'
+        }
+      }
+    }
 
-    const newState = defaultReducer()(nestedMenuState, action);
+    const newState = defaultReducer()(nestedMenuState, action)
 
-    expect(newState[0].selected).toBe(false);
-    expect(newState[0].expanded).toBe(true);
-    expect(newState[0].items[1].selected).toBe(true);
-    expect(newState[0].items[1].expanded).toBe(false);
-  });
-});
+    expect(newState[0].selected).toBe(false)
+    expect(newState[0].expanded).toBe(true)
+    expect(newState[0].items[1].selected).toBe(true)
+    expect(newState[0].items[1].expanded).toBe(false)
+  })
+})
 
 test('switch menu subsection on location change', () => {
   const action = {
     type: constants.LOCATION_CHANGE,
     payload: {
       location: {
-        pathname: '/fruits/banana',
-      },
-    },
-  };
+        pathname: '/fruits/banana'
+      }
+    }
+  }
 
   const state = [
     {
@@ -126,7 +128,7 @@ test('switch menu subsection on location change', () => {
       selected: true,
       expanded: false,
       loading: false,
-      items: [],
+      items: []
     },
     {
       label: 'Fruits',
@@ -141,7 +143,7 @@ test('switch menu subsection on location change', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: [],
+          items: []
         },
         {
           label: 'Apple',
@@ -149,9 +151,9 @@ test('switch menu subsection on location change', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: [],
-        },
-      ],
+          items: []
+        }
+      ]
     },
     {
       label: 'Gems',
@@ -159,28 +161,28 @@ test('switch menu subsection on location change', () => {
       selected: false,
       expanded: false,
       loading: false,
-      items: [],
-    },
-  ];
+      items: []
+    }
+  ]
 
-  const newState = defaultReducer()(state, action);
+  const newState = defaultReducer()(state, action)
 
-  expect(newState[0].selected).toBeFalsy();
-  expect(newState[1].selected).toBeFalsy();
-  expect(newState[1].expanded).toBeTruthy();
-  expect(newState[1].items[0].selected).toBeTruthy();
-  expect(newState[1].items[0].expanded).toBeFalsy();
-});
+  expect(newState[0].selected).toBeFalsy()
+  expect(newState[1].selected).toBeFalsy()
+  expect(newState[1].expanded).toBeTruthy()
+  expect(newState[1].items[0].selected).toBeTruthy()
+  expect(newState[1].items[0].expanded).toBeFalsy()
+})
 
 test('switch menu subsection on route change', () => {
   const action = {
     type: constants.LOCATION_CHANGE,
     payload: {
       location: {
-        pathname: '/gems',
-      },
-    },
-  };
+        pathname: '/gems'
+      }
+    }
+  }
 
   const state = [
     {
@@ -189,7 +191,7 @@ test('switch menu subsection on route change', () => {
       selected: false,
       expanded: false,
       loading: false,
-      items: [],
+      items: []
     },
     {
       label: 'Fruits',
@@ -204,7 +206,7 @@ test('switch menu subsection on route change', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: [],
+          items: []
         },
         {
           label: 'Apple',
@@ -212,9 +214,9 @@ test('switch menu subsection on route change', () => {
           selected: true,
           expanded: false,
           loading: false,
-          items: [],
-        },
-      ],
+          items: []
+        }
+      ]
     },
     {
       label: 'Gems',
@@ -222,41 +224,43 @@ test('switch menu subsection on route change', () => {
       selected: false,
       expanded: false,
       loading: false,
-      items: [],
-    },
-  ];
+      items: []
+    }
+  ]
 
-  const newState = defaultReducer()(state, action);
+  const newState = defaultReducer()(state, action)
 
-  expect(newState[1].expanded).toBeFalsy();
-  expect(newState[1].items[1].selected).toBeFalsy();
-  expect(newState[1].items[1].expanded).toBeFalsy();
-  expect(newState[2].selected).toBeTruthy();
-  expect(newState[2].expanded).toBeFalsy();
-});
+  expect(newState[1].expanded).toBeFalsy()
+  expect(newState[1].items[1].selected).toBeFalsy()
+  expect(newState[1].items[1].expanded).toBeFalsy()
+  expect(newState[2].selected).toBeTruthy()
+  expect(newState[2].expanded).toBeFalsy()
+})
 
 test('reduce choose by full path', () => {
   const action = {
     type: constants.LOCATION_CHANGE,
     payload: {
       location: {
-        pathname: '/space_explorer',
-      },
-    },
-  };
+        pathname: '/space_explorer'
+      }
+    }
+  }
 
-  const state = [{
-    label: 'space_explorer',
-    path: '/space_explorer',
-    selected: false,
-    expanded: false,
-    loading: false,
-    items: [],
-  }];
+  const state = [
+    {
+      label: 'space_explorer',
+      path: '/space_explorer',
+      selected: false,
+      expanded: false,
+      loading: false,
+      items: []
+    }
+  ]
 
-  const newState = defaultReducer()(state, action);
+  const newState = defaultReducer()(state, action)
 
-  expect(newState[0].selected).toBe(true);
+  expect(newState[0].selected).toBe(true)
 })
 
 test('reduce not choose', () => {
@@ -264,65 +268,71 @@ test('reduce not choose', () => {
     type: constants.LOCATION_CHANGE,
     payload: {
       location: {
-        pathname: '/',
-      },
-    },
-  };
+        pathname: '/'
+      }
+    }
+  }
 
-  const state = [{
-    label: 'space_explorer',
-    path: '/space_explorer',
-    selected: false,
-    expanded: false,
-    loading: false,
-    items: [],
-  }];
+  const state = [
+    {
+      label: 'space_explorer',
+      path: '/space_explorer',
+      selected: false,
+      expanded: false,
+      loading: false,
+      items: []
+    }
+  ]
 
-  const newState = defaultReducer()(state, action);
+  const newState = defaultReducer()(state, action)
 
-  expect(newState[0].selected).toBe(false);
+  expect(newState[0].selected).toBe(false)
 })
 
 test('menu reducer function', () => {
-  const reducerInstance = generateInstance();
-  const equalData = [{
-    label: 'test',
-    path: '/test',
-    selected: true,
-    expanded: false,
-    loading: false,
-    items: [],
-  }];
+  const reducerInstance = generateInstance()
+  const equalData = [
+    {
+      label: 'test',
+      path: '/test',
+      selected: true,
+      expanded: false,
+      loading: false,
+      items: []
+    }
+  ]
   const testModule = {
     namespace: 'test',
     menu: () => equalData.slice(0),
     RootComponent: () => null,
-    engine: 'react',
+    engine: 'react'
   }
   reducerInstance.processModule(testModule)
   const reducedData = reducerInstance.reduce([], { type: 'NOTHING_CASE' })
 
-  expect(reducedData).toEqual(equalData.map(item => ({ ...item, namespace: 'test' })));
+  expect(reducedData).toEqual(equalData.map(item => ({ ...item, namespace: 'test' })))
 })
 
 test('menu middleware function call', () => {
-  const middlewareFunction = jest.fn();
-  const nextFn = jest.fn();
-  const reducerInstance = generateInstance();
-  const equalData = [{
-    label: 'test',
-    path: '/test',
-    selected: true,
-    expanded: false,
-    loading: false,
-    items: [],
-  }];
+  const middlewareFunction = jest.fn()
+  const nextFn = jest.fn()
+  const reducerInstance = generateInstance()
+  const equalData = [
+    {
+      label: 'test',
+      path: '/test',
+      selected: true,
+      expanded: false,
+      loading: false,
+      items: []
+    }
+  ]
   const testModule = {
     namespace: 'test',
     menu: () => equalData.slice(0),
     menuMiddleware: middlewareFunction,
     RootComponent: () => null,
-    engine: 'react',
+    engine: 'react'
   }
   reducerInstance.processModule(testModule)
 
@@ -335,23 +345,23 @@ test('menu middleware function call', () => {
 
 describe('matchPath', () => {
   it('match not exact', () => {
-    expect(matchPath('/users/groups/groupb/', '/users')).toBeTruthy();
-    expect(matchPath('/users/groups/groupb', '/users/groups')).toBeTruthy();
-    expect(matchPath('/users/groups/groupb?extended=true&hidden=false', '/users/groups')).toBeTruthy();
+    expect(matchPath('/users/groups/groupb/', '/users')).toBeTruthy()
+    expect(matchPath('/users/groups/groupb', '/users/groups')).toBeTruthy()
+    expect(matchPath('/users/groups/groupb?extended=true&hidden=false', '/users/groups')).toBeTruthy()
 
-    expect(matchPath('/users/groups', '/users/groups/groupb')).toBeFalsy();
-    expect(matchPath('/users/groups/', '/users/groups/groupb')).toBeFalsy();
-    expect(matchPath('/users/groups?extended=true&hidden=false', '/users/groups/groupb')).toBeFalsy();
-  });
+    expect(matchPath('/users/groups', '/users/groups/groupb')).toBeFalsy()
+    expect(matchPath('/users/groups/', '/users/groups/groupb')).toBeFalsy()
+    expect(matchPath('/users/groups?extended=true&hidden=false', '/users/groups/groupb')).toBeFalsy()
+  })
 
   it('match exact', () => {
-    expect(matchPath('/users/groups/', '/users/groups', true)).toBeTruthy();
-    expect(matchPath('/users/groups', '/users/groups', true)).toBeTruthy();
-    expect(matchPath('/users/groups/?extended=true&hidden=false', '/users/groups', true)).toBeTruthy();
-    expect(matchPath('/users/groups?extended=true&hidden=false', '/users/groups', true)).toBeTruthy();
+    expect(matchPath('/users/groups/', '/users/groups', true)).toBeTruthy()
+    expect(matchPath('/users/groups', '/users/groups', true)).toBeTruthy()
+    expect(matchPath('/users/groups/?extended=true&hidden=false', '/users/groups', true)).toBeTruthy()
+    expect(matchPath('/users/groups?extended=true&hidden=false', '/users/groups', true)).toBeTruthy()
 
-    expect(matchPath('/users/groups/groupb/', '/users', true)).toBeFalsy();
-    expect(matchPath('/users/groups/groupb', '/users/groups', true)).toBeFalsy();
-    expect(matchPath('/users/groups/groupb?extended=true&hidden=false', '/users/groups', true)).toBeFalsy();
-  });
-});
+    expect(matchPath('/users/groups/groupb/', '/users', true)).toBeFalsy()
+    expect(matchPath('/users/groups/groupb', '/users/groups', true)).toBeFalsy()
+    expect(matchPath('/users/groups/groupb?extended=true&hidden=false', '/users/groups', true)).toBeFalsy()
+  })
+})

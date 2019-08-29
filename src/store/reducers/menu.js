@@ -2,16 +2,31 @@
 import * as R from 'ramda'
 import * as constants from '../constants'
 import noop from 'lodash/noop'
-import type { menuItem, FSA, module } from '../../core'
+import type { MenuItemType, FSA, CoreModule } from '../../core'
 
 const initialState = []
 
-export type MenuState = menuItem[];
+export type MenuState = MenuItemType[]
 
 type SubStore = {
   reducer: Function,
-  middleware: (Object) => void,
-  namespace: string,
+  middleware: Object => void,
+  namespace: string
+}
+
+const mapMenuTree = (menuState: MenuItemType[], fn: (item: MenuItemType) => MenuItemType) => {
+  const stack = [...menuState.map(fn)]
+  const result = [...stack]
+
+  for (let i = 0; i < stack.length; i++) {
+    const menuItem = stack[i]
+    if (menuItem.items) {
+      menuItem.items = [...menuItem.items.map(fn)]
+      stack.push(...menuItem.items)
+    }
+  }
+
+  return result
 }
 
 export const matchPath = (path: string, link: string, exact: boolean = false): boolean => {
@@ -25,7 +40,7 @@ export const matchPath = (path: string, link: string, exact: boolean = false): b
   return link === path || (!exact && path.indexOf(link) === 0 && path[link.length] === '/')
 }
 
-const getStrongestMatchingLink = (state: menuItem[], path: string): ?string => {
+const getStrongestMatchingLink = (state: MenuItemType[], path: string): ?string => {
   let selected = null
   const flattened = [...state]
 
@@ -46,73 +61,59 @@ const getStrongestMatchingLink = (state: menuItem[], path: string): ?string => {
   return selected
 }
 
-const updateLink = (activeLink: string) => (menuItem: menuItem): menuItem => {
+const updateLink = (activeLink: string) => (menuItem: MenuItemType): MenuItemType => {
   const { items = [], path } = menuItem
   const isPatchMatching: boolean = matchPath(activeLink, path)
 
   return {
     ...menuItem,
     expanded: isPatchMatching && !!items.length,
-    selected: matchPath(activeLink, path, true),
+    selected: matchPath(activeLink, path, true)
   }
 }
 
-const expand = (activeLink: string) => (menuItem: menuItem): menuItem => {
-  const { items = [], path } = menuItem
-  const isPatchMatching: boolean = matchPath(activeLink, path)
+const expand = (activeLink: string) => (menuItem: MenuItemType): MenuItemType => {
+  const { path } = menuItem
 
   return {
     ...menuItem,
-    expanded: matchPath(activeLink, path, true),
+    expanded: matchPath(activeLink, path, true)
   }
 }
 
-const mapMenuTree = (menuState: menuItem[], fn: (item: menuItem) => menuItem) => {
-  const stack = [...menuState.map(fn)]
-  const result = [...stack]
-
-  for (let i = 0; i < stack.length; i++) {
-    const menuItem = stack[i]
-    if (menuItem.items) {
-      menuItem.items = [...menuItem.items.map(fn)]
-      stack.push(...menuItem.items)
-    }
-  }
-
-  return result
-}
-
-export const defaultReducer = (defaultState: MenuState = []) =>
-  (state: MenuState = defaultState, { type, payload }: FSA): MenuState => {
-    switch (type) {
-      case constants.LOCATION_CHANGE:
-        if (payload && payload.location && payload.location.pathname) {
-          const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
-          return activeLink ? mapMenuTree(state, updateLink(activeLink)) : state
-        } else {
-          return state
-        }
-
-      case constants.EXPAND:
-        if (payload && payload.location && payload.location.pathname) {
-          const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
-          return activeLink ? mapMenuTree(state, expand(activeLink)) : state
-        } else {
-          return state
-        }
-
-      case constants.RESET:
-        if (payload && payload.path) {
-          const activeLink = getStrongestMatchingLink(state, payload.path)
-          return activeLink ? mapMenuTree(defaultState, updateLink(activeLink)) : state
-        } else {
-          return state
-        }
-
-      default:
+export const defaultReducer = (defaultState: MenuState = []) => (
+  state: MenuState = defaultState,
+  { type, payload }: FSA
+): MenuState => {
+  switch (type) {
+    case constants.LOCATION_CHANGE:
+      if (payload && payload.location && payload.location.pathname) {
+        const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
+        return activeLink ? mapMenuTree(state, updateLink(activeLink)) : state
+      } else {
         return state
-    }
+      }
+
+    case constants.EXPAND:
+      if (payload && payload.location && payload.location.pathname) {
+        const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
+        return activeLink ? mapMenuTree(state, expand(activeLink)) : state
+      } else {
+        return state
+      }
+
+    case constants.RESET:
+      if (payload && payload.path) {
+        const activeLink = getStrongestMatchingLink(state, payload.path)
+        return activeLink ? mapMenuTree(defaultState, updateLink(activeLink)) : state
+      } else {
+        return state
+      }
+
+    default:
+      return state
   }
+}
 
 const concat = Array.prototype.concat.bind([])
 
@@ -155,21 +156,23 @@ export class MainReducer {
     next(action)
   }
 
-  processModule = (module: module) => {
+  processModule = (module: CoreModule) => {
     if (this.installedStores[module.namespace]) {
       return false
     }
-    const reducer = Array.isArray(module.menu) ? {
-      state: module.menu,
-      reducer: defaultReducer(module.menu),
-      middleware: module.menuMiddleware || noop,
-      namespace: module.namespace,
-    } : {
-      state: initialState,
-      reducer: module.menu,
-      middleware: module.menuMiddleware || noop,
-      namespace: module.namespace,
-    }
+    const reducer = Array.isArray(module.menu)
+      ? {
+        state: module.menu,
+        reducer: defaultReducer(module.menu),
+        middleware: module.menuMiddleware || noop,
+        namespace: module.namespace
+      }
+      : {
+        state: initialState,
+        reducer: module.menu,
+        middleware: module.menuMiddleware || noop,
+        namespace: module.namespace
+      }
     this.subStores.push(reducer)
     this.installedStores[module.namespace] = true
     return true

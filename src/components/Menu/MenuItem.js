@@ -1,6 +1,6 @@
 import { APP_PATH_PREFIX } from '../../store/history'
 import React from 'react'
-import { Icon } from 'antd';
+import { Icon } from 'antd'
 import { css, cx } from 'react-emotion'
 import chevron from './chevron-up.svg'
 
@@ -12,18 +12,18 @@ const itemStyles = {
     border: none;
     text-decoration: none;
     user-select: none; /* supported by Chrome and Opera */
-   -webkit-user-select: none; /* Safari */
-   -khtml-user-select: none; /* Konqueror HTML */
-   -moz-user-select: none; /* Firefox */
-   -ms-user-select: none; /* Internet Explorer/Edge */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
 
-    &:hover{
+    &:hover {
       background: #212121;
     }
   `,
   itemSelected: css`
     background: #212121;
-    &:after{
+    &:after {
       display: block;
       height: 100%;
       left: 0;
@@ -34,11 +34,8 @@ const itemStyles = {
       position: absolute;
     }
   `,
-  itemShort: css`
-    
-  `,
-  itemHover: css`
-  `,
+  itemShort: css``,
+  itemHover: css``,
   title: css`
     position: absolute;
     font-family: Open Sans;
@@ -54,15 +51,16 @@ const itemStyles = {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     user-select: none; /* supported by Chrome and Opera */
-   -webkit-user-select: none; /* Safari */
-   -khtml-user-select: none; /* Konqueror HTML */
-   -moz-user-select: none; /* Firefox */
-   -ms-user-select: none; /* Internet Explorer/Edge */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 170px;
-    &:hover, &:visited{
+    &:hover,
+    &:visited {
       color: #fff;
     }
   `,
@@ -77,10 +75,10 @@ const itemStyles = {
     display: flex;
     color: #fff;
     user-select: none; /* supported by Chrome and Opera */
-   -webkit-user-select: none; /* Safari */
-   -khtml-user-select: none; /* Konqueror HTML */
-   -moz-user-select: none; /* Firefox */
-   -ms-user-select: none; /* Internet Explorer/Edge */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
   `,
   expandButton: css`
     position: absolute;
@@ -101,16 +99,16 @@ const itemStyles = {
   collapse: css`
     opacity: 0.65;
     background: #212121;
-    &:hover{
+    &:hover {
       opacity: 1;
     }
   `,
   expanded: css`
     cursor: default;
-    &:hover{
+    &:hover {
       background: none;
     }
-  `,
+  `
 }
 
 const subitemStyles = {
@@ -124,11 +122,8 @@ const subitemStyles = {
   title: css`
     ${itemStyles.title}
   `,
-  titleSelected: css`
-  
-  `,
-  itemShort: css`
-  `,
+  titleSelected: css``,
+  itemShort: css``
 }
 
 const shortStyles = {
@@ -136,13 +131,13 @@ const shortStyles = {
     height: 40px;
     position: relative;
     cursor: pointer;
-    &:hover{
+    &:hover {
       background: #212121;
     }
   `,
   itemSelected: css`
     background: #212121;
-    &:after{
+    &:after {
       display: block;
       height: 100%;
       left: 0;
@@ -165,18 +160,18 @@ const shortStyles = {
     display: flex;
     color: #fff;
     user-select: none; /* supported by Chrome and Opera */
-   -webkit-user-select: none; /* Safari */
-   -khtml-user-select: none; /* Konqueror HTML */
-   -moz-user-select: none; /* Firefox */
-   -ms-user-select: none; /* Internet Explorer/Edge */
-  `,
-};
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+  `
+}
 
 const MenuIcon = ({ icon, className }) => {
-  if (typeof(icon) === 'string') {
-    return <Icon type={icon} className={className}/>
+  if (typeof icon === 'string') {
+    return <Icon type={icon} className={className} />
   }
-  return <div className={className}>{icon}</div>;
+  return <div className={className}>{icon}</div>
 }
 
 export const MenuItem = ({
@@ -191,44 +186,47 @@ export const MenuItem = ({
   icon = 'hdd',
   short,
   expand,
-  isCollapse,
+  isCollapse
 }) => {
   if (short) {
-    return <div
-      className={`${shortStyles.item} ${(selected || (items && items.find(x => x.selected))) ? shortStyles.itemSelected : ''}`}
-      onClick={evt => items && items.length > 0 ? expand(evt, path) : onClick(evt, path)}
-      title={label}
-    >
-      {path
-        ? (
-          <a
-            className={shortStyles.icon}
-            href={APP_PATH_PREFIX + path}
-          >
+    return (
+      <div
+        className={`${shortStyles.item} ${
+          selected || (items && items.find(x => x.selected)) ? shortStyles.itemSelected : ''
+        }`}
+        onClick={evt => (items && items.length > 0 ? expand(evt, path) : onClick(evt, path))}
+        title={label}
+      >
+        {path ? (
+          <a className={shortStyles.icon} href={APP_PATH_PREFIX + path}>
             <MenuIcon icon={icon} className={shortStyles.icon} />
           </a>
-        )
-        : (
-          <span
-            className={`${shortStyles.icon}`}
-          >
+        ) : (
+          <span className={`${shortStyles.icon}`}>
             <MenuIcon icon={icon} className={shortStyles.icon} />
           </span>
         )}
-    </div>
+      </div>
+    )
   }
   let subItems = null
   if (expanded && !short && items && items.length > 0) {
     subItems = (
       <div className={itemStyles.submenuList}>
-        {items.map(x => <MenuItem key={x.path} {...x} onClick={onClick} isSubitem={true}/>)}
+        {items.map(x => (
+          <MenuItem key={x.path} {...x} onClick={onClick} isSubitem={true} />
+        ))}
       </div>
     )
   }
 
-  const expandButton = items && items.length > 0
-    ? <img src={chevron} className={`${itemStyles.expandButton} ${expanded ? '' : itemStyles.expandButtonUnexpand}`}></img>
-    : null
+  const expandButton =
+    items && items.length > 0 ? (
+      <img
+        src={chevron}
+        className={`${itemStyles.expandButton} ${expanded ? '' : itemStyles.expandButtonUnexpand}`}
+      ></img>
+    ) : null
 
   const styleMap = isSubitem ? subitemStyles : itemStyles
   return (
@@ -238,42 +236,34 @@ export const MenuItem = ({
           [styleMap.item]: true,
           [styleMap.itemSelected]: selected,
           [itemStyles.collapse]: isCollapse,
-          [itemStyles.expanded]: expanded,
+          [itemStyles.expanded]: expanded
         })}
         onClick={items && items.length ? evt => expand(evt, path) : evt => onClick(evt, path)}
-
       >
-        { isSubitem ? null : <MenuIcon icon={icon} className={itemStyles.icon} /> }
-        {
-          path
-            ?
-            <a
-              className={cx(
-                styleMap.title, {
-                  [itemStyles.titleSelected]: selected,
-                  [itemStyles.expanded]: expanded,
-                }
-              )}
-              title={label}
-              href={APP_PATH_PREFIX + path}
-            >
-              {label}
-            </a>
-            :
-            <span
-              className={cx(
-                styleMap.title, {
-                  [itemStyles.titleSelected]: selected,
-                  [itemStyles.expanded]: expanded,
-                }
-              )}
-              title={label}
-            >
-              {label}
-            </span>
-        }
+        {isSubitem ? null : <MenuIcon icon={icon} className={itemStyles.icon} />}
+        {path ? (
+          <a
+            className={cx(styleMap.title, {
+              [itemStyles.titleSelected]: selected,
+              [itemStyles.expanded]: expanded
+            })}
+            title={label}
+            href={APP_PATH_PREFIX + path}
+          >
+            {label}
+          </a>
+        ) : (
+          <span
+            className={cx(styleMap.title, {
+              [itemStyles.titleSelected]: selected,
+              [itemStyles.expanded]: expanded
+            })}
+            title={label}
+          >
+            {label}
+          </span>
+        )}
         {expandButton}
-
       </div>
 
       {subItems}

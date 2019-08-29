@@ -11,24 +11,24 @@ const initialState = {
   showNotificationList: false
 }
 
-export default (state: UiState = initialState, { type } : FSA): UiState => {
+export default (state: UiState = initialState, { type }: FSA): UiState => {
   switch (type) {
     case SHOW_NOTIFICATION_LIST: {
       return {
         ...state,
-        showNotificationList: true,
+        showNotificationList: true
       }
     }
     case HIDE_NOTIFICATION_LIST: {
       return {
         ...state,
-        showNotificationList: false,
+        showNotificationList: false
       }
     }
     case CLEAR_NOTIFICATIONS: {
       return {
         ...state,
-        showNotificationList: false,
+        showNotificationList: false
       }
     }
   }

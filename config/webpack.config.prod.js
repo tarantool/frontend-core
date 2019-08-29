@@ -253,12 +253,12 @@ module.exports = {
   plugins: [
     new FaviconsWebpackPlugin({
       // Your source logo (required)
-      logo: './public/static/favicon.png',
+      logo: './logos/favicon.png',
       // Enable caching and optionally specify the path to store cached data
       // Note: disabling caching may increase build times considerably
       cache: true,
       // Override the publicPath option usually read from webpack configuration
-      publicPath: '/static',
+      publicPath: '/static/core',
       // The directory to output the assets relative to the webpack output dir.
       // Relative string paths are allowed here ie '../public/static'. If this
       // option is not set, `prefix` is used.

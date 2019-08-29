@@ -2,7 +2,7 @@ import Header from './Header'
 import renderer from 'react-test-renderer'
 import * as React from 'react'
 import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux';
+import { Provider } from 'react-redux'
 
 describe('Header component', () => {
   const initialState = {
@@ -14,7 +14,7 @@ describe('Header component', () => {
         items: [],
         label: 'Cluster',
         path: '/test/test2',
-        namespace: 'test',
+        namespace: 'test'
       },
       {
         selected: false,
@@ -23,16 +23,16 @@ describe('Header component', () => {
         items: [],
         label: 'Dashboard',
         path: '/test/test',
-        namespace: 'test',
-      },
+        namespace: 'test'
+      }
     ],
     appTitle: {
       title: '',
-      propsList: [],
+      propsList: []
     },
     notifications: [],
     ui: {
-      showNotificationList: false,
+      showNotificationList: false
     }
   }
 
@@ -41,8 +41,8 @@ describe('Header component', () => {
     appTitle: {
       ...initialState.appTitle,
       title: 'App Title',
-      propsList: [ { title: 'App Title'} ]
-    },
+      propsList: [{ title: 'App Title' }]
+    }
   }
 
   it('use current menu item label, if appTitle is empty', () => {
@@ -51,11 +51,15 @@ describe('Header component', () => {
         menu: (state = initialState.menu) => state,
         appTitle: (state = initialState.appTitle) => state,
         notifications: (state = initialState.notifications) => state,
-        ui: (state = initialState.ui) => state,
+        ui: (state = initialState.ui) => state
       })
     )
 
-    const component = renderer.create(<Provider store={mockStore}><Header /></Provider>)
+    const component = renderer.create(
+      <Provider store={mockStore}>
+        <Header />
+      </Provider>
+    )
 
     expect(component.root.findByType('h1').children[0]).toEqual('Cluster')
   })
@@ -66,11 +70,15 @@ describe('Header component', () => {
         menu: (state = initialStateWithTitle.menu) => state,
         appTitle: (state = initialStateWithTitle.appTitle) => state,
         notifications: (state = initialState.notifications) => state,
-        ui: (state = initialState.ui) => state,
+        ui: (state = initialState.ui) => state
       })
     )
 
-    const component = renderer.create(<Provider store={mockStore}><Header /></Provider>)
+    const component = renderer.create(
+      <Provider store={mockStore}>
+        <Header />
+      </Provider>
+    )
 
     expect(component.root.findByType('h1').children[0]).toEqual('App Title')
   })
