@@ -93,41 +93,45 @@ const shortStyles = {
     font-family: Open Sans;
     font-size: 12px;
     color: rgba(0, 0, 0, 0.65);
-    padding-bottom: 7px
-  `,
+    padding-bottom: 7px;
+  `
 }
 
 const styleMap = {
-  'success': styles.success,
-  'error': styles.error,
+  success: styles.success,
+  error: styles.error
 }
 
 const iconMap = {
-  'success': successCircle,
-  'error': failCircle,
+  success: successCircle,
+  error: failCircle
 }
 
-export default ({ title, message, type, uuid, dispatch, initedAt, className='', isShort = false }) => {
-
+export default ({ title, message, type, uuid, dispatch, initedAt, className = '', isShort = false }) => {
   const icon = iconMap[type] ? <img src={iconMap[type]} className={isShort ? shortStyles.icon : styles.icon} /> : null
   if (isShort) {
-    return <div className={cx(shortStyles.container, className)}>
-      {icon}
-      <div className={shortStyles.content}>{title}</div>
-      {message ? <div className={shortStyles.content} dangerouslySetInnerHTML={{__html: message}}></div> : null }
-      <div className={shortStyles.date}>{format(initedAt, 'hh:mm d MMM yyyy')}</div>
-    </div>
+    return (
+      <div className={cx(shortStyles.container, className)}>
+        {icon}
+        <div className={shortStyles.content}>{title}</div>
+        {message ? <div className={shortStyles.content} dangerouslySetInnerHTML={{ __html: message }}></div> : null}
+        <div className={shortStyles.date}>{format(initedAt, 'hh:mm d MMM yyyy')}</div>
+      </div>
+    )
   }
-  return <div
-    className={cx(styles.container, styleMap[type], className)}
-    onClick={() => dispatch(hideNotification(uuid)) }
-  >
-    {icon}
-    <div className={styles.content}>
-      <img src={close} className={styles.close}/>
-      {title ? <React.Fragment><span className={styles.title}>{title}</span><div className={styles.delimiter}></div></React.Fragment> : null }
-      {message ? <span className={styles.text} dangerouslySetInnerHTML={{__html: message}}></span> : null }
+  return (
+    <div className={cx(styles.container, styleMap[type], className)} onClick={() => dispatch(hideNotification(uuid))}>
+      {icon}
+      <div className={styles.content}>
+        <img src={close} className={styles.close} />
+        {title ? (
+          <React.Fragment>
+            <span className={styles.title}>{title}</span>
+            <div className={styles.delimiter}></div>
+          </React.Fragment>
+        ) : null}
+        {message ? <span className={styles.text} dangerouslySetInnerHTML={{ __html: message }}></span> : null}
+      </div>
     </div>
-
-  </div>
+  )
 }

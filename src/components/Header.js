@@ -1,18 +1,18 @@
 // @flow
-import    * as React from 'react';
-import { connect } from 'react-redux';
-import { css, cx } from 'react-emotion';
-import { selectTitle } from '../store/selectors'
-import { push } from 'connected-react-router';
-import core from '../coreInstance';
-import * as R from 'ramda';
-import { selectBreadcrumbs } from '../store/selectors'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { css, cx } from 'react-emotion'
+import { selectTitle, selectBreadcrumbs } from '../store/selectors'
+import { push } from 'connected-react-router'
+import core from '../coreInstance'
+import * as R from 'ramda'
+
 import NotificationWidget from './NotificationWidget'
 
 const styles = {
   header: css`
     height: 69px;
-    background: #FFFFFF;
+    background: #ffffff;
     width: 100%;
     display: flex;
     box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
@@ -28,7 +28,7 @@ const styles = {
   `,
   logo: css`
     position: absolute;
-    left: 12px; 
+    left: 12px;
     top: -1px;
     width: 146px;
     height: 53px;
@@ -80,44 +80,47 @@ const styles = {
     color: rgba(0, 0, 0, 0.65);
     text-decoration: none;
   `
-};
+}
 
 type HeaderProps = {
   title: string,
   breadcrumbs: AppTitleProps[],
-  dispatch: Function,
-};
+  dispatch: Function
+}
 
 class Header extends React.Component<HeaderProps> {
-  componentDidMount() {
+  componentDidMount () {
     core.subscribe('setHeaderComponent', () => {
-      this.forceUpdate();
-    });
+      this.forceUpdate()
+    })
   }
 
-  render() {
-    const { title, breadcrumbs, dispatch } = this.props;
-    const breadcrumbsComponents = R.flatten(breadcrumbs.map(
-      ({link, title}, i) => [
-        <span key={`delimiter_${i}`} className={`${styles.breadcrumbDelimeter} ${styles.breadcrumbElement}`}>/</span>,
-        link
-          ?
+  render () {
+    const { title, breadcrumbs, dispatch } = this.props
+    const breadcrumbsComponents = R.flatten(
+      breadcrumbs.map(({ link, title }, i) => [
+        <span key={`delimiter_${i}`} className={`${styles.breadcrumbDelimeter} ${styles.breadcrumbElement}`}>
+          /
+        </span>,
+        link ? (
           <a
             key={`title_${i}`}
             href={link}
-            onClick={(e) => {e.preventDefault(); dispatch(push(link))}}
-            className={cx(styles.breadcrumbActive, styles.breadcrumbElement)}>
-            {title}
-          </a>
-          :
-          <span
-            key={`title_${i}`}
+            onClick={e => {
+              e.preventDefault()
+              dispatch(push(link))
+            }}
             className={cx(styles.breadcrumbActive, styles.breadcrumbElement)}
           >
             {title}
+          </a>
+        ) : (
+          <span key={`title_${i}`} className={cx(styles.breadcrumbActive, styles.breadcrumbElement)}>
+            {title}
           </span>
-      ]
-    ))
+        )
+      ])
+    )
     return (
       <div className={styles.header}>
         <div className={styles.titleContainer}>
@@ -128,17 +131,17 @@ class Header extends React.Component<HeaderProps> {
           </div>
         </div>
         <div className={styles.infoContainer}>
-          <NotificationWidget/>
+          <NotificationWidget />
           {core.getHeaderComponent()}
         </div>
       </div>
-    );
+    )
   }
 }
 
 const mapStateToProps = state => ({
   title: selectTitle(state),
-  breadcrumbs: selectBreadcrumbs(state),
-});
+  breadcrumbs: selectBreadcrumbs(state)
+})
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(Header)

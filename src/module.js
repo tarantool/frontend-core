@@ -5,7 +5,7 @@ import core from './coreInstance'
 import AppTitle from './components/AppTitle'
 
 core.components = {
-  AppTitle,
+  AppTitle
 }
 
 core.logo = require('./components/tarantool-logo.svg')

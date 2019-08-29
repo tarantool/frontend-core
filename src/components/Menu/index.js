@@ -4,7 +4,7 @@ import { css, keyframes } from 'react-emotion'
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import type { menuItem } from '../../core'
+import type { MenuItemType } from '../../core'
 import logo from '../tarantool-logo.svg'
 import shortLogo from './tarantool-logo-collapse.svg'
 import { MenuItem } from './MenuItem'
@@ -20,8 +20,7 @@ const translateFromRight = keyframes`
   to{
     transform: translate3d(0, 0, 0);
   }
-`;
-
+`
 
 const styles = {
   container: css`
@@ -46,7 +45,7 @@ const styles = {
   `,
   menuList: css`
     flex-grow: 1;
-    overflow: hidden;   
+    overflow: hidden;
   `,
   item: css`
     height: 40px;
@@ -57,18 +56,18 @@ const styles = {
     position: absolute;
     right: 28px;
     top: 11px;
-    &:after{
-      width: 0; 
-      height: 0; 
+    &:after {
+      width: 0;
+      height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
       border-bottom: 7px solid #fff;
     }
   `,
   expandButtonUnexpand: css`
-    &:after{
-      width: 0; 
-      height: 0; 
+    &:after {
+      width: 0;
+      height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
       border-top: 7px solid #fff;
@@ -89,17 +88,17 @@ const styles = {
     transition: color 300ms;
     text-decoration: none;
     :focus,
-    :hover{
+    :hover {
       color: #e32636;
       text-decoration: none;
-      outline: none
+      outline: none;
     }
   `,
   selectedMenuItem: css`
     padding-bottom: 4px;
-    border-bottom: 1px solid rgba(255, 39, 44, 1);   
+    border-bottom: 1px solid rgba(255, 39, 44, 1);
     cursor: default;
-    :hover{
+    :hover {
       color: rgba(255, 39, 44, 1);
     }
   `,
@@ -110,10 +109,20 @@ const styles = {
     color: white;
     margin-left: 30px;
     cursor: pointer;
-    :before{ content: '> '; display: inline-block; width: 20px; position: relative;}
-    :hover{
+    :before {
+      content: '> ';
+      display: inline-block;
+      width: 20px;
+      position: relative;
+    }
+    :hover {
       color: #ca0009;
-      :before{ content: '@'; display: inline-block; width: 20px; position: relative;}
+      :before {
+        content: '@';
+        display: inline-block;
+        width: 20px;
+        position: relative;
+      }
     }
     animation: ${translateFromRight} 1s;
   `,
@@ -122,8 +131,7 @@ const styles = {
     margin-top: 10px;
     margin-left: 10px;
   `,
-  itemLoading: css`
-  `,
+  itemLoading: css``,
   logoContainer: css`
     padding: 22px 0 22px 0;
     text-align: center;
@@ -144,7 +152,7 @@ const styles = {
     align-self: center;
     position: relative;
     width: 100%;
-    &:after{
+    &:after {
       position: absolute;
       background: rgba(255, 255, 255, 0.2);
       content: '';
@@ -158,105 +166,99 @@ const styles = {
     flex-grow: 0;
     flex-shrink: 0;
     margin-top: 16px;
-  `,
-};
-
-
-type MenuProps = {
-  menu: Array<menuItem>,
-  dispatch: Function,
-  path: string,
-  className: string,
+  `
 }
 
-export function Index(props: MenuProps) {
-  const { menu, dispatch, path, className } = props;
-  const [isInited, setIsInited] = useState(path !== '/');
+type MenuProps = {
+  menu: Array<MenuItemType>,
+  dispatch: Function,
+  path: string,
+  className: string
+}
 
-  const [isShort, setIsShort] = useState(document && document.body ? document.body.clientWidth < 1200 : false);
+export function Index (props: MenuProps) {
+  const { menu, dispatch, path, className } = props
+  const [isInited, setIsInited] = useState(path !== '/')
+
+  const [isShort, setIsShort] = useState(document && document.body ? document.body.clientWidth < 1200 : false)
 
   if (!isInited) {
     if (menu.length > 0) {
-      const notSelected = menu.filter(x => x.selected).length === 0;
+      const notSelected = menu.filter(x => x.selected).length === 0
       if (notSelected) {
-        const path = menu[0].path;
-        dispatch(push(path));
+        const path = menu[0].path
+        dispatch(push(path))
       }
-      setIsInited(true);
+      setIsInited(true)
     }
   }
 
   const onClick = (evt, path) => {
-    evt.preventDefault();
-    dispatch(push(path));
-  };
+    evt.preventDefault()
+    dispatch(push(path))
+  }
 
   const onExpand = (evt, path) => {
-    evt.preventDefault();
+    evt.preventDefault()
     if (isShort) {
-      setIsShort(false);
+      setIsShort(false)
     }
-    dispatch(expand(path));
-  };
+    dispatch(expand(path))
+  }
 
-  return <div className={`${styles.container} ${className} ${isShort ? styles.shortContainer : ''}`}>
-    <div className={styles.logoContainer}>
-      {
-        isShort
-          ?
-          <img src={shortLogo} className={styles.shortLogo} />
-          :
-          <img src={logo} className={styles.logo} />
-      }
-    </div>
-    <div className={styles.separator}></div>
-    <Scrollbar track={'#212121'}>
-      <div className={styles.menuList}>
-        {menu.map((x, i) => <MenuItem key={i} {...x} onClick={onClick} expand={onExpand} short={isShort} />)}
+  return (
+    <div className={`${styles.container} ${className} ${isShort ? styles.shortContainer : ''}`}>
+      <div className={styles.logoContainer}>
+        {isShort ? <img src={shortLogo} className={styles.shortLogo} /> : <img src={logo} className={styles.logo} />}
       </div>
-    </Scrollbar>
-    <div className={styles.bottomButtons}>
-      <MenuItem
-        key={'documentation'}
-        icon={
-          <img src={information}
-           style={{height: 14, width: 14}}
-          />
-        }
-
-        label={'Documentation'}
-        onClick={() => window.open('https://www.tarantool.io/en/doc', '_blank')}
-        selected={false}
-        items={[]}
-        short={isShort}
-
-      />
-      <MenuItem
-        key={'collapse'}
-        isCollapse={true}
-        icon={
-          <img src={leftArrow}
-               style={{
-                 height: 14,
-                 width: 14,
-                 transform: isShort ? 'rotate(180deg)' : '',
-               }}
-          />
-        }
-
-        label={'Collapse menu'}
-        onClick={(e) => {e.preventDefault(); setIsShort(!isShort)}}
-        selected={false}
-        items={[]}
-        short={isShort}
-      />
+      <div className={styles.separator}></div>
+      <Scrollbar track={'#212121'}>
+        <div className={styles.menuList}>
+          {menu.map((x, i) => (
+            <MenuItem key={i} {...x} onClick={onClick} expand={onExpand} short={isShort} />
+          ))}
+        </div>
+      </Scrollbar>
+      <div className={styles.bottomButtons}>
+        <MenuItem
+          key={'documentation'}
+          icon={<img src={information} style={{ height: 14, width: 14 }} />}
+          label={'Documentation'}
+          onClick={() => window.open('https://www.tarantool.io/en/doc', '_blank')}
+          selected={false}
+          items={[]}
+          short={isShort}
+        />
+        <MenuItem
+          key={'collapse'}
+          isCollapse={true}
+          icon={
+            <img
+              src={leftArrow}
+              style={{
+                height: 14,
+                width: 14,
+                transform: isShort ? 'rotate(180deg)' : ''
+              }}
+            />
+          }
+          label={'Collapse menu'}
+          onClick={e => {
+            e.preventDefault()
+            setIsShort(!isShort)
+          }}
+          selected={false}
+          items={[]}
+          short={isShort}
+        />
+      </div>
     </div>
-  </div>;
+  )
 }
 
 export default connect(({ menu, router }) => {
   return {
     menu,
-    path: router.location.pathname,
+    path: router.location.pathname
   }
 })(Index)

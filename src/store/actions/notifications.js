@@ -1,7 +1,8 @@
 // @flow
 import nanoid from 'nanoid'
 import {
-  CHECK_NOTIFICATIONS, CLEAR_NOTIFICATIONS,
+  CHECK_NOTIFICATIONS,
+  CLEAR_NOTIFICATIONS,
   HIDE_NOTIFICATION,
   HIDE_NOTIFICATION_LIST,
   PAUSE_NOTIFICATION_TIMER,
@@ -14,7 +15,7 @@ type SendNotification = {
   type: 'default' | 'warning' | 'error' | 'success',
   title: string,
   message?: string,
-  timeout?: number,
+  timeout?: number
 }
 
 export type SendNotificationAction = {
@@ -25,14 +26,14 @@ export type SendNotificationAction = {
     message?: string,
     timeout: number,
     uuid: string,
-    createdAt: number,
+    createdAt: number
   }
 }
 
 export type CheckNotificationsAction = {
   type: typeof CHECK_NOTIFICATIONS,
   payload: {
-    ts: number,
+    ts: number
   }
 }
 
@@ -40,25 +41,25 @@ export type HideNotificationAction = {
   type: typeof HIDE_NOTIFICATION,
   payload: {
     uuid: string,
-    ts: number,
+    ts: number
   }
 }
 
 export type ShowNotificationListAction = {
   type: typeof SHOW_NOTIFICATION_LIST,
-  payload: {},
+  payload: {}
 }
 
 export type HideNotificationListAction = {
   type: typeof HIDE_NOTIFICATION_LIST,
-  payload: {},
+  payload: {}
 }
 
 export type PauseNotificationTimerAction = {
   type: typeof PAUSE_NOTIFICATION_TIMER,
   payload: {
     uuid: string,
-    ts: number,
+    ts: number
   }
 }
 
@@ -66,17 +67,21 @@ export type UnpauseNotificationTimerAction = {
   type: typeof UNPAUSE_NOTIFICATION_TIMER,
   payload: {
     uuid: string,
-    ts: number,
+    ts: number
   }
 }
 
 export type ClearNotificationsAction = {
   type: typeof CLEAR_NOTIFICATIONS,
-  payload: {},
+  payload: {}
 }
 
-
-export const sendNotification = ({type = 'default', title, message, timeout = 30000}: SendNotification): SendNotificationAction => {
+export const sendNotification = ({
+  type = 'default',
+  title,
+  message,
+  timeout = 30000
+}: SendNotification): SendNotificationAction => {
   const uuid = nanoid()
 
   const now = Date.now()
@@ -98,7 +103,7 @@ export const sendNotification = ({type = 'default', title, message, timeout = 30
 
 export const checkNotifications = (): CheckNotificationsAction => ({
   type: CHECK_NOTIFICATIONS,
-  payload: {ts: Date.now()}
+  payload: { ts: Date.now() }
 })
 
 export const hideNotification = (uuid: string): HideNotificationAction => ({
@@ -124,7 +129,6 @@ export const unpauseNotificationTimer = (uuid: string) => ({
   }
 })
 
-
 export const showNotificationList = (): ShowNotificationListAction => ({
   type: SHOW_NOTIFICATION_LIST,
   payload: {}
@@ -137,5 +141,5 @@ export const hideNotificationList = (): HideNotificationListAction => ({
 
 export const clearNotifications = (): ClearNotificationsAction => ({
   type: CLEAR_NOTIFICATIONS,
-  payload: {},
+  payload: {}
 })

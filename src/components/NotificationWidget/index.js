@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import bell from './notification.svg'
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
 import type { NotificationItem } from '../../store/reducers/notifications'
-import Notification from '../Notification';
+import Notification from '../Notification'
 import Button from '../Button'
 import { isExistsHiddenNonRead, selectHiddenNotifications } from '../../store/selectors'
 import { AutoScroll } from '../AutoScroll'
@@ -21,7 +21,7 @@ const styles = {
     cursor: pointer;
   `,
   bellActive: css`
-    &:after{
+    &:after {
       content: '';
       position: absolute;
       width: 6px;
@@ -45,7 +45,7 @@ const styles = {
     width: 336px;
     background: #fff;
     display: block;
-    
+
     box-sizing: border-box;
     border-radius: 4px;
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.09);
@@ -60,7 +60,7 @@ const styles = {
   `,
   notificationListContent: css`
     max-height: 230px;
-    
+
     overflow: auto;
   `,
   notificationInner: css`
@@ -73,27 +73,27 @@ const styles = {
   listItem: css`
     border-bottom: 1px solid #e8e8e8;
     margin-bottom: 8px;
-    &:last-child{
+    &:last-child {
       border-bottom: none;
-    } 
-  `,
+    }
+  `
 }
 
 type NotificationWidgetProps = {
   notifications: Array<NotificationItem>,
   active: boolean,
   showList: boolean,
-  dispatch: Function,
+  dispatch: Function
 }
 
 class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
-  refEl = null;
-  clickHandler = (e) => {
-    if (this.refEl !== e.target && !this.refEl.contains(e.target) ) {
+  refEl = null
+  clickHandler = e => {
+    if (this.refEl !== e.target && !this.refEl.contains(e.target)) {
       this.props.dispatch(hideNotificationList())
     }
   }
-  componentDidUpdate(prevProps: Readonly<NotificationWidgetProps>): void {
+  componentDidUpdate (prevProps: Readonly<NotificationWidgetProps>): void {
     if (prevProps.showList !== this.props.showList) {
       if (this.props.showList) {
         document.addEventListener('mousedown', this.clickHandler, true)
@@ -105,42 +105,44 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
     }
   }
 
-  render(): React.ReactNode {
-    const { dispatch, notifications, showList, active } = this.props;
-    return <div className={styles.container} ref={r => this.refEl = r}>
-      <div
-        className={cx(styles.bell, active ? styles.bellActive : null)}
-
-        onClick={() => {dispatch(showList ? hideNotificationList() : showNotificationList())}}
-      >
-        <img src={bell} className={styles.bellIcon} />
-      </div>
-      {showList && <div className={styles.notificationList}>
-        <div className={styles.notificationListContent}>
-          <AutoScroll maxHeight={230}>
-            <div className={styles.notificationInner}>
-              {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
-              {notifications.map(x => <Notification className={styles.listItem} {...x} isShort={true}/>)}
-            </div>
-          </AutoScroll>
+  render (): React.ReactNode {
+    const { dispatch, notifications, showList, active } = this.props
+    return (
+      <div className={styles.container} ref={r => (this.refEl = r)}>
+        <div
+          className={cx(styles.bell, active ? styles.bellActive : null)}
+          onClick={() => {
+            dispatch(showList ? hideNotificationList() : showNotificationList())
+          }}
+        >
+          <img src={bell} className={styles.bellIcon} />
         </div>
-        {
-          notifications.length > 0 &&
-          <div className={styles.clearButton}>
-            <Button
-              text={'Clear'}
-              onClick={() => dispatch(clearNotifications())}
-            />
+        {showList && (
+          <div className={styles.notificationList}>
+            <div className={styles.notificationListContent}>
+              <AutoScroll maxHeight={230}>
+                <div className={styles.notificationInner}>
+                  {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
+                  {notifications.map(x => (
+                    <Notification className={styles.listItem} {...x} isShort={true} />
+                  ))}
+                </div>
+              </AutoScroll>
+            </div>
+            {notifications.length > 0 && (
+              <div className={styles.clearButton}>
+                <Button text={'Clear'} onClick={() => dispatch(clearNotifications())} />
+              </div>
+            )}
           </div>
-        }
+        )}
       </div>
-      }
-    </div>
+    )
   }
 }
 
-export default connect((state) => ({
+export default connect(state => ({
   notifications: selectHiddenNotifications(state),
   active: isExistsHiddenNonRead(state),
-  showList: state.ui.showNotificationList,
+  showList: state.ui.showNotificationList
 }))(NotificationWidget)

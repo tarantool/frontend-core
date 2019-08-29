@@ -5,53 +5,53 @@ import * as R from 'ramda'
 import history from './store/history'
 import { sendNotification } from './store/actions/notifications'
 
-export type menuItem = {
+export type MenuItemType = {
   label: string,
   path: string,
   selected: boolean,
   expanded: boolean,
   loading: boolean,
   icon: string | Object,
-  items?: Array<menuItem>,
+  items?: Array<MenuItemType>
 }
 
 type halfMenuItem = {
   label: string,
   path: string,
-  icon?: string | Object,
+  icon?: string | Object
 }
 
 export type FSA = {
   type: string,
   payload?: any,
   error?: boolean,
-  meta?: any,
+  meta?: any
 }
 
-type menuShape = (action: FSA, state: [menuItem]) => Array<menuItem> | Array<menuItem> | Array<halfMenuItem>
+type menuShape = (action: FSA, state: [MenuItemType]) => Array<MenuItemType> | Array<MenuItemType> | Array<halfMenuItem>
 
-const refineMenuItem = (item: menuItem | halfMenuItem) : menuItem => ({
+const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => ({
   selected: false,
   expanded: false,
   loading: false,
   items: [],
   icon: 'menu',
-  ...item,
+  ...item
 })
 
 const engineMap = {
-  'react': 'react.js',
-  'vue': 'vue.js',
+  react: 'react.js',
+  vue: 'vue.js'
 }
 
 type engines = $Keys<typeof engineMap>
 
-export type module = {
+export type CoreModule = {
   namespace: string,
   menu: menuShape,
-  menuMiddleware?: (Object) => void,
+  menuMiddleware?: Object => void,
   RootComponent: ComponentType<any>,
-  engine: engines,
+  engine: engines
 }
 
 type moduleStatus = 'loading' | 'loaded' | 'not_loaded'
@@ -69,30 +69,30 @@ const loadEngine = (engineSrc: string): Promise<boolean> => {
 }
 
 export default class Core {
-  modules: Array<module> = []
+  modules: Array<CoreModule> = []
   activeEngines: { [name: engines]: moduleStatus } = { react: 'loaded' }
   notifiers: { [string]: Array<Function> } = {}
   history = history
   header = null
-  setHeaderComponent(headerComponent: any) {
+  setHeaderComponent (headerComponent: any) {
     this.header = headerComponent
     this.dispatch('setHeaderComponent')
   }
-  getHeaderComponent() {
+  getHeaderComponent () {
     return this.header
   }
-  waitForModule(namespace: string): Promise<boolean> {
+  waitForModule (namespace: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const unwait = this.subscribe('registerModule', () => {
         const modules = this.getModules().filter(x => x.namespace === namespace)
         if (modules.length > 0) {
-          unwait();
+          unwait()
           resolve(true)
         }
       })
     })
   }
-  dispatch(eventType: string, event: ?Object = null) {
+  dispatch (eventType: string, event: ?Object = null) {
     if (!this.notifiers[eventType]) {
       this.notifiers[eventType] = []
     }
@@ -100,24 +100,25 @@ export default class Core {
       callback(event)
     }
   }
-  register(
+  register (
     namespace: string,
     menu: menuShape,
     RootComponent: ComponentType<any>,
     engine: engines = 'react',
-    menuMiddleware?: (Object) => void) {
+    menuMiddleware?: Object => void
+  ) {
     const addingModule = {
       namespace,
       menu: Array.isArray(menu) ? menu.map(refineMenuItem) : menu,
       menuMiddleware,
       RootComponent,
-      engine,
-    };
+      engine
+    }
     this.checkNamespace(addingModule)
     this.modules.push(addingModule)
     this.fetchEnginesAndNotify()
   }
-  async fetchEnginesAndNotify() {
+  async fetchEnginesAndNotify () {
     const currentEngines = R.uniq(this.modules.map(x => x.engine))
     let needLoad = false
     for (const curEngine of currentEngines) {
@@ -136,16 +137,16 @@ export default class Core {
       this.dispatch('registerModule')
     }
   }
-  checkNamespace(module: module) {
+  checkNamespace (module: CoreModule) {
     const namespaces = this.modules.map(x => x.namespace)
     if (namespaces.indexOf(module.namespace) >= 0) {
       throw new Error('namespace_already_in_use')
     }
   }
-  getModules() {
+  getModules () {
     return this.modules
   }
-  subscribe(eventType: string, callback: Function) {
+  subscribe (eventType: string, callback: Function) {
     if (!this.notifiers[eventType]) {
       this.notifiers[eventType] = []
     }
@@ -154,8 +155,18 @@ export default class Core {
       this.notifiers[eventType] = this.notifiers[eventType].filter(f => f !== callback)
     }
   }
-  notify({type, title, message, timeout}: {type: 'default' | 'success' | 'error', title: string, message?: string, timeout?: number}) {
-    this.dispatch('dispatchToken', sendNotification({type, title, message, timeout}))
+  notify ({
+    type,
+    title,
+    message,
+    timeout
+  }: {
+    type: 'default' | 'success' | 'error',
+    title: string,
+    message?: string,
+    timeout?: number
+  }) {
+    this.dispatch('dispatchToken', sendNotification({ type, title, message, timeout }))
   }
 }
 

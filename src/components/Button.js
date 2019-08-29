@@ -91,33 +91,30 @@ const styles = {
 
   s: css`
     padding: 0px 15px;
-  `,
-
-};
+  `
+}
 
 type ButtonProps = {
   className?: string,
   children?: React.Node,
   disabled?: boolean,
   intent?: 'primary' | 'secondary' | 'base',
-  onClick?: (MouseEvent) => void,
+  onClick?: MouseEvent => void,
   size?: 's' | 'm',
   text?: string,
   type?: 'button' | 'submit'
-};
+}
 
 export default ({
-                  className,
-                  children,
-                  disabled,
-                  intent = 'base',
-                  onClick,
-                  size = 'm',
-                  text,
-                  type = 'button'
-                }:
-                  ButtonProps) => {
-
+  className,
+  children,
+  disabled,
+  intent = 'base',
+  onClick,
+  size = 'm',
+  text,
+  type = 'button'
+}: ButtonProps) => {
   return (
     <button
       className={cx(
@@ -135,5 +132,5 @@ export default ({
     >
       {children || text}
     </button>
-  );
+  )
 }

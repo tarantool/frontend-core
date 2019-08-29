@@ -1138,7 +1138,6 @@ injectGlobal(`
 
 `)
 
-
 injectGlobal(`
 /* Open Sans - by Steve Matteson, Apache License version 2.0 */
 

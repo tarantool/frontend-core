@@ -14,9 +14,9 @@ const initialMenu = [
         selected: false,
         expanded: false,
         loading: false,
-        items: [],
-      },
-    ],
+        items: []
+      }
+    ]
   },
   {
     label: 'Fruits',
@@ -31,7 +31,7 @@ const initialMenu = [
         selected: false,
         expanded: false,
         loading: false,
-        items: [],
+        items: []
       },
       {
         label: 'Apple',
@@ -39,9 +39,9 @@ const initialMenu = [
         selected: false,
         expanded: false,
         loading: false,
-        items: [],
-      },
-    ],
+        items: []
+      }
+    ]
   },
   {
     label: 'Gems',
@@ -49,9 +49,9 @@ const initialMenu = [
     selected: false,
     expanded: false,
     loading: false,
-    items: [],
-  },
-];
+    items: []
+  }
+]
 
 test('flattenMenu', () => {
   const expectedResult = [
@@ -68,9 +68,9 @@ test('flattenMenu', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: [],
-        },
-      ],
+          items: []
+        }
+      ]
     },
     {
       label: 'Fruits',
@@ -85,7 +85,7 @@ test('flattenMenu', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: [],
+          items: []
         },
         {
           label: 'Apple',
@@ -93,9 +93,9 @@ test('flattenMenu', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: [],
-        },
-      ],
+          items: []
+        }
+      ]
     },
     {
       label: 'Gems',
@@ -103,7 +103,7 @@ test('flattenMenu', () => {
       selected: false,
       expanded: false,
       loading: false,
-      items: [],
+      items: []
     },
     {
       label: 'Cabbage',
@@ -111,7 +111,7 @@ test('flattenMenu', () => {
       selected: false,
       expanded: false,
       loading: false,
-      items: [],
+      items: []
     },
     {
       label: 'Fruits Banana',
@@ -119,7 +119,7 @@ test('flattenMenu', () => {
       selected: false,
       expanded: false,
       loading: false,
-      items: [],
+      items: []
     },
     {
       label: 'Apple',
@@ -127,20 +127,20 @@ test('flattenMenu', () => {
       selected: false,
       expanded: false,
       loading: false,
-      items: [],
-    },
-  ];
+      items: []
+    }
+  ]
 
-  const flattenedMenu = flattenMenu(initialMenu);
-  expect(flattenedMenu).toEqual(expectedResult);
-});
+  const flattenedMenu = flattenMenu(initialMenu)
+  expect(flattenedMenu).toEqual(expectedResult)
+})
 
 test('selectCurrentMenuItemLabel', () => {
-  const label = selectCurrentMenuItemLabel({ menu: initialMenu });
-  expect(label).toBe('Vegetables');
-});
+  const label = selectCurrentMenuItemLabel({ menu: initialMenu })
+  expect(label).toBe('Vegetables')
+})
 
-test('selectCurrentMenuItemLabel when anyone menu item isn\'t selected', () => {
+test("selectCurrentMenuItemLabel when anyone menu item isn't selected", () => {
   const label = selectCurrentMenuItemLabel({
     menu: [
       {
@@ -149,11 +149,11 @@ test('selectCurrentMenuItemLabel when anyone menu item isn\'t selected', () => {
         selected: false,
         expanded: false,
         loading: false,
-        items: [],
-      },
-    ],
-  });
+        items: []
+      }
+    ]
+  })
 
-  expect(label).toBe('');
-  expect(selectCurrentMenuItemLabel({ menu: [] })).toBe('');
-});
+  expect(label).toBe('')
+  expect(selectCurrentMenuItemLabel({ menu: [] })).toBe('')
+})

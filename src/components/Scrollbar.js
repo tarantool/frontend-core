@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import ReactScroll from 'react-scrollbars-custom';
-import { css } from 'emotion';
-import styled from 'react-emotion';
+import React from 'react'
+import ReactScroll from 'react-scrollbars-custom'
+import styled from 'react-emotion'
 
 const ScrollWrapper = styled.div`
   width: 100%;
@@ -20,21 +19,21 @@ const Thumb = styled.div`
 
 const trackYProps = {
   renderer: props => {
-    const { elementRef, style, ...rest } = props;
+    const { elementRef, style, ...rest } = props
 
-    return <Track {...rest} style={style} innerRef={elementRef} />;
+    return <Track {...rest} style={style} innerRef={elementRef} />
   },
   style: {
     height: '100%',
-    top: 0,
+    top: 0
   }
 }
 
 const thumbYProps = {
   renderer: props => {
-    const { elementRef, style, ...rest } = props;
+    const { elementRef, style, ...rest } = props
 
-    return <Thumb {...rest} style={style} innerRef={elementRef} />;
+    return <Thumb {...rest} style={style} innerRef={elementRef} />
   }
 }
 
@@ -43,11 +42,10 @@ type ScrollbarProps = {
   track?: string,
   thumb?: string,
   maxHeight?: number,
-  className?: string,
+  className?: string
 }
 
-function Scrollbar({ children, track, thumb, className, style }: ScrollbarProps) {
-
+function Scrollbar ({ children, track, thumb, className, style }: ScrollbarProps) {
   return (
     <ScrollWrapper className={className} style={style}>
       <ReactScroll
@@ -63,4 +61,4 @@ function Scrollbar({ children, track, thumb, className, style }: ScrollbarProps)
   )
 }
 
-export default Scrollbar;
+export default Scrollbar
