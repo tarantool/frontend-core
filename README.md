@@ -248,3 +248,24 @@ Register routes `/admin/` and `/static/`, and redirect from `/` to `/admin/` in 
 `namespace` - using for namespace module. Should be same name as your JS namespace module.
 
 `bundle` - a frontend bundle loaded as a lua table.
+
+# Development usage
+
+You can use it in your frontend development mode with our npm package `@tarantoo.io/frontend-core`, but you need use external `react` and `react-dom` from our package.
+
+## Install development package
+
+`npm i -s @tarantool.io/frontend-core`
+
+## Part of webpack config example 
+
+```
+  externals: {
+    react: 'react',
+    'react-dom': 'reactDom'
+  },
+```
+
+## Bundle to lua
+
+We use plugin to bundle our static as Lua. Check it out here: https://github.com/tarantool/lua-bundler-webpack-plugin
