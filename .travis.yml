@@ -7,4 +7,4 @@ cache: false
 script:
   - npm run lint
   - npm run flow
-  - npm run test_oncne
+  - npm run test_once
