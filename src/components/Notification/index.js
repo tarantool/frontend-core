@@ -115,7 +115,7 @@ export default ({ title, message, type, uuid, dispatch, initedAt, className = ''
         {icon}
         <div className={shortStyles.content}>{title}</div>
         {message ? <div className={shortStyles.content} dangerouslySetInnerHTML={{ __html: message }}></div> : null}
-        <div className={shortStyles.date}>{format(initedAt, 'hh:mm d MMM yyyy')}</div>
+        <div className={shortStyles.date}>{format(initedAt, 'HH:mm d MMM yyyy')}</div>
       </div>
     )
   }
