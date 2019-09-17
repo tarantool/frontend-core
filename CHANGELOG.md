@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix notifications hours display
 - Change notifications journal order to by time descending
 - Update ANT.D version
+- Added favicon (working in Chrome and Firefox)
 
 ## [6.0.2]
 
