@@ -3,6 +3,7 @@ import nanoid from 'nanoid'
 import {
   CHECK_NOTIFICATIONS,
   CLEAR_NOTIFICATIONS,
+  GARBAGE_NOTIFICATIONS,
   HIDE_NOTIFICATION,
   HIDE_NOTIFICATION_LIST,
   PAUSE_NOTIFICATION_TIMER,
@@ -15,15 +16,16 @@ type SendNotification = {
   type: 'default' | 'warning' | 'error' | 'success',
   title: string,
   message?: string,
-  timeout?: number
+  timeout?: number,
+  createdAt?: number
 }
 
 export type SendNotificationAction = {
   type: typeof SEND_NOTIFICATION,
   payload: {
     type: 'default' | 'warning' | 'error' | 'success',
-    title: string,
-    message?: string,
+    title: ?string,
+    message: ?string,
     timeout: number,
     uuid: string,
     createdAt: number
@@ -40,8 +42,7 @@ export type CheckNotificationsAction = {
 export type HideNotificationAction = {
   type: typeof HIDE_NOTIFICATION,
   payload: {
-    uuid: string,
-    ts: number
+    uuid: string
   }
 }
 
@@ -76,23 +77,29 @@ export type ClearNotificationsAction = {
   payload: {}
 }
 
+export type GarbageNotificationsAction = {
+  type: typeof GARBAGE_NOTIFICATIONS,
+  payload: {
+    ts: number
+  }
+}
+
 export const sendNotification = ({
   type = 'default',
   title,
   message,
-  timeout = 30000
+  timeout = 30000,
+  createdAt = Date.now()
 }: SendNotification): SendNotificationAction => {
   const uuid = nanoid()
 
-  const now = Date.now()
-
   const payload = {
     type,
-    title,
-    message,
+    title: title || null,
+    message: message || null,
     timeout,
     uuid,
-    createdAt: now
+    createdAt
   }
 
   return {
@@ -101,16 +108,15 @@ export const sendNotification = ({
   }
 }
 
-export const checkNotifications = (): CheckNotificationsAction => ({
+export const checkNotifications = (ts: number = Date.now()): CheckNotificationsAction => ({
   type: CHECK_NOTIFICATIONS,
-  payload: { ts: Date.now() }
+  payload: { ts }
 })
 
 export const hideNotification = (uuid: string): HideNotificationAction => ({
   type: HIDE_NOTIFICATION,
   payload: {
-    uuid,
-    ts: Date.now()
+    uuid
   }
 })
 
@@ -142,4 +148,11 @@ export const hideNotificationList = (): HideNotificationListAction => ({
 export const clearNotifications = (): ClearNotificationsAction => ({
   type: CLEAR_NOTIFICATIONS,
   payload: {}
+})
+
+export const garbageNotifications = (ts: number = Date.now()): GarbageNotificationsAction => ({
+  type: GARBAGE_NOTIFICATIONS,
+  payload: {
+    ts
+  }
 })

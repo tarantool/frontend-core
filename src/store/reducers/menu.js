@@ -153,7 +153,7 @@ export class MainReducer {
 
   middleware = (store: Object) => (next: Function) => (action: FSA) => {
     R.map(R.prop('middleware'), this.subStores).forEach(m => m(action))
-    next(action)
+    return next(action)
   }
 
   processModule = (module: CoreModule) => {

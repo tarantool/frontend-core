@@ -8,11 +8,14 @@ import {
   UNPAUSE_NOTIFICATION_TIMER,
   SEND_NOTIFICATION,
   SHOW_NOTIFICATION_LIST,
-  CLEAR_NOTIFICATIONS
+  CLEAR_NOTIFICATIONS,
+  GARBAGE_NOTIFICATIONS
 } from '../constants'
+
 import type {
   CheckNotificationsAction,
   ClearNotificationsAction,
+  GarbageNotificationsAction,
   HideNotificationAction,
   HideNotificationListAction,
   PauseNotificationTimerAction,
@@ -24,17 +27,31 @@ import type {
 export type NotificationItem = {
   uuid: string,
   type: 'default' | 'warning' | 'error' | 'success',
-  title?: string,
-  message?: string,
+  title: ?string,
+  message: ?string,
   timeout: number,
   pausedAt: ?number,
   createdAt: number,
   initedAt: number,
-  hidden: boolean,
   read: boolean
 }
 
-export type NotificationState = Array<NotificationItem>
+export const notificationFields = [
+  'uuid',
+  'type',
+  'title',
+  'message',
+  'timeout',
+  'pausedAt',
+  'createdAt',
+  'initedAt',
+  'read'
+]
+
+export type NotificationState = {
+  active: Array<NotificationItem>,
+  archive: Array<NotificationItem>
+}
 
 type NotificationActions =
   | SendNotificationAction
@@ -45,9 +62,10 @@ type NotificationActions =
   | PauseNotificationTimerAction
   | UnpauseNotificationTimerAction
   | ClearNotificationsAction
+  | GarbageNotificationsAction
 
-const isTimeouted = ts => ({ createdAt, timeout, pausedAt, hidden }) => {
-  if (pausedAt || hidden || timeout === 0) return false
+const isTimeouted = ts => ({ createdAt, timeout, pausedAt }) => {
+  if (pausedAt || timeout === 0) return false
   return ts - createdAt > timeout
 }
 
@@ -58,59 +76,90 @@ const updateOps = (uuid, ops) => item => {
   return item
 }
 
-const initialState = []
+export const garbageTimeout = 1000 * 60 * 60 * 24 * 3
+
+const garbageFilter = (ts: number) => (item: NotificationItem) => ts - item.createdAt < garbageTimeout
+
+export const initialState = {
+  active: [],
+  archive: []
+}
 
 export default (state: NotificationState = initialState, action: NotificationActions): NotificationState => {
   switch (action.type) {
     case SEND_NOTIFICATION: {
-      return state.concat([
-        {
-          hidden: false,
-          read: false,
-          pausedAt: null,
-          createdAt: action.payload.createdAt,
-          initedAt: action.payload.createdAt,
-          ...action.payload
-        }
-      ])
+      return {
+        ...state,
+        active: state.active.concat([
+          {
+            read: false,
+            pausedAt: null,
+            createdAt: action.payload.createdAt,
+            initedAt: action.payload.createdAt,
+            ...action.payload
+          }
+        ])
+      }
     }
     case CHECK_NOTIFICATIONS: {
       const checkTimeout = isTimeouted(action.payload.ts)
-      const needModify = state.find(checkTimeout)
-      if (needModify) {
-        return state.map(notification => {
-          if (checkTimeout(notification)) {
-            return {
-              ...notification,
-              hidden: true
-            }
-          } else return notification
-        })
+      const needModify = state.active.filter(x => checkTimeout(x))
+      if (needModify.length > 0) {
+        return {
+          active: state.active.filter(x => !checkTimeout(x)),
+          archive: state.archive.concat(needModify)
+        }
       }
       return state
     }
     case PAUSE_NOTIFICATION_TIMER: {
-      return state.map(updateOps(action.payload.uuid, R.mergeDeepLeft({ pausedAt: action.payload.ts, read: true })))
+      return {
+        ...state,
+        active: state.active.map(
+          updateOps(action.payload.uuid, R.mergeDeepLeft({ pausedAt: action.payload.ts, read: true }))
+        )
+      }
     }
     case UNPAUSE_NOTIFICATION_TIMER: {
-      return state.map(
-        updateOps(action.payload.uuid, item => {
-          return {
-            ...item,
-            createdAt: item.createdAt + (action.payload.ts - (item.pausedAt || action.payload.ts)),
-            pausedAt: null
-          }
-        })
-      )
+      return {
+        ...state,
+        active: state.active.map(
+          updateOps(action.payload.uuid, item => {
+            return {
+              ...item,
+              createdAt: item.createdAt + (action.payload.ts - (item.pausedAt || action.payload.ts)),
+              pausedAt: null
+            }
+          })
+        )
+      }
     }
     case SHOW_NOTIFICATION_LIST: {
-      return state.map(x => ({ ...x, read: true }))
+      return {
+        ...state,
+        archive: state.archive.map(x => ({ ...x, read: true })),
+        active: state.active.map(x => ({ ...x, read: true }))
+      }
     }
     case HIDE_NOTIFICATION: {
-      return state.map(updateOps(action.payload.uuid, R.mergeDeepLeft({ hidden: true, read: true })))
+      const archived = state.active.find(x => x.uuid === action.payload.uuid)
+      return {
+        archive: state.archive.concat([{ ...archived, read: true }]),
+        active: state.active.filter(x => x.uuid !== action.payload.uuid)
+      }
     }
     case CLEAR_NOTIFICATIONS: {
-      return state.filter(x => !x.hidden)
+      return {
+        ...state,
+        archive: []
+      }
+    }
+    case GARBAGE_NOTIFICATIONS: {
+      const filter = garbageFilter(action.payload.ts)
+      return {
+        active: state.active.filter(filter),
+        archive: state.archive.filter(filter)
+      }
     }
   }
   return state

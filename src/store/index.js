@@ -11,7 +11,12 @@ import history, { APP_PATH_PREFIX } from './history'
 import CoreInstance from '../coreInstance'
 import * as constants from './constants'
 import { type FSA } from '../core'
-import { startTimer } from './middlewares/notifications'
+import {
+  notificationStorageKey,
+  saveNotificationsMiddleware,
+  startTimerCheckNotifications,
+  unzipData
+} from './middlewares/notifications'
 import type { UiState } from './reducers/ui'
 
 export type State = {
@@ -32,7 +37,18 @@ const store = createStore(
       notifications: notificationsReducer
     })
   ),
-  composeEnhancers(applyMiddleware(thunk, routerMiddleware(history), menuReducer.middleware, changeTitleMiddleware))
+  {
+    notifications: unzipData(localStorage.getItem(notificationStorageKey))
+  },
+  composeEnhancers(
+    applyMiddleware(
+      thunk,
+      routerMiddleware(history),
+      menuReducer.middleware,
+      saveNotificationsMiddleware,
+      changeTitleMiddleware
+    )
+  )
 )
 
 CoreInstance.subscribe('registerModule', () => {
@@ -53,6 +69,6 @@ CoreInstance.subscribe('registerModule', () => {
 
 CoreInstance.subscribe('dispatchToken', (token: FSA) => store.dispatch(token))
 
-startTimer(store)
+startTimerCheckNotifications(store)
 
 export default store

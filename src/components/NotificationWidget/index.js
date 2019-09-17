@@ -124,7 +124,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
                 <div className={styles.notificationInner}>
                   {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
                   {notifications.map(x => (
-                    <Notification className={styles.listItem} {...x} isShort={true} />
+                    <Notification key={x.uuid} className={styles.listItem} {...x} isShort={true} />
                   ))}
                 </div>
               </AutoScroll>
