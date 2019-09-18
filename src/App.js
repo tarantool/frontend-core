@@ -72,28 +72,29 @@ export default class App extends Component<any> {
       <Provider store={store}>
         <div className={styles.layout}>
           <Helmet>
-            <link rel="apple-touch-icon" sizes="57x57" href="/static/core/apple-touch-icon-57x57.png"/>
-            <link rel="apple-touch-icon" sizes="60x60" href="/static/core/apple-touch-icon-60x60.png"/>
-            <link rel="apple-touch-icon" sizes="72x72" href="/static/core/apple-touch-icon-72x72.png"/>
-            <link rel="apple-touch-icon" sizes="76x76" href="/static/core/apple-touch-icon-76x76.png"/>
-            <link rel="apple-touch-icon" sizes="114x114" href="/static/core/apple-touch-icon-114x114.png"/>
-            <link rel="apple-touch-icon" sizes="120x120" href="/static/core/apple-touch-icon-120x120.png"/>
-            <link rel="apple-touch-icon" sizes="144x144" href="/static/core/apple-touch-icon-144x144.png"/>
-            <link rel="apple-touch-icon" sizes="152x152" href="/static/core/apple-touch-icon-152x152.png"/>
-            <link rel="apple-touch-icon" sizes="167x167" href="/static/core/apple-touch-icon-167x167.png"/>
-            <link rel="apple-touch-icon" sizes="180x180" href="/static/core/apple-touch-icon-180x180.png"/>
-            <link rel="apple-touch-icon" sizes="1024x1024" href="/static/core/apple-touch-icon-1024x1024.png"/>
-            <link rel="icon" type="image/png" sizes="16x16" href="/static/core/favicon-16x16.png"/>
-            <link rel="icon" type="image/png" sizes="32x32" href="/static/core/favicon-32x32.png"/>
-            <link rel="icon" type="image/png" sizes="228x228" href="/static/core/coast-228x228.png"/>
-            <link rel="shortcut icon" href="/static/core/favicon.ico"/>
-            <meta name="apple-mobile-web-app-capable" content="yes"/>
-            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-            <meta name="apple-mobile-web-app-title"/>
-            <meta name="application-name"/>
-            <meta name="mobile-web-app-capable" content="yes"/>
-            <meta name="msapplication-TileColor" content="#fff"/>
-            <meta name="theme-color" content="#fff"/>
+            <link rel="apple-touch-icon" sizes="57x57" href="/static/core/apple-touch-icon-57x57.png" />
+            <link rel="apple-touch-icon" sizes="60x60" href="/static/core/apple-touch-icon-60x60.png" />
+            <link rel="apple-touch-icon" sizes="72x72" href="/static/core/apple-touch-icon-72x72.png" />
+            <link rel="apple-touch-icon" sizes="76x76" href="/static/core/apple-touch-icon-76x76.png" />
+            <link rel="apple-touch-icon" sizes="114x114" href="/static/core/apple-touch-icon-114x114.png" />
+            <link rel="apple-touch-icon" sizes="120x120" href="/static/core/apple-touch-icon-120x120.png" />
+            <link rel="apple-touch-icon" sizes="144x144" href="/static/core/apple-touch-icon-144x144.png" />
+            <link rel="apple-touch-icon" sizes="152x152" href="/static/core/apple-touch-icon-152x152.png" />
+            <link rel="apple-touch-icon" sizes="167x167" href="/static/core/apple-touch-icon-167x167.png" />
+            <link rel="apple-touch-icon" sizes="180x180" href="/static/core/apple-touch-icon-180x180.png" />
+            <link rel="apple-touch-icon" sizes="1024x1024" href="/static/core/apple-touch-icon-1024x1024.png" />
+            <link rel="icon" type="image/png" sizes="16x16" href="/static/core/favicon-16x16.png" />
+            <link rel="icon" type="image/png" sizes="32x32" href="/static/core/favicon-32x32.png" />
+            <link rel="icon" type="image/png" sizes="228x228" href="/static/core/coast-228x228.png" />
+            <link rel="icon" type="image/png" sizes="196x196" href="/static/core/coast-196x196.png" />
+            <link rel="icon" type="image/png" sizes="512x512" href="/static/core/coast-512x512.png" />
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+            <meta name="apple-mobile-web-app-title" />
+            <meta name="application-name" />
+            <meta name="mobile-web-app-capable" content="yes" />
+            <meta name="msapplication-TileColor" content="#fff" />
+            <meta name="theme-color" content="#fff" />
           </Helmet>
           <div className={styles.main}>
             <Menu className={styles.sidemenu} />

@@ -30,7 +30,10 @@ describe('Header component', () => {
       title: '',
       propsList: []
     },
-    notifications: [],
+    notifications: {
+      active: [],
+      archive: []
+    },
     ui: {
       showNotificationList: false
     }

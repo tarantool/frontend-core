@@ -23,15 +23,17 @@ export const selectCurrentMenuItemLabel = (state: State): string => {
 export const selectTitle = (state: State) => state.appTitle.title || selectCurrentMenuItemLabel(state)
 export const selectBreadcrumbs = (state: State): AppTitleProps[] => state.appTitle.propsList.slice(0, -1)
 
-export const selectActiveNotifications = (state: State): NotificationItem[] =>
-  state.notifications.filter(x => !x.hidden)
+export const selectActiveNotifications = (state: State): NotificationItem[] => state.notifications.active
+
+export const selectOutdatedNotifications = (state: State, ts: number): NotificationItem[] =>
+  state.notifications.active.filter(x => x.timeout > 0 && !x.pausedAt && ts - x.createdAt > x.timeout)
 
 export const isExistsHiddenNonRead = createSelector(
-  (state: State) => state.notifications,
-  notifications => notifications.filter(x => !x.read && x.hidden).length > 0
+  (state: State) => state.notifications.archive,
+  notifications => !!notifications.find(x => !x.read)
 )
 
 export const selectHiddenNotifications = createSelector(
-  (state: State) => state.notifications,
-  notifications => notifications.filter(x => x.hidden)
+  (state: State) => state.notifications.archive,
+  (notifications: NotificationItem[]) => notifications.sort((a, b) => b.createdAt - a.createdAt)
 )
