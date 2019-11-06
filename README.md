@@ -175,6 +175,72 @@ Example:
 
 `AppTitle` - sets application title
 
+### window.tarantool_enterprise_core.apiMethods.registerAxiosHandler(eventType: 'request' | 'response' | 'requestError' | 'responseError', handler: (any, Array<handlers>))
+
+Register axios handler. It's use a single responsibility chain inside. Handler should looks like:
+
+```
+(r, next) => next(r + 1)
+```
+
+More about context of usage [https://github.com/axios/axios#interceptors]. So request is request interceptor and requestError it's error on request. Also same for response with interceptors.response.
+
+### window.tarantool_enterprise_core.apiMethods.axiosWizard(axiosInstance)
+
+You should use it for your axios instance for using same middlewares.
+
+Example:
+
+```
+window.tarantool_enterprise_core.apiMethods.axiosWizard(axiosInstance)
+```
+
+### window.tarantool_enterprise_core.apiMethods.registerApolloHandler(eventType: 'middleware' | 'afterware', handler: (any, Array<handlers>))
+
+Register handler for Apollo. Handler should looks like it:
+
+```
+(r, next) => next(r + 1)
+```
+
+It's handle middleware before query and afterware on error.
+
+More information here: [https://www.apollographql.com/docs/react/networking/network-layer/]
+
+### window.tarantool_enterprise_core.apiMethods.apolloLinkMiddleware
+
+Link middleware. Should use for working handlers.
+
+Example of usage:
+
+```
+import { from } from 'apollo-link'
+
+new ApolloClient({
+    link: from([
+        window.tarantool_enterprise_core.apiMethods.apolloLinkMiddleware,
+        yourHttpLink,
+    ])
+})
+```
+
+### window.tarantool_enterprise_core.apiMethods.apolloLinkAfterware
+
+Link afterware. Should use for working handlers.
+
+Example of usage:
+
+```
+import { from } from 'apollo-link'
+
+new ApolloClient({
+    link: from([
+        window.tarantool_enterprise_core.apiMethods.apolloLinkAfterware,
+        yourHttpLink,
+    ])
+})
+```
+
 ### Core events
 
 `dispatchToken` - transmits action to core redux store.
@@ -257,7 +323,7 @@ You can use it in your frontend development mode with our npm package `@tarantoo
 
 `npm i -s @tarantool.io/frontend-core`
 
-## Part of webpack config example 
+## Part of webpack config example
 
 ```
   externals: {
