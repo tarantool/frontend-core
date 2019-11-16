@@ -94,7 +94,11 @@ core.register(
       icon: 'hdd'
     },
     {
-      label: <b><i>булок, да выпей чаю</i></b>,
+      label: (
+        <b>
+          <i>булок, да выпей чаю</i>
+        </b>
+      ),
       path: '/test/icon/5'
     }
   ],

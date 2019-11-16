@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unrealeased]
+
+- Add Api Methods for single HTTP Configuration
+
 ## [6.1.1]
 
 - Remove from npm version useless files
