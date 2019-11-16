@@ -136,4 +136,14 @@ describe('notifications', () => {
       expect(dismissedState.archive).toHaveLength(i + 1)
     }
   })
+
+  it('deduplication', () => {
+    const action = sendNotification(example);
+
+    const modifiedState = notificationReducer(initialState, action)
+
+    const twiceModifiedState = notificationReducer(modifiedState, action)
+
+    expect(modifiedState).toEqual(twiceModifiedState)
+  })
 })
