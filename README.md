@@ -22,7 +22,7 @@ const core = window.tarantool_enterprise_core;
 core.register('module', [{label: 'Module', path: '/module/'}], Root);
 ```
 
-### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void)
+### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void, menuFilter?: (MenuItem) => boolean)
 
 #### namespace
 
@@ -123,6 +123,24 @@ You can use any technology inside that you want.
 This is a redux middleware for dispatch some custom events or add reaction on your custom events.
 
 It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want dispatch action on menu events from other modules.
+
+#### menuFilter
+
+It will be used as global filter. You could hide some items that's not suitable for your usage.
+
+Example:
+
+```
+const hideModule = {
+  namespace: 'test-2',
+  menu: tasksMenu,
+  RootComponent: () => null,
+  engine: 'react',
+  menuFilter: ({ path }) => !path.includes('space')
+}
+```
+
+It will hide all menu items that has `'space'` in their URIs.
 
 
 ### window.tarantool_enterprise_core.checkNamespace(module: string)

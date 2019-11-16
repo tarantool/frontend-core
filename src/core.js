@@ -51,7 +51,8 @@ export type CoreModule = {
   menu: menuShape,
   menuMiddleware?: Object => void,
   RootComponent: ComponentType<any>,
-  engine: engines
+  engine: engines,
+  menuFilter?: MenuItemType => boolean
 }
 
 type moduleStatus = 'loading' | 'loaded' | 'not_loaded'
@@ -105,14 +106,16 @@ export default class Core {
     menu: menuShape,
     RootComponent: ComponentType<any>,
     engine: engines = 'react',
-    menuMiddleware?: Object => void
+    menuMiddleware?: Object => void,
+    menuFilter?: MenuItemType => boolean
   ) {
     const addingModule = {
       namespace,
       menu: Array.isArray(menu) ? menu.map(refineMenuItem) : menu,
       menuMiddleware,
       RootComponent,
-      engine
+      engine,
+      menuFilter
     }
     this.checkNamespace(addingModule)
     this.modules.push(addingModule)

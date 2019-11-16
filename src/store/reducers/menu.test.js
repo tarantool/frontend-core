@@ -365,3 +365,90 @@ describe('matchPath', () => {
     expect(matchPath('/users/groups/groupb?extended=true&hidden=false', '/users/groups', true)).toBeFalsy()
   })
 })
+
+describe('menu filter', () => {
+  it('filter', () => {
+    const menuState = [
+      {
+        label: 'space_explorer',
+        path: '/space_explorer',
+        selected: false,
+        expanded: false,
+        loading: false,
+        items: []
+      }
+    ]
+
+    const reducerInstance = generateInstance()
+
+    const testModule = {
+      namespace: 'test',
+      menu: menuState,
+      RootComponent: () => null,
+      engine: 'react'
+    }
+    reducerInstance.processModule(testModule)
+    const reducedData = reducerInstance.reduce([], { type: 'NOTHING_CASE' })
+
+    const hideModule = {
+      namespace: 'test-2',
+      menu: menuState,
+      RootComponent: () => null,
+      engine: 'react',
+      menuFilter: () => false
+    }
+
+    reducerInstance.processModule(hideModule)
+
+    const newState = reducerInstance.reduce(reducedData, { type: 'NOTHING_CASE' })
+
+    expect(newState).toEqual([])
+  })
+
+  it('filter space', () => {
+    const reducerInstance = generateInstance()
+
+    const testModule = {
+      namespace: 'test',
+      menu: [
+        {
+          label: 'space_explorer',
+          path: '/space_explorer',
+          selected: false,
+          expanded: false,
+          loading: false,
+          items: []
+        }
+      ],
+      RootComponent: () => null,
+      engine: 'react'
+    }
+    reducerInstance.processModule(testModule)
+    const reducedData = reducerInstance.reduce([], { type: 'NOTHING_CASE' })
+
+    const tasksMenu = [
+      {
+        label: 'tasks',
+        path: '/tasks',
+        selected: false,
+        expanded: false,
+        loading: false,
+        items: []
+      }
+    ]
+
+    const hideModule = {
+      namespace: 'test-2',
+      menu: tasksMenu,
+      RootComponent: () => null,
+      engine: 'react',
+      menuFilter: ({ path }) => !path.includes('space')
+    }
+
+    reducerInstance.processModule(hideModule)
+
+    const newState = reducerInstance.reduce(reducedData, { type: 'NOTHING_CASE' })
+
+    expect(newState).toEqual(tasksMenu.map(x => ({ ...x, namespace: 'test-2' })))
+  })
+})

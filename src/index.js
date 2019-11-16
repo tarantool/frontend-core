@@ -100,10 +100,16 @@ core.register(
         </b>
       ),
       path: '/test/icon/5'
+    },
+    {
+      label: 'Меня не видно',
+      path: '/test/icon/6'
     }
   ],
   Test,
-  'react'
+  'react',
+  null,
+  ({ path }) => !path.includes('/test/icon/6')
 )
 
 core.notify({
