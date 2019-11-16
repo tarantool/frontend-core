@@ -123,12 +123,16 @@ core.notify({
   title: 'hello',
   message: `Тут что-то интересное произошло`
 })
-core.notify({
-  type: 'success',
-  title: 'hello',
-  message: `Create the replicaset "Name of replicaset #2" 
+
+for (let i = 0; i < 5; i++) {
+  core.notify({
+    type: 'success',
+    title: 'hello',
+    message: `Create the replicaset "Name of replicaset #2" 
   to with server "pim.dmitrov_ storages_ msk_eapi_trn57_5" executed successfully`
-})
+  })
+}
+
 setTimeout(() => {
   core.setHeaderComponent(null)
 }, 3000)

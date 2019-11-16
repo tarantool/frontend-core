@@ -88,6 +88,16 @@ export const initialState = {
 export default (state: NotificationState = initialState, action: NotificationActions): NotificationState => {
   switch (action.type) {
     case SEND_NOTIFICATION: {
+      const isExistsWithSameTextAndTitle = state.active.some(
+        R.compose(
+          R.equals([action.payload.title, action.payload.message]),
+          R.props(['title', 'message'])
+        )
+      )
+
+      if (isExistsWithSameTextAndTitle) {
+        return state;
+      }
       return {
         ...state,
         active: state.active.concat([

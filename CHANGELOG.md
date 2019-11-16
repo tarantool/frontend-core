@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unrealeased]
 
-- Add Api Methods for single HTTP Configuration
+- Add deduplication to active notifications
+- Add API Methods for single HTTP Configuration
 
 ## [6.1.1]
 
