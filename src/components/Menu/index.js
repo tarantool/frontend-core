@@ -212,7 +212,7 @@ export function Index (props: MenuProps) {
         {isShort ? <img src={shortLogo} className={styles.shortLogo} /> : <img src={logo} className={styles.logo} />}
       </div>
       <div className={styles.separator}></div>
-      <Scrollbar track={'#212121'}>
+      <Scrollbar track={'#212121'} style={{height: '40px', flexGrow: 1}}>
         <div className={styles.menuList}>
           {menu.map((x, i) => (
             <MenuItem key={i} {...x} onClick={onClick} expand={onExpand} short={isShort} />
