@@ -120,7 +120,7 @@ const concat = Array.prototype.concat.bind([])
 export class MainReducer {
   subStores: Array<SubStore> = []
   installedStores: { [string]: true } = {}
-
+  filters: Array<(MenuItemType) => boolean> = [R.T]
   reduce = (state: any = initialState, { type, payload }: FSA) => {
     const subState = R.groupBy(R.prop('namespace'), state)
     switch (type) {
@@ -128,6 +128,7 @@ export class MainReducer {
         if (payload && payload.namespace) {
           const { namespace } = payload
           return R.compose(
+            R.compose(...this.filters.map(filter => R.filter(filter))),
             R.apply(concat),
             R.map(x => {
               if (x.namespace === namespace) {
@@ -142,6 +143,7 @@ export class MainReducer {
       }
       default: {
         return R.compose(
+          R.compose(...this.filters.map(filter => R.filter(filter))),
           R.apply(concat),
           R.map(x => {
             return x.reducer(subState[x.namespace], { type, payload }).map(z => ({ ...z, namespace: x.namespace }))
@@ -174,6 +176,9 @@ export class MainReducer {
         namespace: module.namespace
       }
     this.subStores.push(reducer)
+    if (module.menuFilter) {
+      this.filters.push(module.menuFilter)
+    }
     this.installedStores[module.namespace] = true
     return true
   }

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Add deduplication to active notifications
 - Add API Methods for single HTTP Configuration
+- Add way to filter menu items
 
 ## [6.1.1]
 
