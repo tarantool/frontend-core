@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Fix side menu bug in Safari
+- Update MenuItem component
+
 ## [6.2.0] - 2019-11-19
 
 - Add deduplication to active notifications
