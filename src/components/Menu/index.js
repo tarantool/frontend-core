@@ -31,7 +31,6 @@ const styles = {
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 6px 0 rgba(0, 21, 41, 0.35);
-    height: 100vh;
   `,
   shortContainer: css`
     width: 62px;
@@ -224,10 +223,9 @@ export function Index (props: MenuProps) {
           key={'documentation'}
           icon={<img src={information} style={{ height: 14, width: 14 }} />}
           label={'Documentation'}
-          onClick={() => window.open('https://www.tarantool.io/en/doc', '_blank')}
-          selected={false}
-          items={[]}
+          onClick={(evt, path) => window.open(path, '_blank')}
           short={isShort}
+          path={'https://www.tarantool.io/en/doc'}
         />
         <MenuItem
           key={'collapse'}
@@ -247,8 +245,6 @@ export function Index (props: MenuProps) {
             e.preventDefault()
             setIsShort(!isShort)
           }}
-          selected={false}
-          items={[]}
           short={isShort}
         />
       </div>

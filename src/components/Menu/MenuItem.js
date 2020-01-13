@@ -1,23 +1,53 @@
 import { APP_PATH_PREFIX } from '../../store/history'
 import React from 'react'
-import { Icon } from 'antd'
 import { css, cx } from 'react-emotion'
 import chevron from './chevron-up.svg'
+import { MenuIcon } from './MenuIcon'
 
-const itemStyles = {
+type handleClickType = (event: MouseEvent, handler: T => void, ...args: T) => void
+
+const handleClick: handleClickType = (event, handler, ...args) => {
+  if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+    event.preventDefault()
+    handler(...args)
+  }
+}
+
+const styles = {
   item: css`
+    display: block;
+    width: 100%;
     height: 40px;
     position: relative;
     cursor: pointer;
     border: none;
+    text-align: left;
     text-decoration: none;
+    background: transparent;
+    outline: none;
     user-select: none; /* supported by Chrome and Opera */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
 
-    &:hover {
+    &:hover,
+    &:focus {
+      background: #212121;
+    }
+  `,
+  shortItem: css`
+    display: block;
+    width: 100%;
+    height: 40px;
+    position: relative;
+    border: none;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
       background: #212121;
     }
   `,
@@ -34,8 +64,9 @@ const itemStyles = {
       position: absolute;
     }
   `,
-  itemShort: css``,
-  itemHover: css``,
+  subItemSelected: css`
+    background: #212121;
+  `,
   title: css`
     position: absolute;
     font-family: Open Sans;
@@ -50,11 +81,6 @@ const itemStyles = {
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    user-select: none; /* supported by Chrome and Opera */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -66,13 +92,12 @@ const itemStyles = {
   `,
   icon: css`
     position: absolute;
+    left: 24px;
+    top: calc(50% - 7px);
+    display: flex;
     height: 14px;
     width: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 24px;
     font-size: 14px;
-    display: flex;
     color: #fff;
     user-select: none; /* supported by Chrome and Opera */
     -webkit-user-select: none; /* Safari */
@@ -111,69 +136,6 @@ const itemStyles = {
   `
 }
 
-const subitemStyles = {
-  item: css`
-    ${itemStyles.item}
-  `,
-  itemSelected: css`
-    background: #212121;
-    ${itemStyles.itemSelected}
-  `,
-  title: css`
-    ${itemStyles.title}
-  `,
-  titleSelected: css``,
-  itemShort: css``
-}
-
-const shortStyles = {
-  item: css`
-    height: 40px;
-    position: relative;
-    cursor: pointer;
-    &:hover {
-      background: #212121;
-    }
-  `,
-  itemSelected: css`
-    background: #212121;
-    &:after {
-      display: block;
-      height: 100%;
-      left: 0;
-      top: 0;
-      width: 4px;
-      background: #ff272c;
-      content: '';
-      position: absolute;
-    }
-  `,
-  icon: css`
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    left: 50%;
-    top: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    font-size: 14px;
-    color: #fff;
-    display: flex;
-    color: #fff;
-    user-select: none; /* supported by Chrome and Opera */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-  `
-}
-
-const MenuIcon = ({ icon, className }) => {
-  if (typeof icon === 'string') {
-    return <Icon type={icon} className={className} />
-  }
-  return <div className={className}>{icon}</div>
-}
-
 export const MenuItem = ({
   path,
   selected,
@@ -188,31 +150,32 @@ export const MenuItem = ({
   expand,
   isCollapse
 }) => {
+  const Component = path ? 'a' : 'button'
+
   if (short) {
     return (
-      <div
-        className={`${shortStyles.item} ${
-          selected || (items && items.find(x => x.selected)) ? shortStyles.itemSelected : ''
-        }`}
-        onClick={evt => (items && items.length > 0 ? expand(evt, path) : onClick(evt, path))}
+      <Component
+        className={cx(
+          styles.shortItem,
+          { [styles.itemSelected]: selected || (items && items.find(x => x.selected)) }
+        )}
+        onClick={
+          items && items.length
+            ? evt => expand(evt, path)
+            : evt => handleClick(evt, onClick, evt, path)
+        }
+        href={APP_PATH_PREFIX + path}
         title={label}
       >
-        {path ? (
-          <a className={shortStyles.icon} href={APP_PATH_PREFIX + path}>
-            <MenuIcon icon={icon} className={shortStyles.icon} />
-          </a>
-        ) : (
-          <span className={`${shortStyles.icon}`}>
-            <MenuIcon icon={icon} className={shortStyles.icon} />
-          </span>
-        )}
-      </div>
+        <MenuIcon icon={icon} className={styles.icon} />
+      </Component>
     )
   }
+
   let subItems = null
   if (expanded && !short && items && items.length > 0) {
     subItems = (
-      <div className={itemStyles.submenuList}>
+      <div className={styles.submenuList}>
         {items.map(x => (
           <MenuItem key={x.path} {...x} onClick={onClick} isSubitem={true} />
         ))}
@@ -224,47 +187,44 @@ export const MenuItem = ({
     items && items.length > 0 ? (
       <img
         src={chevron}
-        className={`${itemStyles.expandButton} ${expanded ? '' : itemStyles.expandButtonUnexpand}`}
+        className={`${styles.expandButton} ${expanded ? '' : styles.expandButtonUnexpand}`}
       ></img>
     ) : null
 
-  const styleMap = isSubitem ? subitemStyles : itemStyles
   return (
     <React.Fragment>
-      <div
-        className={cx({
-          [styleMap.item]: true,
-          [styleMap.itemSelected]: selected,
-          [itemStyles.collapse]: isCollapse,
-          [itemStyles.expanded]: expanded
-        })}
-        onClick={items && items.length ? evt => expand(evt, path) : evt => onClick(evt, path)}
-      >
-        {isSubitem ? null : <MenuIcon icon={icon} className={itemStyles.icon} />}
-        {path ? (
-          <a
-            className={cx(styleMap.title, {
-              [itemStyles.titleSelected]: selected,
-              [itemStyles.expanded]: expanded
-            })}
-            title={label}
-            href={APP_PATH_PREFIX + path}
-          >
-            {label}
-          </a>
-        ) : (
-          <span
-            className={cx(styleMap.title, {
-              [itemStyles.titleSelected]: selected,
-              [itemStyles.expanded]: expanded
-            })}
-            title={label}
-          >
-            {label}
-          </span>
+      <Component
+        className={cx(
+          styles.item,
+          {
+            [styles.itemSelected]: selected,
+            [styles.subItemSelected]: selected && isSubitem,
+            [styles.collapse]: isCollapse,
+            [styles.expanded]: expanded
+          }
         )}
+        href={APP_PATH_PREFIX + path}
+        onClick={
+          items && items.length
+            ? evt => expand(evt, path)
+            : evt => handleClick(evt, onClick, evt, path)
+        }
+        title={label}
+      >
+        {isSubitem ? null : <MenuIcon icon={icon} className={styles.icon} />}
+        <span
+          className={cx(
+            styles.title,
+            {
+              [styles.titleSelected]: selected,
+              [styles.expanded]: expanded
+            }
+          )}
+        >
+          {label}
+        </span>
         {expandButton}
-      </div>
+      </Component>
 
       {subItems}
     </React.Fragment>
