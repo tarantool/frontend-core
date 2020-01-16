@@ -112,6 +112,7 @@
     "eslint-plugin-emotion": "^9.2.6",
     "eslint-plugin-prettier": "^2.6.2",
     "graphql-tag": "^2.10.1",
+    "mock-local-storage": "^1.1.11",
     "nock": "^11.7.0"
   },
   "jest": {
@@ -119,7 +120,8 @@
       "src/**/*.{js,jsx,mjs}"
     ],
     "setupFiles": [
-      "<rootDir>/config/polyfills.js"
+      "<rootDir>/config/polyfills.js",
+      "mock-local-storage"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
