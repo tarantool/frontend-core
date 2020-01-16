@@ -263,6 +263,49 @@ new ApolloClient({
 })
 ```
 
+### window.tarantool_enteprise_core.analyticModule
+
+We add our analytic abstraction module. It support 2 types of event: Pageview and Action. By default it doesn't send any information.
+
+You could send event with sendEvent and add own implementation of analytic by usage effect.
+
+```
+window.tarantool_enteprise_core.analyticModule.sendEvent({
+    type: 'pageview',
+    url: 'https://tarantool.io'
+})
+
+const unsub = window.tarantool_enterprise.analyticModule.effect((event) => {
+    axios.post('https://myanalytics.io', { pageview: event.url })
+})
+
+unsub() // unsubscribe from effect
+```
+
+
+Typings:
+
+```
+type Action = {
+  type: 'action',
+  action: string,
+  category: string,
+  label?: string,
+  value?: number
+}
+
+type PageView = {
+  type: 'pageview',
+  url: string
+}
+
+type AnalyticsEvent = Action | PageView
+
+sendEvent(AnalyticsEvent)
+effect(Function)
+```
+
+
 ### Core events
 
 `dispatchToken` - transmits action to core redux store.
