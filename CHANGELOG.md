@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Fix side menu bug in Safari
 - Update MenuItem component
+- Change Apollo handlers: `afterware` handles successful responses and `onError` handles errors.
 
 ## [6.2.0] - 2019-11-19
 

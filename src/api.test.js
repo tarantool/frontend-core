@@ -133,7 +133,12 @@ test('api methods: graphql', async () => {
   })
 
   const graphqlClient = new ApolloClient({
-    link: from([apiMethods.apolloLinkAfterware, apiMethods.apolloLinkMiddleware, httpLink]),
+    link: from([
+      apiMethods.apolloLinkAfterware,
+      apiMethods.apolloLinkOnError,
+      apiMethods.apolloLinkMiddleware,
+      httpLink
+    ]),
     cache,
     defaultOptions: {
       query: {
@@ -150,9 +155,11 @@ test('api methods: graphql', async () => {
 
   const middlewareFn = jest.fn()
   const afterwareFn = jest.fn()
+  const onErrorFn = jest.fn()
 
   apiMethods.registerApolloHandler('middleware', callFn(middlewareFn))
   apiMethods.registerApolloHandler('afterware', callFn(afterwareFn))
+  apiMethods.registerApolloHandler('onError', callFn(onErrorFn))
 
   localScope.post('/graphql').reply(200, { data: { repairList: [], records: [] } })
 
@@ -161,7 +168,8 @@ test('api methods: graphql', async () => {
   })
 
   expect(middlewareFn).toBeCalled()
-  expect(afterwareFn).not.toBeCalled()
+  expect(afterwareFn).toBeCalled()
+  expect(onErrorFn).not.toBeCalled()
 
   localScope.post('/graphql').reply(502, 'bad gateway')
 
@@ -172,7 +180,8 @@ test('api methods: graphql', async () => {
   } catch (e) {
     // nothing
   } finally {
-    expect(afterwareFn).toBeCalled()
+    expect(onErrorFn).toBeCalled()
     expect(middlewareFn.mock.calls.length).toBe(2)
+    expect(afterwareFn.mock.calls.length).toBe(1)
   }
 })

@@ -213,7 +213,7 @@ Example:
 window.tarantool_enterprise_core.apiMethods.axiosWizard(axiosInstance)
 ```
 
-### window.tarantool_enterprise_core.apiMethods.registerApolloHandler(eventType: 'middleware' | 'afterware', handler: (any, Array<handlers>))
+### window.tarantool_enterprise_core.apiMethods.registerApolloHandler(eventType: 'middleware' | 'onError' | 'afterware', handler: (any, Array<handlers>))
 
 Register handler for Apollo. Handler should looks like it:
 
@@ -221,7 +221,11 @@ Register handler for Apollo. Handler should looks like it:
 (r, next) => next(r + 1)
 ```
 
-It's handle middleware before query and afterware on error.
+* `middleware` runs before query;
+
+* `afterware` handles successful responses;
+
+* `onError` handles errors.
 
 More information here: [https://www.apollographql.com/docs/react/networking/network-layer/]
 

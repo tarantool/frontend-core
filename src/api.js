@@ -3,7 +3,7 @@ import { ApolloLink } from 'apollo-link'
 import { onError } from 'apollo-link-error'
 
 export type AxiosHandlerType = 'request' | 'response' | 'requestError' | 'responseError'
-export type ApolloHandlerType = 'middleware' | 'afterware'
+export type ApolloHandlerType = 'middleware' | 'onError' | 'afterware'
 
 export type HandlerType = (result: any, handlers: Array<HandlerType>) => any
 
@@ -24,6 +24,7 @@ export const generateApiMethod = () => {
 
   const apolloHandlers: { [ApolloHandlerType]: Array<Function> } = {
     middleware: [],
+    onError: [],
     afterware: []
   }
 
@@ -68,8 +69,12 @@ export const generateApiMethod = () => {
     return forward(modOperation)
   })
 
-  const apolloLinkAfterware = onError(error => {
-    responsibilityChain(error, apolloHandlers['afterware'])
+  const apolloLinkOnError = onError(error => {
+    responsibilityChain(error, apolloHandlers['onError'])
+  })
+
+  const apolloLinkAfterware = new ApolloLink((operation, forward) => {
+    return forward(operation).map(response => responsibilityChain(response, apolloHandlers['afterware']))
   })
 
   return {
@@ -77,6 +82,7 @@ export const generateApiMethod = () => {
     registerApolloHandler,
     axiosWizard,
     apolloLinkMiddleware,
+    apolloLinkOnError,
     apolloLinkAfterware
   }
 }
