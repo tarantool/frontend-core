@@ -98,7 +98,11 @@ local function add(namespace, filemap)
     return true
 end
 
-local function init(httpd)
+local function init(httpd, options)
+    local enforce_root_redirect = true
+    if options.enforce_root_redirect ~= nil then
+        enforce_root_redirect = options.enforce_root_redirect
+    end
     httpd:route({
         path = '/static/:namespace/*filename',
         method = 'GET',
@@ -114,12 +118,14 @@ local function init(httpd)
         method = 'GET',
     }, index_handler)
 
-    httpd:route({
-        path = '/',
-        method = 'GET',
-    }, function (cx)
-        return cx:redirect_to('/admin')
-    end)
+    if enforce_root_redirect then
+        httpd:route({
+            path = '/',
+            method = 'GET',
+        }, function (cx)
+            return cx:redirect_to('/admin')
+        end)
+    end
 
     add('core', core_bundle)
     return true
