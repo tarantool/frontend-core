@@ -13,7 +13,7 @@ httpd:start()
 local srv_name = httpd.tcp_server:name()
 log.info('Listening HTTP on %s:%s', srv_name.host, srv_name.port)
 
-front.init(httpd)
+front.init(httpd, { enforce_root_redirect = false, prefix = '/tnt' })
 -- front.add('module_one', require('module_one.bundle'))
 -- front.add('module_two', require('module_two.bundle'))
 
