@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Add cache-control http header for /static route
+
 ## [6.4.0] - 2020-03-17
 
 - Customizable route prefix
