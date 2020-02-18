@@ -1,59 +1,60 @@
 #!/usr/bin/env tarantool
 
 local core_bundle = require('frontend-core.bundle')
-local json = require('json')
 
 local index_body = nil
 local modules = {
     -- [1] = namespace
     -- [namespace] = filemap
 }
+local prefix = ''
 
-local function get_index_handler(options)
-    return function(req)
-        if index_body == nil then
-            local entries = {}
-            for _, namespace in ipairs(modules) do
-                local mod = modules[namespace]
+local function index_handler(_)
+    if index_body == nil then
+        local entries = {}
+        for _, namespace in ipairs(modules) do
+            local mod = modules[namespace]
 
-                local data
-                if type(mod.__data) == 'function' then
-                    data = mod.__data()
-                else
-                    data = mod
-                end
-
-                for filename, file in pairs(data) do
-                    if file.is_entry then
-                        table.insert(entries,
-                            string.format('<script src="'..options.prefix..'/static/%s/%s"></script>', namespace, filename)
-                        )
-                    end
-                end
+            local data
+            if type(mod.__data) == 'function' then
+                data = mod.__data()
+            else
+                data = mod
             end
 
-            index_body =
-                '<!doctype html>' ..
-                '<html>' ..
-                    '<head>' ..
-                        '<title>Tarantool Cartridge</title>'..
-                        '<script>'..
-                        'window.__tarantool_admin_prefix = '..json.encode(options.prefix)..
-                        '</script>'..
-                    '</head>' ..
-                    '<body>' ..
-                        '<div id="root"></div>' ..
-                        table.concat(entries) ..
-                    '</body>' ..
-                '</html>'
+            for filename, file in pairs(data) do
+                if file.is_entry then
+                    table.insert(entries,
+                        string.format(
+                            '<script src="%s/static/%s/%s"></script>',
+                            prefix, namespace, filename
+                        )
+                    )
+                end
+            end
         end
 
-        return {
-            status = 200,
-            headers = {['content-type'] = 'text/html; charset=utf8'},
-            body = index_body
-        }
+        index_body =
+            '<!doctype html>' ..
+            '<html>' ..
+                '<head>' ..
+                    '<title>Tarantool Cartridge</title>'..
+                    '<script>'..
+                    ('window.__tarantool_admin_prefix = %q'):format(prefix)..
+                    '</script>'..
+                '</head>' ..
+                '<body>' ..
+                    '<div id="root"></div>' ..
+                    table.concat(entries) ..
+                '</body>' ..
+            '</html>'
     end
+
+    return {
+        status = 200,
+        headers = {['content-type'] = 'text/html; charset=utf8'},
+        body = index_body
+    }
 end
 
 local function static_handler(req)
@@ -105,39 +106,52 @@ local function add(namespace, filemap)
 end
 
 local function init(httpd, options)
-    local options_ = {}
-
-    if options ~= nil then
-        options_ = options
+    if options == nil then
+        options = {}
+    elseif type(options) ~= 'table' then
+        local err = string.format("bad argument #2 to init" ..
+        " (?table expected, got %s)", type(options))
+        error(err, 2)
     end
 
-    local real_options = { prefix = '', enforce_root_redirect = true }
+    local enforce_root_redirect
+    if options.enforce_root_redirect == nil then
+        enforce_root_redirect = true
+    elseif type(options.enforce_root_redirect) ~= 'boolean' then
+        local err = string.format("bad argument options.enforce_root_redirect" ..
+        " to init (?boolean expected, got %s)", type(options.enforce_root_redirect))
+        error(err, 2)
+    else
+        enforce_root_redirect = options.enforce_root_redirect
+    end
 
-    for k, v in pairs(options_) do real_options[k] = v end
-
-    local index_handler = get_index_handler(real_options)
+    if options.prefix == nil then
+        prefix = ''
+    else
+        prefix = options.prefix
+    end
 
     httpd:route({
-        path = real_options.prefix .. '/static/:namespace/*filename',
+        path = prefix .. '/static/:namespace/*filename',
         method = 'GET',
     }, static_handler)
 
     httpd:route({
-        path = real_options.prefix .. '/admin',
+        path = prefix .. '/admin',
         method = 'GET',
     }, index_handler)
 
     httpd:route({
-        path = real_options.prefix .. '/admin/*any',
+        path = prefix .. '/admin/*any',
         method = 'GET',
     }, index_handler)
 
-    if real_options.enforce_root_redirect then -- default true
+    if enforce_root_redirect then
         httpd:route({
             path = '/',
             method = 'GET',
         }, function (cx)
-            return cx:redirect_to(real_options.prefix .. '/admin')
+            return cx:redirect_to(prefix .. '/admin')
         end)
     end
 
