@@ -352,7 +352,10 @@ local httpd = http.new('0.0.0.0', '5050')
 httpd:start()
 
 local front = require('frontend-core')
-front.init(httpd)
+front.init(httpd, {
+	enforce_root_redirect = false,
+	prefix = '/tarantool',
+})
 ```
 
 This start a Tarantool Enterprise Admin without modules.
@@ -364,9 +367,13 @@ local my_module_bundle = require('my_module.bundle')
 front.add('module_namespace', my_module_bundle)
 ```
 
-### init(httpd: httpd)
+### init(httpd: httpd, { enforce_root_redirect: boolean, prefix: string })
 
 `httpd` argument - should be an instance of a Tarantool HTTP server.
+
+`enforce_root_redirect` - optional key which controls redirection to frontend-core app from '/' path, default true.
+
+`prefix` - optional, adds path prefix to frontend-core app.
 
 Register routes `/admin/` and `/static/`, and redirect from `/` to `/admin/` in `httpd`.
 

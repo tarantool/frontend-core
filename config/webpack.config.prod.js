@@ -8,10 +8,8 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-const CopyPlugin = require('copy-webpack-plugin');
-
+const moduleConfig = require('../module-config');
 const LuaBundlePlugin = require('@tarantool.io/lua-bundler-webpack-plugin');
-
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -49,8 +47,8 @@ module.exports = {
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'static/js/core.js',
-    chunkFilename: 'static/js/core.[chunkhash:8].chunk.js',
+    filename: `static/${moduleConfig.namespace}/core.[chunkhash:8].js`,
+    chunkFilename: `static/${moduleConfig.namespace}/[chunkhash:8].chunk.js`,
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -126,7 +124,7 @@ module.exports = {
             loader: require.resolve('url-loader'),
             options: {
               limit: 10000000,
-              name: `static/core/media/[name].[hash:8].[ext]`,
+              name: `static/${moduleConfig.namespace}/media/[name].[hash:8].[ext]`
             },
           },
           // Process JS with Babel.
@@ -240,7 +238,7 @@ module.exports = {
             // by webpacks internal loaders.
             exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
             options: {
-              name: `static/core/media/[name].[hash:8].[ext]`,
+              name: `static/${moduleConfig.namespace}/media/[name].[hash:8].[ext]`
             },
           },
           // ** STOP ** Are you adding a new loader?
@@ -273,7 +271,8 @@ module.exports = {
     // ]),
 
     new LuaBundlePlugin({
-      entryRegExp: /js$/
+      entryRegExp: /core\.[a-f0-9]+\.js$/,
+      namespace: moduleConfig.namespace
     })
 
   ],

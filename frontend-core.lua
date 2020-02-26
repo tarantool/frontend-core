@@ -7,8 +7,9 @@ local modules = {
     -- [1] = namespace
     -- [namespace] = filemap
 }
+local prefix = ''
 
-local function index_handler(req)
+local function index_handler(_)
     if index_body == nil then
         local entries = {}
         for _, namespace in ipairs(modules) do
@@ -24,7 +25,10 @@ local function index_handler(req)
             for filename, file in pairs(data) do
                 if file.is_entry then
                     table.insert(entries,
-                        string.format('<script src="/static/%s/%s"></script>', namespace, filename)
+                        string.format(
+                            '<script src="%s/static/%s/%s"></script>',
+                            prefix, namespace, filename
+                        )
                     )
                 end
             end
@@ -35,6 +39,9 @@ local function index_handler(req)
             '<html>' ..
                 '<head>' ..
                     '<title>Tarantool Cartridge</title>'..
+                    '<script>'..
+                    ('window.__tarantool_admin_prefix = %q'):format(prefix)..
+                    '</script>'..
                 '</head>' ..
                 '<body>' ..
                     '<div id="root"></div>' ..
@@ -98,28 +105,55 @@ local function add(namespace, filemap)
     return true
 end
 
-local function init(httpd)
+local function init(httpd, options)
+    if options == nil then
+        options = {}
+    elseif type(options) ~= 'table' then
+        local err = string.format("bad argument #2 to init" ..
+        " (?table expected, got %s)", type(options))
+        error(err, 2)
+    end
+
+    local enforce_root_redirect
+    if options.enforce_root_redirect == nil then
+        enforce_root_redirect = true
+    elseif type(options.enforce_root_redirect) ~= 'boolean' then
+        local err = string.format("bad argument options.enforce_root_redirect" ..
+        " to init (?boolean expected, got %s)", type(options.enforce_root_redirect))
+        error(err, 2)
+    else
+        enforce_root_redirect = options.enforce_root_redirect
+    end
+
+    if options.prefix == nil then
+        prefix = ''
+    else
+        prefix = options.prefix
+    end
+
     httpd:route({
-        path = '/static/:namespace/*filename',
+        path = prefix .. '/static/:namespace/*filename',
         method = 'GET',
     }, static_handler)
 
     httpd:route({
-        path = '/admin',
+        path = prefix .. '/admin',
         method = 'GET',
     }, index_handler)
 
     httpd:route({
-        path = '/admin/*any',
+        path = prefix .. '/admin/*any',
         method = 'GET',
     }, index_handler)
 
-    httpd:route({
-        path = '/',
-        method = 'GET',
-    }, function (cx)
-        return cx:redirect_to('/admin')
-    end)
+    if enforce_root_redirect then
+        httpd:route({
+            path = '/',
+            method = 'GET',
+        }, function (cx)
+            return cx:redirect_to(prefix .. '/admin')
+        end)
+    end
 
     add('core', core_bundle)
     return true
