@@ -8,8 +8,10 @@ import gql from 'graphql-tag'
 
 import { generateApiMethod } from './api'
 
-const callFn = fn => (r, n) => {
-  fn(r)
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+const callFn = fn => async (r, n) => {
+  await fn(r)
   return n(r)
 }
 
@@ -18,6 +20,57 @@ const host = 'https://interceptors.com'
 const scope = nock(host)
 
 const localScope = nock('http://localhost')
+
+test('api methods: Promise', async () => {})
+
+test('api methods: priority', async () => {
+  const apiMethods = generateApiMethod()
+  const axiosInstance = axios.create()
+  apiMethods.axiosWizard(axiosInstance)
+
+  const times = []
+
+  const myMockFn1 = jest.fn(async () => {
+    times[0] = Date.now()
+    await sleep(5)
+  })
+  const myMockFn2 = jest.fn(async () => {
+    times[1] = Date.now()
+    await sleep(5)
+  })
+
+  apiMethods.registerAxiosHandler('request', callFn(myMockFn1))
+  apiMethods.registerAxiosHandler('request', callFn(myMockFn2))
+
+  scope.get('/rest/ok').reply(200, {
+    content: 'content'
+  })
+
+  await axiosInstance.get(`${host}/rest/ok`)
+
+  expect(myMockFn1).toBeCalled()
+  expect(myMockFn2).toBeCalled()
+
+  expect(times[1]).toBeGreaterThan(times[0])
+
+  scope.get('/rest/ok').reply(200, {
+    content: 'content'
+  })
+
+  const myMockFnBefore = jest.fn(async () => {
+    times[2] = Date.now()
+    await sleep(5)
+  })
+
+  apiMethods.registerAxiosHandler('request', callFn(myMockFnBefore), -100)
+
+  await axiosInstance.get(`${host}/rest/ok`)
+
+  expect(myMockFnBefore).toBeCalled()
+
+  expect(times[1]).toBeGreaterThan(times[0])
+  expect(times[0]).toBeGreaterThan(times[2])
+})
 
 test('api methods: subscribe and unsubscribe', async () => {
   const apiMethods = generateApiMethod()

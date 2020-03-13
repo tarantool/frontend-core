@@ -19,7 +19,7 @@ type AnalyticModule = {
   sendEvent: AnalyticsEvent => void,
   effect: Function => Function,
   __storage: Array<AnalyticsEvent>,
-  __effects: Array<{handler: Function, cursor: number}>,
+  __effects: Array<{ handler: Function, cursor: number }>,
   __timerInterval: number
 }
 
