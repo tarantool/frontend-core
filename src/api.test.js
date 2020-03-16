@@ -8,10 +8,8 @@ import gql from 'graphql-tag'
 
 import { generateApiMethod } from './api'
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-const callFn = fn => async (r, n) => {
-  await fn(r)
+const callFn = fn => (r, n) => {
+  fn(r)
   return n(r)
 }
 
@@ -21,23 +19,15 @@ const scope = nock(host)
 
 const localScope = nock('http://localhost')
 
-test('api methods: Promise', async () => {})
-
 test('api methods: priority', async () => {
   const apiMethods = generateApiMethod()
   const axiosInstance = axios.create()
   apiMethods.axiosWizard(axiosInstance)
 
-  const times = []
+  let log = []
 
-  const myMockFn1 = jest.fn(async () => {
-    times[0] = Date.now()
-    await sleep(5)
-  })
-  const myMockFn2 = jest.fn(async () => {
-    times[1] = Date.now()
-    await sleep(5)
-  })
+  const myMockFn1 = jest.fn(() => log.push('innerPriority 1'))
+  const myMockFn2 = jest.fn(() => log.push('innerPriority 2'))
 
   apiMethods.registerAxiosHandler('request', callFn(myMockFn1))
   apiMethods.registerAxiosHandler('request', callFn(myMockFn2))
@@ -51,25 +41,25 @@ test('api methods: priority', async () => {
   expect(myMockFn1).toBeCalled()
   expect(myMockFn2).toBeCalled()
 
-  expect(times[1]).toBeGreaterThan(times[0])
+  expect(log).toEqual(['innerPriority 2', 'innerPriority 1'])
 
   scope.get('/rest/ok').reply(200, {
     content: 'content'
   })
 
-  const myMockFnBefore = jest.fn(async () => {
-    times[2] = Date.now()
-    await sleep(5)
-  })
+  log = []
 
-  apiMethods.registerAxiosHandler('request', callFn(myMockFnBefore), -100)
+  const myMockFnBefore = jest.fn(() => log.push('priority -1'))
+  const myMockFnAfter = jest.fn(() => log.push('priority 1'))
+
+  apiMethods.registerAxiosHandler('request', callFn(myMockFnBefore), -1)
+  apiMethods.registerAxiosHandler('request', callFn(myMockFnAfter), 1)
 
   await axiosInstance.get(`${host}/rest/ok`)
 
   expect(myMockFnBefore).toBeCalled()
 
-  expect(times[1]).toBeGreaterThan(times[0])
-  expect(times[0]).toBeGreaterThan(times[2])
+  expect(log).toEqual(['priority -1', 'innerPriority 2', 'innerPriority 1', 'priority 1'])
 })
 
 test('api methods: subscribe and unsubscribe', async () => {
@@ -206,13 +196,37 @@ test('api methods: graphql', async () => {
     }
   })
 
-  const middlewareFn = jest.fn()
-  const afterwareFn = jest.fn()
-  const onErrorFn = jest.fn()
+  let log = []
 
-  apiMethods.registerApolloHandler('middleware', callFn(middlewareFn))
-  apiMethods.registerApolloHandler('afterware', callFn(afterwareFn))
-  apiMethods.registerApolloHandler('onError', callFn(onErrorFn))
+  const middlewareFn1 = jest.fn(() => log.push('middleware priority -1'))
+  const middlewareFn2 = jest.fn(() => log.push('middleware innerPriority 1'))
+  const middlewareFn3 = jest.fn(() => log.push('middleware innerPriority 2'))
+  const middlewareFn4 = jest.fn(() => log.push('middleware priority 1'))
+
+  const afterwareFn1 = jest.fn(() => log.push('afterware priority -1'))
+  const afterwareFn2 = jest.fn(() => log.push('afterware innerPriority 1'))
+  const afterwareFn3 = jest.fn(() => log.push('afterware innerPriority 2'))
+  const afterwareFn4 = jest.fn(() => log.push('afterware priority 1'))
+
+  const onErrorFn1 = jest.fn(() => log.push('onError priority -1'))
+  const onErrorFn2 = jest.fn(() => log.push('onError innerPriority 1'))
+  const onErrorFn3 = jest.fn(() => log.push('onError innerPriority 2'))
+  const onErrorFn4 = jest.fn(() => log.push('onError priority 1'))
+
+  apiMethods.registerApolloHandler('middleware', callFn(middlewareFn1), -1)
+  apiMethods.registerApolloHandler('middleware', callFn(middlewareFn4), 1)
+  apiMethods.registerApolloHandler('middleware', callFn(middlewareFn2))
+  apiMethods.registerApolloHandler('middleware', callFn(middlewareFn3))
+
+  apiMethods.registerApolloHandler('afterware', callFn(afterwareFn1), -1)
+  apiMethods.registerApolloHandler('afterware', callFn(afterwareFn4), 1)
+  apiMethods.registerApolloHandler('afterware', callFn(afterwareFn2))
+  apiMethods.registerApolloHandler('afterware', callFn(afterwareFn3))
+
+  apiMethods.registerApolloHandler('onError', callFn(onErrorFn1), -1)
+  apiMethods.registerApolloHandler('onError', callFn(onErrorFn4), 2)
+  apiMethods.registerApolloHandler('onError', callFn(onErrorFn2))
+  apiMethods.registerApolloHandler('onError', callFn(onErrorFn3))
 
   localScope.post('/graphql').reply(200, { data: { repairList: [], records: [] } })
 
@@ -220,9 +234,20 @@ test('api methods: graphql', async () => {
     query
   })
 
-  expect(middlewareFn).toBeCalled()
-  expect(afterwareFn).toBeCalled()
-  expect(onErrorFn).not.toBeCalled()
+  expect(log).toEqual([
+    'middleware priority -1',
+    'middleware innerPriority 2',
+    'middleware innerPriority 1',
+    'middleware priority 1',
+    'afterware priority -1',
+    'afterware innerPriority 2',
+    'afterware innerPriority 1',
+    'afterware priority 1'
+  ])
+
+  expect(onErrorFn1).not.toBeCalled()
+
+  log = []
 
   localScope.post('/graphql').reply(502, 'bad gateway')
 
@@ -233,8 +258,16 @@ test('api methods: graphql', async () => {
   } catch (e) {
     // nothing
   } finally {
-    expect(onErrorFn).toBeCalled()
-    expect(middlewareFn.mock.calls.length).toBe(2)
-    expect(afterwareFn.mock.calls.length).toBe(1)
+    expect(log).toEqual([
+      'middleware priority -1',
+      'middleware innerPriority 2',
+      'middleware innerPriority 1',
+      'middleware priority 1',
+      'onError priority -1',
+      'onError innerPriority 2',
+      'onError innerPriority 1',
+      'onError priority 1'
+    ])
+    expect(middlewareFn1.mock.calls.length).toBe(2)
   }
 })

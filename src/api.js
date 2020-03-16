@@ -57,7 +57,7 @@ export const generateApiMethod = () => {
       innerPriority: innerPriority++
     }
     apolloHandlers[type] = [handler, ...apolloHandlers[type]].sort((a, b) =>
-      a.priority - b.priority === 0 ? b.innerPriority - a.innerPriority : a.priority - b.priority
+      a.priority - b.priority === 0 ? b.innerPriority - a.innerPriority : a.priority - b.priority // !!!
     )
     return () => {
       apolloHandlers[type] = apolloHandlers[type].filter(x => x !== handler)
@@ -86,13 +86,13 @@ export const generateApiMethod = () => {
     )
   }
 
-  const apolloLinkMiddleware = new ApolloLink(async (operation, forward) => {
-    const modOperation = await responsibilityChain(operation, apolloHandlers['middleware'])
+  const apolloLinkMiddleware = new ApolloLink((operation, forward) => {
+    const modOperation = responsibilityChain(operation, apolloHandlers['middleware'])
     return forward(modOperation)
   })
 
-  const apolloLinkOnError = onError(async error => {
-    await responsibilityChain(error, apolloHandlers['onError'])
+  const apolloLinkOnError = onError(error => {
+    responsibilityChain(error, apolloHandlers['onError'])
   })
 
   const apolloLinkAfterware = new ApolloLink((operation, forward) => {
