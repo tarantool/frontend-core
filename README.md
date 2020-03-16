@@ -193,13 +193,15 @@ Example:
 
 `AppTitle` - sets application title
 
-### window.tarantool_enterprise_core.apiMethods.registerAxiosHandler(eventType: 'request' | 'response' | 'requestError' | 'responseError', handler: (any, Array<handlers>))
+### window.tarantool_enterprise_core.apiMethods.registerAxiosHandler(eventType: 'request' | 'response' | 'requestError' | 'responseError', handler: (any, Array<handlers>) [, priority: Number])
 
 Register axios handler. It's use a single responsibility chain inside. Handler should looks like:
 
 ```
 (r, next) => next(r + 1)
 ```
+
+Handlers with negative priority will be called before handlers without priority.
 
 More about context of usage [https://github.com/axios/axios#interceptors]. So request is request interceptor and requestError it's error on request. Also same for response with interceptors.response.
 
@@ -213,7 +215,7 @@ Example:
 window.tarantool_enterprise_core.apiMethods.axiosWizard(axiosInstance)
 ```
 
-### window.tarantool_enterprise_core.apiMethods.registerApolloHandler(eventType: 'middleware' | 'onError' | 'afterware', handler: (any, Array<handlers>))
+### window.tarantool_enterprise_core.apiMethods.registerApolloHandler(eventType: 'middleware' | 'onError' | 'afterware', handler: (any, Array<handlers>) [, priority: Number])
 
 Register handler for Apollo. Handler should looks like it:
 
@@ -226,6 +228,8 @@ Register handler for Apollo. Handler should looks like it:
 * `afterware` handles successful responses;
 
 * `onError` handles errors.
+
+Handlers with negative priority will be called before handlers without priority.
 
 More information here: [https://www.apollographql.com/docs/react/networking/network-layer/]
 

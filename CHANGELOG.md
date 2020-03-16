@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Customizable route prefix
+- Add optional priority to network events handlers
 
 ## [6.3.0] - 2020-01-24
 
