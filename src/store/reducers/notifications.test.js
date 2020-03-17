@@ -138,7 +138,7 @@ describe('notifications', () => {
   })
 
   it('deduplication', () => {
-    const action = sendNotification(example);
+    const action = sendNotification(example)
 
     const modifiedState = notificationReducer(initialState, action)
 

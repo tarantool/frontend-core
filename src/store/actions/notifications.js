@@ -22,14 +22,14 @@ type SendNotification = {
 
 export type SendNotificationAction = {
   type: typeof SEND_NOTIFICATION,
-  payload: {
+  payload: {|
     type: 'default' | 'warning' | 'error' | 'success',
     title: ?string,
     message: ?string,
     timeout: number,
     uuid: string,
     createdAt: number
-  }
+  |}
 }
 
 export type CheckNotificationsAction = {

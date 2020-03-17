@@ -96,7 +96,7 @@ export default (state: NotificationState = initialState, action: NotificationAct
       )
 
       if (isExistsWithSameTextAndTitle) {
-        return state;
+        return state
       }
       return {
         ...state,

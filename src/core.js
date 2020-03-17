@@ -5,7 +5,7 @@ import * as R from 'ramda'
 import history from './store/history'
 import { sendNotification } from './store/actions/notifications'
 
-export type MenuItemType = {
+export type MenuItemType = {|
   label: string,
   path: string,
   selected: boolean,
@@ -13,13 +13,13 @@ export type MenuItemType = {
   loading: boolean,
   icon: string | Object,
   items?: Array<MenuItemType>
-}
+|}
 
-type halfMenuItem = {
+type halfMenuItem = {|
   label: string,
   path: string,
   icon?: string | Object
-}
+|}
 
 export type FSA = {
   type: string,

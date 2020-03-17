@@ -4,7 +4,7 @@ import { css, cx } from 'react-emotion'
 import chevron from './chevron-up.svg'
 import { MenuIcon } from './MenuIcon'
 
-type handleClickType = (event: MouseEvent, handler: T => void, ...args: T) => void
+type handleClickType = (event: MouseEvent, handler: (T) => void, ...args: T) => void
 
 const handleClick: handleClickType = (event, handler, ...args) => {
   if (!event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
@@ -155,15 +155,8 @@ export const MenuItem = ({
   if (short) {
     return (
       <Component
-        className={cx(
-          styles.shortItem,
-          { [styles.itemSelected]: selected || (items && items.find(x => x.selected)) }
-        )}
-        onClick={
-          items && items.length
-            ? evt => expand(evt, path)
-            : evt => handleClick(evt, onClick, evt, path)
-        }
+        className={cx(styles.shortItem, { [styles.itemSelected]: selected || (items && items.find(x => x.selected)) })}
+        onClick={items && items.length ? evt => expand(evt, path) : evt => handleClick(evt, onClick, evt, path)}
         href={APP_PATH_PREFIX + path}
         title={label}
       >
@@ -185,41 +178,28 @@ export const MenuItem = ({
 
   const expandButton =
     items && items.length > 0 ? (
-      <img
-        src={chevron}
-        className={`${styles.expandButton} ${expanded ? '' : styles.expandButtonUnexpand}`}
-      ></img>
+      <img src={chevron} className={`${styles.expandButton} ${expanded ? '' : styles.expandButtonUnexpand}`}></img>
     ) : null
 
   return (
     <React.Fragment>
       <Component
-        className={cx(
-          styles.item,
-          {
-            [styles.itemSelected]: selected,
-            [styles.subItemSelected]: selected && isSubitem,
-            [styles.collapse]: isCollapse,
-            [styles.expanded]: expanded
-          }
-        )}
+        className={cx(styles.item, {
+          [styles.itemSelected]: selected,
+          [styles.subItemSelected]: selected && isSubitem,
+          [styles.collapse]: isCollapse,
+          [styles.expanded]: expanded
+        })}
         href={APP_PATH_PREFIX + path}
-        onClick={
-          items && items.length
-            ? evt => expand(evt, path)
-            : evt => handleClick(evt, onClick, evt, path)
-        }
+        onClick={items && items.length ? evt => expand(evt, path) : evt => handleClick(evt, onClick, evt, path)}
         title={label}
       >
         {isSubitem ? null : <MenuIcon icon={icon} className={styles.icon} />}
         <span
-          className={cx(
-            styles.title,
-            {
-              [styles.titleSelected]: selected,
-              [styles.expanded]: expanded
-            }
-          )}
+          className={cx(styles.title, {
+            [styles.titleSelected]: selected,
+            [styles.expanded]: expanded
+          })}
         >
           {label}
         </span>
