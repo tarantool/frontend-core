@@ -193,7 +193,7 @@ Example:
 
 `AppTitle` - sets application title
 
-### window.tarantool_enterprise_core.apiMethods.registerAxiosHandler(eventType: 'request' | 'response' | 'requestError' | 'responseError', handler: (any, Array<handlers>) [, priority: Number])
+### window.tarantool_enterprise_core.apiMethods.registerAxiosHandler(eventType: 'request' | 'response' | 'requestError' | 'responseError', handler: (any, Array<handlers>) => any, priority?: number = 0)
 
 Register axios handler. It's use a single responsibility chain inside. Handler should looks like:
 
@@ -215,7 +215,7 @@ Example:
 window.tarantool_enterprise_core.apiMethods.axiosWizard(axiosInstance)
 ```
 
-### window.tarantool_enterprise_core.apiMethods.registerApolloHandler(eventType: 'middleware' | 'onError' | 'afterware', handler: (any, Array<handlers>) [, priority: Number])
+### window.tarantool_enterprise_core.apiMethods.registerApolloHandler(eventType: 'middleware' | 'onError' | 'afterware', handler: (any, Array<handlers>) => any, priority?: number)
 
 Register handler for Apollo. Handler should looks like it:
 
