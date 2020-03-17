@@ -8,3 +8,26 @@ script:
   - npm run lint
   - npm run flow
   - npm run test_once
+
+env:
+  global:
+    - ROCK_NAME=frontend-core
+
+jobs:
+  include:
+    # - tests
+    - stage: deploy
+      script: skip
+      deploy:
+        - provider: script
+          script: curl --fail -X PUT -F rockspec=@$ROCK_NAME-scm-1.rockspec
+            https://$ROCKS_USERNAME:$ROCKS_PASSWORD@$ROCKS_SERVER
+        - on:
+            tags: true
+          provider: script
+          script: cat $ROCK_NAME-scm-1.rockspec |
+            sed -E
+              -e "s/branch = '.+'/tag = '$TRAVIS_TAG'/g"
+              -e "s/version = '.+'/version = '$TRAVIS_TAG-1'/g" |
+            curl --fail -X PUT -F "rockspec=@-;filename=$ROCK_NAME-$TRAVIS_TAG-1.rockspec"
+              https://$ROCKS_USERNAME:$ROCKS_PASSWORD@$ROCKS_SERVER
