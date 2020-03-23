@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react'
+import { Location } from 'history';
 import { Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
@@ -61,12 +62,53 @@ const mapRoutesModule = () => {
   ))
 }
 
-export default class App extends Component<any> {
+type AppState = {
+  routeIsAllowed: boolean,
+}
+
+export default class App extends Component<any, AppState> {
+  unlisten: () => void;
+  unsubscribe: () => void;
+
+  state: AppState = {
+    routeIsAllowed: true
+  };
+
+  componentWillMount () {
+    this.unlisten = history.listen((location: Location) => {
+      this.setState({
+        routeIsAllowed: this.checkRoute(location)
+      });
+    });
+
+    this.unsubscribe = store.subscribe(() => {
+      this.setState({
+        routeIsAllowed: this.checkRoute(history.location)
+      });
+    });
+  }
+
   componentDidMount () {
     coreInstance.subscribe('registerModule', () => {
       this.forceUpdate()
     })
   }
+
+  componentWillUnmount () {
+    this.unlisten();
+    this.unsubscribe();
+  }
+
+  checkRoute = (location: Location) => {
+    const modules = coreInstance.getModules();
+    const clusterModule = modules.find(module => module.namespace === 'cluster');
+    if (!clusterModule) {
+      return true;
+    }
+
+    return clusterModule.menuFilter ? clusterModule.menuFilter({ path: location.pathname }) : true;
+  }
+
   render () {
     return (
       <Provider store={store}>
@@ -78,7 +120,7 @@ export default class App extends Component<any> {
               <Header />
               <ConnectedRouter history={history}>
                 <Switch>
-                  {mapRoutesModule()}
+                  {this.state.routeIsAllowed && mapRoutesModule()}
                   <Route path={'/'} component={NoComponent} />
                 </Switch>
               </ConnectedRouter>
