@@ -1,17 +1,14 @@
 // @flow
 import React, { Component } from 'react'
-import { Location } from 'history';
-import { Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
+import Routes from './Routes';
 // $FlowFixMe
 import 'antd/dist/antd.less'
 import history from './store/history'
 import store from './store'
 import './styles/reset'
-import coreInstance from './coreInstance'
 import { css } from 'react-emotion'
-import NoComponent from './components/NoComponent'
 import Menu from './components/Menu'
 import Header from './components/Header'
 import NotificationList from './components/NotificationList'
@@ -55,60 +52,7 @@ const styles = {
   `
 }
 
-const mapRoutesModule = () => {
-  const modules = coreInstance.getModules()
-  return modules.map(module => (
-    <Route key={module.namespace} path={'/' + module.namespace} component={module.RootComponent} />
-  ))
-}
-
-type AppState = {
-  routeIsAllowed: boolean,
-}
-
-export default class App extends Component<any, AppState> {
-  unlisten: () => void;
-  unsubscribe: () => void;
-
-  state: AppState = {
-    routeIsAllowed: true
-  };
-
-  componentWillMount () {
-    this.unlisten = history.listen((location: Location) => {
-      this.setState({
-        routeIsAllowed: this.checkRoute(location)
-      });
-    });
-
-    this.unsubscribe = store.subscribe(() => {
-      this.setState({
-        routeIsAllowed: this.checkRoute(history.location)
-      });
-    });
-  }
-
-  componentDidMount () {
-    coreInstance.subscribe('registerModule', () => {
-      this.forceUpdate()
-    })
-  }
-
-  componentWillUnmount () {
-    this.unlisten();
-    this.unsubscribe();
-  }
-
-  checkRoute = (location: Location) => {
-    const modules = coreInstance.getModules();
-    const clusterModule = modules.find(module => module.namespace === 'cluster');
-    if (!clusterModule) {
-      return true;
-    }
-
-    return clusterModule.menuFilter ? clusterModule.menuFilter({ path: location.pathname }) : true;
-  }
-
+export default class App extends Component<any> {
   render () {
     return (
       <Provider store={store}>
@@ -119,10 +63,7 @@ export default class App extends Component<any, AppState> {
             <div className={styles.content}>
               <Header />
               <ConnectedRouter history={history}>
-                <Switch>
-                  {this.state.routeIsAllowed && mapRoutesModule()}
-                  <Route path={'/'} component={NoComponent} />
-                </Switch>
+                <Routes />
               </ConnectedRouter>
             </div>
             <NotificationList />

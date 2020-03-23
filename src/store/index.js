@@ -2,7 +2,8 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import menuReducer, { type MenuState } from './reducers/menu'
 import notificationsReducer, { type NotificationState } from './reducers/notifications'
-import uiReducer from './reducers/ui'
+import uiReducer, { type UiState } from './reducers/ui'
+import routesReducer, { type RoutesState } from './reducers/routes'
 import { changeTitleMiddleware } from './middlewares/title'
 import appTitleReducer, { type AppTitleState } from './reducers/title'
 import thunk from 'redux-thunk'
@@ -17,13 +18,13 @@ import {
   startTimerCheckNotifications,
   unzipData
 } from './middlewares/notifications'
-import type { UiState } from './reducers/ui'
 
 export type State = {
   menu: MenuState,
   appTitle: AppTitleState,
   notifications: NotificationState,
-  ui: UiState
+  ui: UiState,
+  routes: RoutesState
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
@@ -34,7 +35,8 @@ const store = createStore(
       menu: menuReducer.reduce,
       appTitle: appTitleReducer,
       ui: uiReducer,
-      notifications: notificationsReducer
+      notifications: notificationsReducer,
+      routes: routesReducer
     })
   ),
   {
