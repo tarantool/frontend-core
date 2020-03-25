@@ -80,6 +80,7 @@ local function static_handler(req)
         body = file.body,
         headers = {
             ['content-type'] = file.mime,
+            ['cache-control'] = 'max-age=86400',
         },
     }
 end
