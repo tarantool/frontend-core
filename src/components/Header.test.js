@@ -27,6 +27,7 @@ describe('Header component', () => {
       }
     ],
     appTitle: {
+      appName: null,
       title: '',
       propsList: []
     },
@@ -43,6 +44,7 @@ describe('Header component', () => {
     ...initialState,
     appTitle: {
       ...initialState.appTitle,
+      appName: 'App Name',
       title: 'App Title',
       propsList: [{ title: 'App Title' }]
     }
@@ -64,10 +66,11 @@ describe('Header component', () => {
       </Provider>
     )
 
-    expect(component.root.findByType('h1').children[0]).toEqual('Cluster')
+    expect(component.root.findAllByType('h1')).toEqual([])
+    expect(component.root.findAllByType('span')[2].children[0]).toEqual('Cluster')
   })
 
-  it('display appTitle.title', () => {
+  it('display appTitle.title and appName', () => {
     const mockStore = createStore(
       combineReducers({
         menu: (state = initialStateWithTitle.menu) => state,
@@ -83,6 +86,7 @@ describe('Header component', () => {
       </Provider>
     )
 
-    expect(component.root.findByType('h1').children[0]).toEqual('App Title')
+    expect(component.root.findByType('h1').children[0]).toEqual('App Name')
+    expect(component.root.findAllByType('span')[2].children[0]).toEqual('App Title')
   })
 })

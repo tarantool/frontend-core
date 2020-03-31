@@ -196,6 +196,8 @@ for (let i = 0; i < 5; i++) {
   })
 }
 
+core.dispatch('setAppName', 'Frontend Core')
+
 setTimeout(() => {
   core.setHeaderComponent(null)
 }, 3000)

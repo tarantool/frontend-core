@@ -1,21 +1,29 @@
 import reducer from './title'
 import * as constants from '../constants'
 
-test('title should be changed', () => {
+test('app name and title should be changed', () => {
   const title = 'Section first'
+  const appName = 'Front app'
 
-  const action = {
+  const setTitleAction = {
     type: constants.TITLE_SET,
     payload: { title, propsList: [{ title }] }
   }
 
+  const setAppNameAction = {
+    type: constants.APP_NAME_SET,
+    payload: appName
+  }
+
   const initialState = {
+    appName: null,
     title: '',
     propsList: []
   }
 
-  const newState = reducer(initialState, action)
+  const newState = reducer(reducer(initialState, setAppNameAction), setTitleAction)
 
+  expect(newState.appName).toEqual(appName)
   expect(newState.title).toEqual(title)
 })
 
@@ -35,9 +43,10 @@ test('title should be cleared', () => {
 test('title should be the same', () => {
   const title = 'Section second'
   const action = { type: 'SOME_ACTION', payload: { data: 'Big' } }
-  const initialState = { title, propsList: [{ title }] }
+  const initialState = { appName: null, title, propsList: [{ title }] }
 
   const newState = reducer(initialState, action)
 
   expect(newState.title).toEqual(title)
+  expect(newState.appName).toEqual(null)
 })
