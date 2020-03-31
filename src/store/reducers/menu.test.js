@@ -3,6 +3,15 @@ import * as constants from '../constants'
 
 // Only one level of nesting depth allowed in side menu
 
+const locationAction = pathname => ({
+  type: constants.LOCATION_CHANGE,
+  payload: {
+    location: {
+      pathname
+    }
+  }
+})
+
 describe('reduce choose by part of path', () => {
   const nestedMenuState = [
     {
@@ -33,14 +42,7 @@ describe('reduce choose by part of path', () => {
   ]
 
   it('without nested items', () => {
-    const action = {
-      type: constants.LOCATION_CHANGE,
-      payload: {
-        location: {
-          pathname: '/space_explorer/hosts'
-        }
-      }
-    }
+    const action = locationAction('/space_explorer/hosts')
 
     const state = [
       {
@@ -59,14 +61,7 @@ describe('reduce choose by part of path', () => {
   })
 
   it('with nested items', () => {
-    const action = {
-      type: constants.LOCATION_CHANGE,
-      payload: {
-        location: {
-          pathname: '/space_explorer/hosts'
-        }
-      }
-    }
+    const action = locationAction('/space_explorer/hosts')
 
     const newState = defaultReducer()(nestedMenuState, action)
 
@@ -76,14 +71,7 @@ describe('reduce choose by part of path', () => {
   })
 
   it('with nested items and deep path', () => {
-    const action = {
-      type: constants.LOCATION_CHANGE,
-      payload: {
-        location: {
-          pathname: '/space_explorer/spaces/space4/'
-        }
-      }
-    }
+    const action = locationAction('/space_explorer/spaces/space4/')
 
     const newState = defaultReducer()(nestedMenuState, action)
 
@@ -93,14 +81,7 @@ describe('reduce choose by part of path', () => {
   })
 
   it('with nested items and deep path, second case', () => {
-    const action = {
-      type: constants.LOCATION_CHANGE,
-      payload: {
-        location: {
-          pathname: '/space_explorer/kitties/kitty4/'
-        }
-      }
-    }
+    const action = locationAction('/space_explorer/kitties/kitty4/')
 
     const newState = defaultReducer()(nestedMenuState, action)
 
@@ -112,14 +93,7 @@ describe('reduce choose by part of path', () => {
 })
 
 test('switch menu subsection on location change', () => {
-  const action = {
-    type: constants.LOCATION_CHANGE,
-    payload: {
-      location: {
-        pathname: '/fruits/banana'
-      }
-    }
-  }
+  const action = locationAction('/fruits/banana')
 
   const state = [
     {
@@ -175,14 +149,7 @@ test('switch menu subsection on location change', () => {
 })
 
 test('switch menu subsection on route change', () => {
-  const action = {
-    type: constants.LOCATION_CHANGE,
-    payload: {
-      location: {
-        pathname: '/gems'
-      }
-    }
-  }
+  const action = locationAction('/gems')
 
   const state = [
     {
@@ -238,14 +205,7 @@ test('switch menu subsection on route change', () => {
 })
 
 test('reduce choose by full path', () => {
-  const action = {
-    type: constants.LOCATION_CHANGE,
-    payload: {
-      location: {
-        pathname: '/space_explorer'
-      }
-    }
-  }
+  const action = locationAction('/space_explorer')
 
   const state = [
     {
@@ -264,14 +224,7 @@ test('reduce choose by full path', () => {
 })
 
 test('reduce not choose', () => {
-  const action = {
-    type: constants.LOCATION_CHANGE,
-    payload: {
-      location: {
-        pathname: '/'
-      }
-    }
-  }
+  const action = locationAction('/')
 
   const state = [
     {
@@ -450,5 +403,51 @@ describe('menu filter', () => {
     const newState = reducerInstance.reduce(reducedData, { type: 'NOTHING_CASE' })
 
     expect(newState).toEqual(tasksMenu.map(x => ({ ...x, namespace: 'test-2' })))
+  })
+
+  it('should be one selected menu', () => {
+    const reducerInstance = generateInstance()
+
+    const first = {
+      namespace: 'first',
+      menu: [
+        {
+          label: 'first',
+          path: '/first',
+          selected: false,
+          expanded: false,
+          loading: false,
+          items: []
+        }
+      ],
+      RootComponent: () => null,
+      engine: 'react'
+    }
+    const second = {
+      namespace: 'second',
+      menu: [
+        {
+          label: 'second',
+          path: '/second',
+          selected: false,
+          expanded: false,
+          loading: false,
+          items: []
+        }
+      ],
+      RootComponent: () => null,
+      engine: 'react'
+    }
+    reducerInstance.processModule(first)
+    reducerInstance.processModule(second)
+    const reducedData = reducerInstance.reduce([], { type: 'NOTHING_CASE' })
+
+    const firstClickState = reducerInstance.reduce(reducedData, locationAction('/first'))
+
+    expect(firstClickState.filter(x => x.selected).length).toBe(1)
+
+    const secondClickState = reducerInstance.reduce(firstClickState, locationAction('/second'))
+
+    expect(secondClickState.filter(x => x.selected).length).toBe(1)
   })
 })

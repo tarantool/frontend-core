@@ -29,8 +29,8 @@ const mapMenuTree = (menuState: MenuItemType[], fn: (item: MenuItemType) => Menu
   return result
 }
 
-export const matchPath = (path: string, link: string, exact: boolean = false): boolean => {
-  if (path.length === 0) {
+export const matchPath = (path: ?string, link: string, exact: boolean = false): boolean => {
+  if (!path || path.length === 0) {
     return false
   }
 
@@ -61,18 +61,18 @@ const getStrongestMatchingLink = (state: MenuItemType[], path: string): ?string 
   return selected
 }
 
-const updateLink = (activeLink: string) => (menuItem: MenuItemType): MenuItemType => {
+const updateLink = (activeLink: ?string) => (menuItem: MenuItemType): MenuItemType => {
   const { items = [], path } = menuItem
-  const isPatchMatching: boolean = matchPath(activeLink, path)
+  const isPatchMatching: boolean = activeLink ? matchPath(activeLink, path) : false
 
   return {
     ...menuItem,
     expanded: isPatchMatching && !!items.length,
-    selected: matchPath(activeLink, path, true)
+    selected: activeLink ? matchPath(activeLink, path, true) : false
   }
 }
 
-const expand = (activeLink: string) => (menuItem: MenuItemType): MenuItemType => {
+const expand = (activeLink: ?string) => (menuItem: MenuItemType): MenuItemType => {
   const { path } = menuItem
 
   return {
@@ -89,7 +89,7 @@ export const defaultReducer = (defaultState: MenuState = []) => (
     case constants.LOCATION_CHANGE:
       if (payload && payload.location && payload.location.pathname) {
         const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
-        return activeLink ? mapMenuTree(state, updateLink(activeLink)) : state
+        return mapMenuTree(state, updateLink(activeLink))
       } else {
         return state
       }
@@ -97,7 +97,7 @@ export const defaultReducer = (defaultState: MenuState = []) => (
     case constants.EXPAND:
       if (payload && payload.location && payload.location.pathname) {
         const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
-        return activeLink ? mapMenuTree(state, expand(activeLink)) : state
+        return mapMenuTree(state, expand(activeLink))
       } else {
         return state
       }
@@ -105,7 +105,7 @@ export const defaultReducer = (defaultState: MenuState = []) => (
     case constants.RESET:
       if (payload && payload.path) {
         const activeLink = getStrongestMatchingLink(state, payload.path)
-        return activeLink ? mapMenuTree(defaultState, updateLink(activeLink)) : state
+        return mapMenuTree(defaultState, updateLink(activeLink))
       } else {
         return state
       }
