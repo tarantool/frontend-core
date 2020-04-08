@@ -4,6 +4,7 @@ import ReactDom from 'react-dom'
 import * as R from 'ramda'
 import history from './store/history'
 import { sendNotification } from './store/actions/notifications'
+import pageFilter from './pageFilter'
 
 export type MenuItemType = {|
   label: string,
@@ -70,11 +71,17 @@ const loadEngine = (engineSrc: string): Promise<boolean> => {
 }
 
 export default class Core {
-  modules: Array<CoreModule> = []
-  activeEngines: { [name: engines]: moduleStatus } = { react: 'loaded' }
-  notifiers: { [string]: Array<Function> } = {}
-  history = history
-  header = null
+  modules: Array<CoreModule>
+  activeEngines: { [name: engines]: moduleStatus }
+  notifiers: { [string]: Array<Function> }
+  constructor() {
+    this.modules = []
+    this.activeEngines = { react: 'loaded' }
+    this.notifiers = {}
+    this.history = history
+    this.header = null
+    this.pageFilter = pageFilter(this)
+  }
   setHeaderComponent (headerComponent: any) {
     this.header = headerComponent
     this.dispatch('setHeaderComponent')

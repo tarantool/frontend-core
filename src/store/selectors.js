@@ -7,7 +7,7 @@ import { createSelector } from 'reselect'
 export const flattenMenu = (menuItems: MenuItemType[] = []): MenuItemType[] =>
   menuItems.reduce((acc, { items }) => (items ? [...acc, ...items] : acc), menuItems)
 
-const selectMenu = (state: State): MenuItemType[] => state.menu
+const selectMenu = (state: State): MenuItemType[] => state.menu.list
 
 export const selectCurrentMenuItemLabel = (state: State): string => {
   const menu = flattenMenu(selectMenu(state))

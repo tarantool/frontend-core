@@ -4,6 +4,7 @@ import menuReducer, { type MenuState } from './reducers/menu'
 import notificationsReducer, { type NotificationState } from './reducers/notifications'
 import uiReducer from './reducers/ui'
 import { changeTitleMiddleware } from './middlewares/title'
+import pageFilterMiddleware from './middlewares/pageFilter'
 import appTitleReducer, { type AppTitleState } from './reducers/title'
 import thunk from 'redux-thunk'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
@@ -46,7 +47,8 @@ const store = createStore(
       routerMiddleware(history),
       menuReducer.middleware,
       saveNotificationsMiddleware,
-      changeTitleMiddleware
+      changeTitleMiddleware,
+      pageFilterMiddleware,
     )
   )
 )
@@ -54,7 +56,7 @@ const store = createStore(
 CoreInstance.subscribe('registerModule', () => {
   const modules = CoreInstance.getModules()
   for (const module of modules) {
-    const added = menuReducer.processModule(module)
+    const added = menuReducer.processModule(module, CoreInstance.pageFilter.registerFilter)
     if (added) {
       store.dispatch({
         type: constants.RESET,
@@ -65,6 +67,13 @@ CoreInstance.subscribe('registerModule', () => {
       })
     }
   }
+})
+
+CoreInstance.subscribe('core:pageFilter:apply', filters => {
+  store.dispatch({
+    type: constants.FILTER_APPLY,
+  })
+  CoreInstance.dispatch('core:pageFilter:applied')
 })
 
 CoreInstance.subscribe('dispatchToken', (token: FSA) => store.dispatch(token))

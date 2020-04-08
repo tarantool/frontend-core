@@ -7,10 +7,13 @@ import core from './coreInstance'
 import AppTitle from './components/AppTitle'
 import apiMethods from './api'
 import analyticModule from './analytics'
+import pageFilter from './pageFilter'
 
 core.components = {
   AppTitle
 }
+
+core.pageFilter = pageFilter
 
 core.logo = require('./components/tarantool-logo.svg')
 

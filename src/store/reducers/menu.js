@@ -176,10 +176,8 @@ export class MainReducer {
         namespace: module.namespace
       }
     this.subStores.push(reducer)
-    if (module.menuFilter) {
-      this.filters.push(module.menuFilter)
-    }
     this.installedStores[module.namespace] = true
+
     return true
   }
 }
