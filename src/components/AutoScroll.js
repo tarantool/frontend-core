@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Scrollbar from './Scrollbar'
 
-export function AutoScroll ({ className, maxHeight, children }) {
+export function AutoScroll({ className, maxHeight, children }) {
   const [height, setHeight] = useState(0)
   const scrollContainerRef = useRef(null)
 

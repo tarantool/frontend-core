@@ -3,6 +3,8 @@ import renderer from 'react-test-renderer'
 import * as React from 'react'
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
+import { disposableFunctionKey } from '../utils/disposableFnMap'
+import * as R from 'ramda'
 
 describe('Header component', () => {
   const initialState = {
@@ -37,7 +39,8 @@ describe('Header component', () => {
     },
     ui: {
       showNotificationList: false
-    }
+    },
+    pageFilter: [disposableFunctionKey(R.T)]
   }
 
   const initialStateWithTitle = {
@@ -56,7 +59,8 @@ describe('Header component', () => {
         menu: (state = initialState.menu) => state,
         appTitle: (state = initialState.appTitle) => state,
         notifications: (state = initialState.notifications) => state,
-        ui: (state = initialState.ui) => state
+        ui: (state = initialState.ui) => state,
+        pageFilter: (state = initialState.pageFilter) => state
       })
     )
 
@@ -76,7 +80,8 @@ describe('Header component', () => {
         menu: (state = initialStateWithTitle.menu) => state,
         appTitle: (state = initialStateWithTitle.appTitle) => state,
         notifications: (state = initialState.notifications) => state,
-        ui: (state = initialState.ui) => state
+        ui: (state = initialState.ui) => state,
+        pageFilter: (state = initialState.pageFilter) => state
       })
     )
 

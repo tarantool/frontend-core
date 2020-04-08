@@ -45,7 +45,7 @@ type ScrollbarProps = {
   className?: string
 }
 
-function Scrollbar ({ children, track, thumb, className, style }: ScrollbarProps) {
+function Scrollbar({ children, track, thumb, className, style }: ScrollbarProps) {
   return (
     <ScrollWrapper className={className} style={style}>
       <ReactScroll

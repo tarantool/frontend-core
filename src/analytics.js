@@ -71,7 +71,7 @@ export const generateAnalyticModule = (storagePrefix: ?string = ''): AnalyticMod
 
   return {
     __timerInterval: defaultTimerInterval,
-    sendEvent (event: AnalyticsEvent) {
+    sendEvent(event: AnalyticsEvent) {
       if (effects.length === 0 && storage.length > threshold) {
         storage = storage.splice(0, storage.length)
         storedActionName = {}
@@ -93,7 +93,7 @@ export const generateAnalyticModule = (storagePrefix: ?string = ''): AnalyticMod
       storage.push(event)
       updateCursors()
     },
-    effect (handler: Function) {
+    effect(handler: Function) {
       effects.push({
         handler,
         cursor: 0

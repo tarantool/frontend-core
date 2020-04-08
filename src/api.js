@@ -56,8 +56,8 @@ export const generateApiMethod = () => {
       priority,
       innerPriority: innerPriority++
     }
-    apolloHandlers[type] = [handler, ...apolloHandlers[type]].sort((a, b) =>
-      a.priority - b.priority === 0 ? b.innerPriority - a.innerPriority : a.priority - b.priority // !!!
+    apolloHandlers[type] = [handler, ...apolloHandlers[type]].sort(
+      (a, b) => (a.priority - b.priority === 0 ? b.innerPriority - a.innerPriority : a.priority - b.priority) // !!!
     )
     return () => {
       apolloHandlers[type] = apolloHandlers[type].filter(x => x !== handler)

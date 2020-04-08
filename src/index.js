@@ -24,7 +24,7 @@ for (let i = 0; i < 100; i++) {
 }
 
 class Test extends React.Component<null> {
-  render () {
+  render() {
     return (
       <div>
         <AppTitle title="Root" link={'/test/test2'} />
@@ -62,7 +62,7 @@ class Test extends React.Component<null> {
 }
 
 class TestTwo extends React.Component<null> {
-  render () {
+  render() {
     return (
       <div>
         <AppTitle title="Root" link={'/test/test2'} />
@@ -150,6 +150,7 @@ core.register(
   ({ path }) => !path.includes('/test/icon/6')
 )
 
+let menuVisible = false
 core.register(
   'second-test',
   [
@@ -166,7 +167,11 @@ core.register(
   ],
   TestTwo,
   'react',
-  null
+  null,
+  item => {
+    console.log('filter + + + + +')
+    return menuVisible
+  }
 )
 
 core.notify({
@@ -201,3 +206,12 @@ core.dispatch('setAppName', 'Frontend Core')
 setTimeout(() => {
   core.setHeaderComponent(null)
 }, 3000)
+
+// setTimeout(() => {
+// core.register('test', [], Root, 'react', null, )
+// }, 3000)
+
+setTimeout(() => {
+  menuVisible = true
+  core.dispatch('dispatchToken', { type: '' })
+}, 1000)

@@ -4,6 +4,9 @@ import ReactDom from 'react-dom'
 import * as R from 'ramda'
 import history from './store/history'
 import { sendNotification } from './store/actions/notifications'
+import pageFilter from './pageFilter'
+import { ReactComponentLike } from 'prop-types'
+import type { PageFilterType } from './pageFilter'
 
 export type MenuItemType = {|
   label: string,
@@ -70,19 +73,28 @@ const loadEngine = (engineSrc: string): Promise<boolean> => {
 }
 
 export default class Core {
-  modules: Array<CoreModule> = []
-  activeEngines: { [name: engines]: moduleStatus } = { react: 'loaded' }
-  notifiers: { [string]: Array<Function> } = {}
-  history = history
-  header = null
-  setHeaderComponent (headerComponent: any) {
+  modules: Array<CoreModule>
+  activeEngines: { [name: engines]: moduleStatus }
+  notifiers: { [string]: Array<Function> }
+  history: history
+  header: ?ReactComponentLike
+  pageFilter: PageFilterType
+  constructor() {
+    this.modules = []
+    this.activeEngines = { react: 'loaded' }
+    this.notifiers = {}
+    this.history = history
+    this.header = null
+    this.pageFilter = pageFilter(this)
+  }
+  setHeaderComponent(headerComponent: any) {
     this.header = headerComponent
     this.dispatch('setHeaderComponent')
   }
-  getHeaderComponent () {
+  getHeaderComponent() {
     return this.header
   }
-  waitForModule (namespace: string): Promise<boolean> {
+  waitForModule(namespace: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const unwait = this.subscribe('registerModule', () => {
         const modules = this.getModules().filter(x => x.namespace === namespace)
@@ -93,7 +105,7 @@ export default class Core {
       })
     })
   }
-  dispatch (eventType: string, event: ?Object = null) {
+  dispatch(eventType: string, event: ?Object = null) {
     if (!this.notifiers[eventType]) {
       this.notifiers[eventType] = []
     }
@@ -101,7 +113,7 @@ export default class Core {
       callback(event)
     }
   }
-  register (
+  register(
     namespace: string,
     menu: menuShape,
     RootComponent: ComponentType<any>,
@@ -119,9 +131,12 @@ export default class Core {
     }
     this.checkNamespace(addingModule)
     this.modules.push(addingModule)
+    if (addingModule.menuFilter) {
+      this.pageFilter.registerFilter(addingModule.menuFilter)
+    }
     this.fetchEnginesAndNotify()
   }
-  async fetchEnginesAndNotify () {
+  async fetchEnginesAndNotify() {
     const currentEngines = R.uniq(this.modules.map(x => x.engine))
     let needLoad = false
     for (const curEngine of currentEngines) {
@@ -133,23 +148,23 @@ export default class Core {
         this.activeEngines[curEngine] = 'loading'
         await loadEngine(engineMap[curEngine])
         this.activeEngines[curEngine] = 'loaded'
-        this.dispatch('registerModule')
+        this.dispatch('registerModule', this.getModules())
       }
     }
     if (!needLoad) {
-      this.dispatch('registerModule')
+      this.dispatch('registerModule', this.getModules())
     }
   }
-  checkNamespace (module: CoreModule) {
+  checkNamespace(module: CoreModule) {
     const namespaces = this.modules.map(x => x.namespace)
     if (namespaces.indexOf(module.namespace) >= 0) {
       throw new Error('namespace_already_in_use')
     }
   }
-  getModules () {
+  getModules() {
     return this.modules
   }
-  subscribe (eventType: string, callback: Function) {
+  subscribe(eventType: string, callback: Function) {
     if (!this.notifiers[eventType]) {
       this.notifiers[eventType] = []
     }
@@ -158,7 +173,7 @@ export default class Core {
       this.notifiers[eventType] = this.notifiers[eventType].filter(f => f !== callback)
     }
   }
-  notify ({
+  notify({
     type,
     title,
     message,
