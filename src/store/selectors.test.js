@@ -153,7 +153,7 @@ test("selectCurrentMenuItemLabel when anyone menu item isn't selected", () => {
         items: []
       }
     ],
-    pageFilter: pageFilterInitialState,
+    pageFilter: pageFilterInitialState
   })
 
   expect(label).toBe('')

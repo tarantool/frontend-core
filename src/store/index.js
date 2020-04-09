@@ -58,7 +58,7 @@ export const createCoreStore = (core: Core) => {
     )
   )
 
-  core.subscribe('registerModule', (modules) => {
+  core.subscribe('registerModule', modules => {
     for (const module of modules) {
       const added = menuReducer.processModule(module)
       if (added) {

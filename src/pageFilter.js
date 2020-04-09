@@ -1,7 +1,18 @@
+// @flow
+
 import * as R from 'ramda'
 import { PAGE_FILTER_ADD, PAGE_FILTER_REMOVE } from './store/constants'
+import Core from './core'
+import type { MenuItemType } from './core'
 
-export const generateFilterApi = core => {
+export type PageFilterType = {
+  registerFilter: Function => Function,
+  getFilters: () => Array<Function>,
+  applyFilters: (Array<MenuItemType>) => Array<MenuItemType>,
+  filterPage: MenuItemType => boolean
+}
+
+export const generateFilterApi = (core: Core): PageFilterType => {
   const filters = [R.T]
 
   const getFilters = () => filters
@@ -20,7 +31,7 @@ export const generateFilterApi = core => {
     })
     core.dispatch('core:pageFilter:applied', getFilters())
     return () => {
-      filters.splice(filter.findIndex(x => x === filter), 1)
+      filters.splice(filters.findIndex(x => x === filter), 1)
       core.dispatch('core:pageFilter:apply', getFilters())
       core.dispatch('dispatchToken', {
         type: PAGE_FILTER_REMOVE,
