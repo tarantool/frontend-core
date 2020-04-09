@@ -7,7 +7,7 @@ import { changeTitleMiddleware } from './middlewares/title'
 import pageFilterMiddleware from './middlewares/pageFilter'
 import appTitleReducer, { type AppTitleState } from './reducers/title'
 import thunk from 'redux-thunk'
-import { connectRouter, routerMiddleware } from 'connected-react-router'
+import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router'
 import history, { APP_PATH_PREFIX } from './history'
 import coreInstance from '../coreInstance'
 import * as constants from './constants'
@@ -27,7 +27,8 @@ export type State = {
   appTitle: AppTitleState,
   notifications: NotificationState,
   ui: UiState,
-  pageFilter: PageFilterState
+  pageFilter: PageFilterState,
+  router: RouterState
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

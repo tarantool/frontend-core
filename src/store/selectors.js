@@ -42,3 +42,9 @@ export const selectHiddenNotifications = createSelector(
   (state: State) => state.notifications.archive,
   (notifications: NotificationItem[]) => notifications.sort((a, b) => b.createdAt - a.createdAt)
 )
+
+export const routeIsAllowed = createSelector(
+  selectMenu,
+  (state: State) => state.router.location.pathname,
+  (menuItems: MenuItemType[], path: string) => menuItems.some((item: MenuItemType) => path === item.path)
+)

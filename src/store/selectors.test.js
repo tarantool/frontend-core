@@ -1,4 +1,4 @@
-import { flattenMenu, selectCurrentMenuItemLabel } from './selectors'
+import { flattenMenu, selectCurrentMenuItemLabel, routeIsAllowed } from './selectors'
 import { initialState as pageFilterInitialState } from './reducers/pageFilter'
 
 const initialMenu = [
@@ -158,4 +158,50 @@ test("selectCurrentMenuItemLabel when anyone menu item isn't selected", () => {
 
   expect(label).toBe('')
   expect(selectCurrentMenuItemLabel({ menu: [], pageFilter: pageFilterInitialState })).toBe('')
+})
+
+test("check routeIsAllowed when menu includes pathname", () => {
+  const state = {
+    menu: [
+      {
+        label: 'Fruits Banana',
+        path: '/fruits/banana',
+        selected: false,
+        expanded: false,
+        loading: false,
+        items: []
+      }
+    ],
+    pageFilter: pageFilterInitialState,
+    router: {
+      location: {
+        pathname: '/fruits/banana'
+      }
+    }
+  };
+
+  expect(routeIsAllowed(state)).toBe(true);
+})
+
+test("check routeIsAllowed when menu not includes pathname", () => {
+  const state = {
+    menu: [
+      {
+        label: 'Fruits Banana',
+        path: '/fruits/banana',
+        selected: false,
+        expanded: false,
+        loading: false,
+        items: []
+      }
+    ],
+    pageFilter: pageFilterInitialState,
+    router: {
+      location: {
+        pathname: '/tomato'
+      }
+    }
+  };
+
+  expect(routeIsAllowed(state)).toBe(false);
 })
