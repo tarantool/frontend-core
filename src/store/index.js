@@ -7,7 +7,7 @@ import { changeTitleMiddleware } from './middlewares/title'
 import appTitleReducer, { type AppTitleState } from './reducers/title'
 import thunk from 'redux-thunk'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
-import history, { APP_PATH_PREFIX } from './history'
+import history, { APP_PATH_PREFIX, getCurrentURLPath } from './history'
 import CoreInstance from '../coreInstance'
 import * as constants from './constants'
 import { type FSA } from '../core'
@@ -60,7 +60,7 @@ CoreInstance.subscribe('registerModule', () => {
         type: constants.RESET,
         payload: {
           namespace: module.namespace,
-          path: window.location.pathname.slice(APP_PATH_PREFIX.length)
+          path: getCurrentURLPath()
         }
       })
     }

@@ -1,4 +1,11 @@
 import { defaultReducer, generateInstance, matchPath } from './menu'
+
+jest.mock('../history');
+import { getCurrentURLPath } from '../history'
+
+import { selectCurrentMenuItemLabel } from '../selectors'
+import store from '../index'
+import core from '../../coreInstance'
 import * as constants from '../constants'
 
 // Only one level of nesting depth allowed in side menu
@@ -356,7 +363,8 @@ describe('menu filter', () => {
     const newState = reducerInstance.reduce(reducedData, { type: 'NOTHING_CASE' })
 
     expect(newState).toEqual([])
-  })
+  });
+
 
   it('filter space', () => {
     const reducerInstance = generateInstance()
@@ -449,5 +457,63 @@ describe('menu filter', () => {
     const secondClickState = reducerInstance.reduce(firstClickState, locationAction('/second'))
 
     expect(secondClickState.filter(x => x.selected).length).toBe(1)
-  })
+  });
+
+
+  describe('select current item (by current url)', () => {
+    const currentItem = {
+      label: 'Current item',
+      path: '/current-url',
+      selected: false,
+      expanded: false,
+      loading: false,
+      items: []
+    };
+
+    // MOCK getCurrentURLPath()
+    getCurrentURLPath.mockReturnValue(currentItem.path);
+
+    const menuState = [
+      {
+        label: 'Other item',
+        path: '/other-url',
+        selected: false,
+        expanded: false,
+        loading: false,
+        items: []
+      },
+      currentItem
+    ];
+    const namespace = 'testNamespace';
+    let menuVisible = true;
+
+    core.register(
+      namespace,
+      menuState,
+      () => null,
+      'react',
+      null,
+      item => menuVisible
+    );
+
+    it('when SHOW menu items', () => {
+      expect(
+        selectCurrentMenuItemLabel(store.getState())
+      ).toEqual(currentItem.label);
+    });
+
+    it('when HIDE then SHOW menu items', () => {
+      // hide
+      menuVisible = false;
+      core.dispatch('dispatchToken', { type: '' });
+
+      // show
+      menuVisible = true;
+      core.dispatch('dispatchToken', { type: '' });
+
+      expect(
+        selectCurrentMenuItemLabel(store.getState())
+      ).toEqual(currentItem.label);
+    });
+  });
 })
