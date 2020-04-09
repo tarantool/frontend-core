@@ -153,14 +153,14 @@ test("selectCurrentMenuItemLabel when anyone menu item isn't selected", () => {
         items: []
       }
     ],
-    pageFilter: pageFilterInitialState,
+    pageFilter: pageFilterInitialState
   })
 
   expect(label).toBe('')
   expect(selectCurrentMenuItemLabel({ menu: [], pageFilter: pageFilterInitialState })).toBe('')
 })
 
-test("check routeIsAllowed when menu includes pathname", () => {
+test('check routeIsAllowed when menu includes pathname', () => {
   const state = {
     menu: [
       {
@@ -183,7 +183,7 @@ test("check routeIsAllowed when menu includes pathname", () => {
   expect(routeIsAllowed(state)).toBe(true);
 })
 
-test("check routeIsAllowed when menu not includes pathname", () => {
+test('check routeIsAllowed when menu not includes pathname', () => {
   const state = {
     menu: [
       {
