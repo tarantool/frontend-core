@@ -1,4 +1,5 @@
 import { flattenMenu, selectCurrentMenuItemLabel } from './selectors'
+import { initialState as pageFilterInitialState } from './reducers/pageFilter'
 
 const initialMenu = [
   {
@@ -136,7 +137,7 @@ test('flattenMenu', () => {
 })
 
 test('selectCurrentMenuItemLabel', () => {
-  const label = selectCurrentMenuItemLabel({ menu: initialMenu })
+  const label = selectCurrentMenuItemLabel({ menu: initialMenu, pageFilter: pageFilterInitialState })
   expect(label).toBe('Vegetables')
 })
 
@@ -151,9 +152,10 @@ test("selectCurrentMenuItemLabel when anyone menu item isn't selected", () => {
         loading: false,
         items: []
       }
-    ]
+    ],
+    pageFilter: pageFilterInitialState,
   })
 
   expect(label).toBe('')
-  expect(selectCurrentMenuItemLabel({ menu: [] })).toBe('')
+  expect(selectCurrentMenuItemLabel({ menu: [], pageFilter: pageFilterInitialState })).toBe('')
 })

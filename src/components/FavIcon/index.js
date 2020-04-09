@@ -4,7 +4,7 @@ import icon from './favicon@32.png'
 import iconSvg from './favicon.svg'
 
 export default class FavIcon extends Component<any> {
-  componentDidMount () {
+  componentDidMount() {
     const svgIconElement = document.createElement('link')
     svgIconElement.setAttribute('rel', 'shortcut icon')
     svgIconElement.setAttribute('href', iconSvg)
@@ -20,7 +20,7 @@ export default class FavIcon extends Component<any> {
     document.head && document.head.appendChild(pngIconElement)
   }
 
-  render () {
+  render() {
     return null
   }
 }

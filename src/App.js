@@ -62,12 +62,12 @@ const mapRoutesModule = () => {
 }
 
 export default class App extends Component<any> {
-  componentDidMount () {
+  componentDidMount() {
     coreInstance.subscribe('registerModule', () => {
       this.forceUpdate()
     })
   }
-  render () {
+  render() {
     return (
       <Provider store={store}>
         <div className={styles.layout}>

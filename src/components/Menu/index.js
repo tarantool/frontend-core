@@ -12,6 +12,7 @@ import Scrollbar from '../Scrollbar'
 import { expand } from '../../store/actions/menu'
 import information from './information.svg'
 import leftArrow from './arrow-left.svg'
+import { selectMenu } from '../../store/selectors'
 
 const translateFromRight = keyframes`
   from{
@@ -175,7 +176,7 @@ type MenuProps = {
   className: string
 }
 
-export function Index (props: MenuProps) {
+export function Index(props: MenuProps) {
   const { menu, dispatch, path, className } = props
   const [isInited, setIsInited] = useState(path !== '/')
 
@@ -252,9 +253,9 @@ export function Index (props: MenuProps) {
   )
 }
 
-export default connect(({ menu, router }) => {
+export default connect(state => {
   return {
-    menu,
-    path: router.location.pathname
+    menu: selectMenu(state),
+    path: state.router.location.pathname
   }
 })(Index)

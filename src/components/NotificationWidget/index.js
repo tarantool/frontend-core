@@ -93,7 +93,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
       this.props.dispatch(hideNotificationList())
     }
   }
-  componentDidUpdate (prevProps: Readonly<NotificationWidgetProps>): void {
+  componentDidUpdate(prevProps: Readonly<NotificationWidgetProps>): void {
     if (prevProps.showList !== this.props.showList) {
       if (this.props.showList) {
         document.addEventListener('mousedown', this.clickHandler, true)
@@ -105,7 +105,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
     }
   }
 
-  render (): React.ReactNode {
+  render(): React.ReactNode {
     const { dispatch, notifications, showList, active } = this.props
     return (
       <div className={styles.container} ref={r => (this.refEl = r)}>

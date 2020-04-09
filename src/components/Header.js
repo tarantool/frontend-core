@@ -89,13 +89,13 @@ type HeaderProps = {
 }
 
 class Header extends React.Component<HeaderProps> {
-  componentDidMount () {
+  componentDidMount() {
     core.subscribe('setHeaderComponent', () => {
       this.forceUpdate()
     })
   }
 
-  render () {
+  render() {
     const { title, breadcrumbs, dispatch } = this.props
     const breadcrumbsComponents = R.flatten(
       breadcrumbs.map(({ link, title }, i) => [
