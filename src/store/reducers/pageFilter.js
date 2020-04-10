@@ -12,10 +12,14 @@ export const initialState: PageFilterState = [disposableFunctionKey(R.T)]
 export default (state: PageFilterState = initialState, action: FSA): PageFilterState => {
   switch (action.type) {
     case PAGE_FILTER_ADD: {
-      return state.concat(action.payload.fn)
+      if (action.payload && action.payload.fn) return state.concat(action.payload.fn)
+      else return state
     }
     case PAGE_FILTER_REMOVE: {
-      return state.filter(x => x !== action.payload.fn)
+      if (action.payload && action.payload.fn) {
+        const fn = action.payload.fn
+        return state.filter(x => x !== fn)
+      } else return state
     }
     default: {
       return state

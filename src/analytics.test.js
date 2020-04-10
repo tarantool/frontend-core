@@ -57,7 +57,7 @@ describe('analytics module', () => {
     expect(newEffect).toBeCalledTimes(3)
   })
 
-  it('clear storage', async () => {
+  it('clear storage', async() => {
     const analyticModule = generateAnalyticModule()
     analyticModule.__timerInterval = 0
     const pageviewEvent = {

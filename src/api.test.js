@@ -19,7 +19,7 @@ const scope = nock(host)
 
 const localScope = nock('http://localhost')
 
-test('api methods: priority', async () => {
+test('api methods: priority', async() => {
   const apiMethods = generateApiMethod()
   const axiosInstance = axios.create()
   apiMethods.axiosWizard(axiosInstance)
@@ -62,7 +62,7 @@ test('api methods: priority', async () => {
   expect(log).toEqual(['priority -1', 'innerPriority 2', 'innerPriority 1', 'priority 1'])
 })
 
-test('api methods: subscribe and unsubscribe', async () => {
+test('api methods: subscribe and unsubscribe', async() => {
   const apiMethods = generateApiMethod()
 
   const axiosInstance = axios.create()
@@ -107,7 +107,7 @@ test('api methods: subscribe and unsubscribe', async () => {
 })
 
 describe('api methods: rest', () => {
-  it('rest: ok', async () => {
+  it('rest: ok', async() => {
     const apiMethods = generateApiMethod()
 
     const axiosInstance = axios.create()
@@ -127,7 +127,7 @@ describe('api methods: rest', () => {
     expect(myMockFnReq).toBeCalled()
     expect(myMockFnRes).toBeCalled()
   })
-  it('rest: response error', async () => {
+  it('rest: response error', async() => {
     const apiMethods = generateApiMethod()
 
     const axiosInstance = axios.create()
@@ -151,7 +151,7 @@ describe('api methods: rest', () => {
   })
 })
 
-test('api methods: graphql', async () => {
+test('api methods: graphql', async() => {
   const query = gql`
     query getInfo {
       repairList {
