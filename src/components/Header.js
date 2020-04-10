@@ -83,7 +83,7 @@ const styles = {
 }
 
 type HeaderProps = {
-  appName?: string,
+  appName: ?string,
   breadcrumbs: AppTitleProps[],
   dispatch: Function
 }
