@@ -5,14 +5,19 @@ import type { NotificationItem } from './reducers/notifications'
 import { createSelector } from 'reselect'
 import * as R from 'ramda'
 import { getFnByKey } from '../utils/disposableFnMap'
+import type { PageFilterState } from './reducers/pageFilter'
 
 export const flattenMenu = (menuItems: MenuItemType[] = []): MenuItemType[] =>
   menuItems.reduce((acc, { items }) => (items ? [...acc, ...items] : acc), menuItems)
 
-export const selectMenu = (state: State): MenuItemType[] => {
-  const predicates = state.pageFilter.map(predicateKey => getFnByKey(predicateKey))
-  return R.filter(R.allPass(predicates))(state.menu)
-}
+export const selectMenu = createSelector<State, PageFilterState, MenuItemType[]>(
+  (state) => state.pageFilter,
+  (state) => state.menu,
+  (filter: PageFilterState, menu: MenuItemType[]): MenuItemType[] => {
+    const predicates = filter.map(predicateKey => getFnByKey(predicateKey))
+    return R.filter(R.allPass(predicates))(menu)
+  }
+)
 
 export const selectCurrentMenuItemLabel = (state: State): string => {
   const menu = flattenMenu(selectMenu(state))
