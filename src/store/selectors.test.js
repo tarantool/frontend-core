@@ -1,5 +1,7 @@
 import { flattenMenu, selectCurrentMenuItemLabel, routeIsAllowed } from './selectors'
 import { initialState as pageFilterInitialState } from './reducers/pageFilter'
+import { disposableFunctionKey } from '../utils/disposableFnMap'
+import * as R from 'ramda';
 
 const initialMenu = [
   {
@@ -195,7 +197,7 @@ test('check routeIsAllowed when menu not includes pathname', () => {
         items: []
       }
     ],
-    pageFilter: pageFilterInitialState,
+    pageFilter: [disposableFunctionKey(R.F)],
     router: {
       location: {
         pathname: '/tomato'

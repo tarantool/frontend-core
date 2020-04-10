@@ -48,8 +48,12 @@ export const selectHiddenNotifications = createSelector(
   (notifications: NotificationItem[]) => notifications.sort((a, b) => b.createdAt - a.createdAt)
 )
 
-export const routeIsAllowed = createSelector(
-  selectMenu,
+export const routeIsAllowed = createSelector<State, PageFilterState, string>(
+  (state: State) => state.pageFilter,
   (state: State) => state.router.location.pathname,
-  (menuItems: MenuItemType[], path: string) => menuItems.some((item: MenuItemType) => path === item.path)
+  (filter: PageFilterState, path: string): boolean => {
+    const predicates = filter.map(predicateKey => getFnByKey(predicateKey))
+
+    return R.allPass(predicates)({ path });
+  }
 )
