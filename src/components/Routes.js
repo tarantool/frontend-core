@@ -3,10 +3,10 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import NoComponent from './components/NoComponent'
-import coreInstance from './coreInstance'
-import type { State } from './store'
-import { routeIsAllowed } from './store/selectors'
+import NoComponent from './NoComponent'
+import coreInstance from '../coreInstance'
+import type { State } from '../store'
+import { selectRouteIsAllowed } from '../store/selectors'
 
 type RoutesProps = {
   routeIsAllowed: boolean,
@@ -39,6 +39,6 @@ class Routes extends React.Component<RoutesProps> {
 
 export default connect((state: State) => {
   return {
-    routeIsAllowed: routeIsAllowed(state)
+    routeIsAllowed: selectRouteIsAllowed(state)
   }
 })(Routes)

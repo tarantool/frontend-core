@@ -48,7 +48,7 @@ export const selectHiddenNotifications = createSelector(
   (notifications: NotificationItem[]) => notifications.sort((a, b) => b.createdAt - a.createdAt)
 )
 
-export const routeIsAllowed = createSelector<State, PageFilterState, string>(
+export const selectRouteIsAllowed = createSelector<State, PageFilterState, string, boolean>(
   (state: State) => state.pageFilter,
   (state: State) => state.router.location.pathname,
   (filter: PageFilterState, path: string): boolean => {

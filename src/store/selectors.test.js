@@ -1,4 +1,4 @@
-import { flattenMenu, selectCurrentMenuItemLabel, routeIsAllowed } from './selectors'
+import { flattenMenu, selectCurrentMenuItemLabel, selectRouteIsAllowed } from './selectors'
 import { initialState as pageFilterInitialState } from './reducers/pageFilter'
 import { disposableFunctionKey } from '../utils/disposableFnMap'
 import * as R from 'ramda';
@@ -182,7 +182,7 @@ test('check routeIsAllowed when menu includes pathname', () => {
     }
   };
 
-  expect(routeIsAllowed(state)).toBe(true);
+  expect(selectRouteIsAllowed(state)).toBe(true);
 })
 
 test('check routeIsAllowed when menu not includes pathname', () => {
@@ -205,5 +205,5 @@ test('check routeIsAllowed when menu not includes pathname', () => {
     }
   };
 
-  expect(routeIsAllowed(state)).toBe(false);
+  expect(selectRouteIsAllowed(state)).toBe(false);
 })
