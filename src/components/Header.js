@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { css, cx } from 'react-emotion'
-import { selectTitle, selectBreadcrumbs } from '../store/selectors'
+import { selectBreadcrumbs } from '../store/selectors'
 import { push } from 'connected-react-router'
 import core from '../coreInstance'
 import * as R from 'ramda'
@@ -83,7 +83,7 @@ const styles = {
 }
 
 type HeaderProps = {
-  title: string,
+  appName: ?string,
   breadcrumbs: AppTitleProps[],
   dispatch: Function
 }
@@ -96,7 +96,8 @@ class Header extends React.Component<HeaderProps> {
   }
 
   render () {
-    const { title, breadcrumbs, dispatch } = this.props
+    const { appName, breadcrumbs, dispatch } = this.props
+
     const breadcrumbsComponents = R.flatten(
       breadcrumbs.map(({ link, title }, i) => [
         <span key={`delimiter_${i}`} className={`${styles.breadcrumbDelimeter} ${styles.breadcrumbElement}`}>
@@ -121,10 +122,11 @@ class Header extends React.Component<HeaderProps> {
         )
       ])
     )
+
     return (
       <div className={styles.header}>
         <div className={styles.titleContainer}>
-          <h1 className={styles.title}>{title}</h1>
+          {appName && <h1 className={styles.title}>{appName}</h1>}
           <div className={styles.breadcrumbs}>
             <span className={cx(styles.breadcrumbNoInteract, styles.breadcrumbElement)}>Tarantool</span>
             {breadcrumbsComponents}
@@ -140,7 +142,7 @@ class Header extends React.Component<HeaderProps> {
 }
 
 const mapStateToProps = state => ({
-  title: selectTitle(state),
+  appName: state.appTitle.appName,
   breadcrumbs: selectBreadcrumbs(state)
 })
 

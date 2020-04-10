@@ -159,6 +159,9 @@ Type influence on view of notification.
 
 Timeout is time in miliseconds for automatic hide notification. If timeout = 0. It's infinite time. You only can close it by your hands.
 
+### window.tarantool_enterprise_core.dispatch('setAppName', name: string)
+
+Sets application name.
 
 ### window.tarantool_enterprise_core.subscribe(eventType: string, callback: Function) : unsubscribe function
 

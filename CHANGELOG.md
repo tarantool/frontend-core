@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Add cache-control http header for /static route
 - Fixed state where could be more than one selected menu items.
+- Application name heading
 
 ## [6.4.0] - 2020-03-17
 

@@ -4,6 +4,7 @@ import menuReducer, { type MenuState } from './reducers/menu'
 import notificationsReducer, { type NotificationState } from './reducers/notifications'
 import uiReducer from './reducers/ui'
 import { changeTitleMiddleware } from './middlewares/title'
+import { setAppName } from './actions/title'
 import appTitleReducer, { type AppTitleState } from './reducers/title'
 import thunk from 'redux-thunk'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
@@ -64,6 +65,12 @@ CoreInstance.subscribe('registerModule', () => {
         }
       })
     }
+  }
+})
+
+CoreInstance.subscribe('setAppName', (name: string) => {
+  if (typeof name === 'string' && name) {
+    store.dispatch(setAppName(name))
   }
 })
 

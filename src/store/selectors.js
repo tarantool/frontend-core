@@ -21,7 +21,10 @@ export const selectCurrentMenuItemLabel = (state: State): string => {
   return ''
 }
 export const selectTitle = (state: State) => state.appTitle.title || selectCurrentMenuItemLabel(state)
-export const selectBreadcrumbs = (state: State): AppTitleProps[] => state.appTitle.propsList.slice(0, -1)
+export const selectBreadcrumbs = (state: State): AppTitleProps[] => [
+  ...state.appTitle.propsList.slice(0, -1),
+  { title: selectTitle(state) }
+]
 
 export const selectActiveNotifications = (state: State): NotificationItem[] => state.notifications.active
 
