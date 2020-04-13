@@ -89,15 +89,14 @@ type HeaderProps = {
 }
 
 class Header extends React.Component<HeaderProps> {
-  componentDidMount () {
+  componentDidMount() {
     core.subscribe('setHeaderComponent', () => {
       this.forceUpdate()
     })
   }
 
-  render () {
+  render() {
     const { appName, breadcrumbs, dispatch } = this.props
-
     const breadcrumbsComponents = R.flatten(
       breadcrumbs.map(({ link, title }, i) => [
         <span key={`delimiter_${i}`} className={`${styles.breadcrumbDelimeter} ${styles.breadcrumbElement}`}>

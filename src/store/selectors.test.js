@@ -1,4 +1,7 @@
-import { flattenMenu, selectCurrentMenuItemLabel } from './selectors'
+import { flattenMenu, selectCurrentMenuItemLabel, selectRouteIsAllowed } from './selectors'
+import { initialState as pageFilterInitialState } from './reducers/pageFilter'
+import { disposableFunctionKey } from '../utils/disposableFnMap'
+import * as R from 'ramda';
 
 const initialMenu = [
   {
@@ -136,7 +139,7 @@ test('flattenMenu', () => {
 })
 
 test('selectCurrentMenuItemLabel', () => {
-  const label = selectCurrentMenuItemLabel({ menu: initialMenu })
+  const label = selectCurrentMenuItemLabel({ menu: initialMenu, pageFilter: pageFilterInitialState })
   expect(label).toBe('Vegetables')
 })
 
@@ -151,9 +154,56 @@ test("selectCurrentMenuItemLabel when anyone menu item isn't selected", () => {
         loading: false,
         items: []
       }
-    ]
+    ],
+    pageFilter: pageFilterInitialState
   })
 
   expect(label).toBe('')
-  expect(selectCurrentMenuItemLabel({ menu: [] })).toBe('')
+  expect(selectCurrentMenuItemLabel({ menu: [], pageFilter: pageFilterInitialState })).toBe('')
+})
+
+test('check routeIsAllowed when menu includes pathname', () => {
+  const state = {
+    menu: [
+      {
+        label: 'Fruits Banana',
+        path: '/fruits/banana',
+        selected: false,
+        expanded: false,
+        loading: false,
+        items: []
+      }
+    ],
+    pageFilter: pageFilterInitialState,
+    router: {
+      location: {
+        pathname: '/fruits/banana'
+      }
+    }
+  };
+
+  expect(selectRouteIsAllowed(state)).toBe(true);
+})
+
+test('check routeIsAllowed when menu not includes pathname', () => {
+  const state = {
+    menu: [
+      {
+        label: 'Fruits Banana',
+        path: '/fruits/banana',
+        selected: false,
+        expanded: false,
+        loading: false,
+        items: []
+      }
+    ],
+    pageFilter: [disposableFunctionKey(R.F)],
+    router: {
+      location: {
+        pathname: '/tomato'
+      }
+    }
+  };
+
+  expect(selectRouteIsAllowed(state)).toBe(false);
 })

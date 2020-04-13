@@ -24,45 +24,7 @@ for (let i = 0; i < 100; i++) {
 }
 
 class Test extends React.Component<null> {
-  render () {
-    return (
-      <div>
-        <AppTitle title="Root" link={'/test/test2'} />
-        Tarantool - Frontend Core
-        <Router history={core.history}>
-          <Switch>
-            <Route
-              path={'/test/test'}
-              component={() => (
-                <div>
-                  <AppTitle title="Test 2" />
-                  <AppTitle title="Test 3" />
-                  <AppTitle title="Test 4" />
-                  <AppTitle title="Test 6" />
-                  <p>Test title page</p>
-                </div>
-              )}
-            />
-            <Route
-              path={'/test/sub'}
-              component={() => (
-                <div>
-                  <AppTitle title="Test" />
-                  {textElements}
-                </div>
-              )}
-            />
-            <Route path={'/test/icon'} component={() => <div>Just content</div>} />
-            <Route path={'/'} component={() => <div>Some root</div>} />
-          </Switch>
-        </Router>
-      </div>
-    )
-  }
-}
-
-class TestTwo extends React.Component<null> {
-  render () {
+  render() {
     return (
       <div>
         <AppTitle title="Root" link={'/test/test2'} />
@@ -148,25 +110,6 @@ core.register(
   'react',
   null,
   ({ path }) => !path.includes('/test/icon/6')
-)
-
-core.register(
-  'second-test',
-  [
-    {
-      label: 'Second menu item 1',
-      path: '/second-test/test',
-      icon: 'hdd'
-    },
-    {
-      label: 'Second menu item 2',
-      path: '/second-test/two',
-      items: []
-    }
-  ],
-  TestTwo,
-  'react',
-  null
 )
 
 core.notify({

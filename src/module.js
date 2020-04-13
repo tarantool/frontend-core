@@ -1,5 +1,5 @@
 // we use webpack's dynamic public path feature to set path prefix from backend
-import './publicPath';
+import './publicPath'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'

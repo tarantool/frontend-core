@@ -124,7 +124,7 @@ This is a redux middleware for dispatch some custom events or add reaction on yo
 
 It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want dispatch action on menu events from other modules.
 
-#### menuFilter
+#### menuFilter (deprecated)
 
 It will be used as global filter. You could hide some items that's not suitable for your usage.
 
@@ -312,6 +312,18 @@ sendEvent(AnalyticsEvent)
 effect(Function)
 ```
 
+
+### window.tarantool_enterprise_core.pageFilter.registerFilter(MenuItem => boolean): unsubscribeFn
+
+Register page filter and return unsubscibe function.
+
+### window.tarantool_enterprise_core.pageFilter.applyFilters(MenuItemType[]):  MenuItemType[]
+
+Filter out pages.
+
+### window.tarantool_enterprise_core.pageFilter.filterPage(MenuItemType):  boolean
+
+Is page pass filters
 
 ### Core events
 
