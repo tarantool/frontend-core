@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.5.0] - 2020-04-13
+
 - Add cache-control http header for /static route
 - Fixed state where could be more than one selected menu items.
 - Refactor filter API
