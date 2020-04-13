@@ -13,8 +13,6 @@ core.components = {
   AppTitle
 }
 
-core.pageFilter = pageFilter
-
 core.logo = require('./components/tarantool-logo.svg')
 
 core.apiMethods = apiMethods
