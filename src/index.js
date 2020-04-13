@@ -61,44 +61,6 @@ class Test extends React.Component<null> {
   }
 }
 
-class TestTwo extends React.Component<null> {
-  render() {
-    return (
-      <div>
-        <AppTitle title="Root" link={'/test/test2'} />
-        Tarantool - Frontend Core
-        <Router history={core.history}>
-          <Switch>
-            <Route
-              path={'/test/test'}
-              component={() => (
-                <div>
-                  <AppTitle title="Test 2" />
-                  <AppTitle title="Test 3" />
-                  <AppTitle title="Test 4" />
-                  <AppTitle title="Test 6" />
-                  <p>Test title page</p>
-                </div>
-              )}
-            />
-            <Route
-              path={'/test/sub'}
-              component={() => (
-                <div>
-                  <AppTitle title="Test" />
-                  {textElements}
-                </div>
-              )}
-            />
-            <Route path={'/test/icon'} component={() => <div>Just content</div>} />
-            <Route path={'/'} component={() => <div>Some root</div>} />
-          </Switch>
-        </Router>
-      </div>
-    )
-  }
-}
-
 core.register(
   'test',
   [
@@ -150,30 +112,6 @@ core.register(
   ({ path }) => !path.includes('/test/icon/6')
 )
 
-let menuVisible = false
-core.register(
-  'second-test',
-  [
-    {
-      label: 'Second menu item 1',
-      path: '/second-test/test',
-      icon: 'hdd'
-    },
-    {
-      label: 'Second menu item 2',
-      path: '/second-test/two',
-      items: []
-    }
-  ],
-  TestTwo,
-  'react',
-  null,
-  item => {
-    console.log('filter + + + + +')
-    return menuVisible
-  }
-)
-
 core.notify({
   type: 'success',
   title: 'Hello',
@@ -206,12 +144,3 @@ core.dispatch('setAppName', 'Frontend Core')
 setTimeout(() => {
   core.setHeaderComponent(null)
 }, 3000)
-
-// setTimeout(() => {
-// core.register('test', [], Root, 'react', null, )
-// }, 3000)
-
-setTimeout(() => {
-  menuVisible = true
-  core.dispatch('dispatchToken', { type: '' })
-}, 1000)

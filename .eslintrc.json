@@ -23,6 +23,8 @@
     "no-undef": 0,
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
-    "space-before-function-paren": ["error", "never"]
+    "space-before-function-paren": ["error", "never"],
+    "no-console": ["error"],
+    "no-debugger": ["error"]
   }
 }
