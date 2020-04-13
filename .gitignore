@@ -6,3 +6,4 @@ build
 
 *.snap
 *.xlog
+compiled_module
