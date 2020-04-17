@@ -11,8 +11,8 @@ export const flattenMenu = (menuItems: MenuItemType[] = []): MenuItemType[] =>
   menuItems.reduce((acc, { items }) => (items ? [...acc, ...items] : acc), menuItems)
 
 export const selectMenu = createSelector<State, PageFilterState, MenuItemType[], MenuItemType[]>(
-  (state) => state.pageFilter,
-  (state) => state.menu,
+  state => state.pageFilter,
+  state => state.menu,
   (filter: PageFilterState, menu: MenuItemType[]): MenuItemType[] => {
     const predicates = filter.map(predicateKey => getFnByKey(predicateKey))
     return R.filter(R.allPass(predicates))(menu)
@@ -57,6 +57,6 @@ export const selectRouteIsAllowed = createSelector<State, PageFilterState, strin
   (filter: PageFilterState, path: string): boolean => {
     const predicates = filter.map(predicateKey => getFnByKey(predicateKey))
 
-    return R.allPass(predicates)({ path });
+    return R.allPass(predicates)({ path })
   }
 )

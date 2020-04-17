@@ -1,7 +1,7 @@
 import { flattenMenu, selectCurrentMenuItemLabel, selectRouteIsAllowed } from './selectors'
 import { initialState as pageFilterInitialState } from './reducers/pageFilter'
 import { disposableFunctionKey } from '../utils/disposableFnMap'
-import * as R from 'ramda';
+import * as R from 'ramda'
 
 const initialMenu = [
   {
@@ -180,9 +180,9 @@ test('check routeIsAllowed when menu includes pathname', () => {
         pathname: '/fruits/banana'
       }
     }
-  };
+  }
 
-  expect(selectRouteIsAllowed(state)).toBe(true);
+  expect(selectRouteIsAllowed(state)).toBe(true)
 })
 
 test('check routeIsAllowed when menu not includes pathname', () => {
@@ -203,7 +203,7 @@ test('check routeIsAllowed when menu not includes pathname', () => {
         pathname: '/tomato'
       }
     }
-  };
+  }
 
-  expect(selectRouteIsAllowed(state)).toBe(false);
+  expect(selectRouteIsAllowed(state)).toBe(false)
 })
