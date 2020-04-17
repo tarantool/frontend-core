@@ -27,33 +27,54 @@ class Test extends React.Component<null> {
   render() {
     return (
       <div>
-        <AppTitle title="Root" link={'/test/test2'} />
-        Tarantool - Frontend Core
+        <AppTitle title={'my test'} />
         <Router history={core.history}>
           <Switch>
             <Route
-              path={'/test/test'}
+              path={'/mytest/test'}
               component={() => (
                 <div>
-                  <AppTitle title="Test 2" />
-                  <AppTitle title="Test 3" />
-                  <AppTitle title="Test 4" />
-                  <AppTitle title="Test 6" />
-                  <p>Test title page</p>
+                  1
                 </div>
               )}
             />
             <Route
-              path={'/test/sub'}
+              path={'/'}
               component={() => (
                 <div>
-                  <AppTitle title="Test" />
-                  {textElements}
+                  Not found
                 </div>
               )}
             />
-            <Route path={'/test/icon'} component={() => <div>Just content</div>} />
-            <Route path={'/'} component={() => <div>Some root</div>} />
+          </Switch>
+        </Router>
+      </div>
+    )
+  }
+}
+
+class TestTwo extends React.Component<null> {
+  render() {
+    return (
+      <div>
+        <Router history={core.history}>
+          <Switch>
+            <Route
+              path={'/other/test'}
+              component={() => (
+                <div>
+                  2
+                </div>
+              )}
+            />
+            <Route
+              path={'/'}
+              component={() => (
+                <div>
+                  Not found
+                </div>
+              )}
+            />
           </Switch>
         </Router>
       </div>
@@ -62,54 +83,29 @@ class Test extends React.Component<null> {
 }
 
 core.register(
-  'test',
+  'mytest',
   [
     {
-      label: 'Simple Title Example',
-      path: '/test/test',
+      label: 'My Test',
+      path: '/mytest/test',
       icon: 'hdd'
-    },
-    {
-      label: 'SubItems Example',
-      path: '/test/sub',
-      items: textElements.map((r, i) => ({ label: `Subitem ${i}`, path: `/test/sub/${i}` }))
-    },
-    {
-      label: 'Test custom icon',
-      path: '/test/icon/1'
-    },
-    {
-      label: 'Съешь же',
-      path: '/test/icon/2',
-      icon: <img src={testSvg} style={{ width: 14, height: 14 }} />
-    },
-    {
-      label: <b>ещё этих</b>,
-      path: '/test/icon/3',
-      icon: 'hdd'
-    },
-    {
-      label: <i>мягких французских</i>,
-      path: '/test/icon/4',
-      icon: 'hdd'
-    },
-    {
-      label: (
-        <b>
-          <i>булок, да выпей чаю</i>
-        </b>
-      ),
-      path: '/test/icon/5'
-    },
-    {
-      label: 'Меня не видно',
-      path: '/test/icon/6'
     }
   ],
   Test,
-  'react',
-  null,
-  ({ path }) => !path.includes('/test/icon/6')
+  'react'
+)
+
+core.register(
+  'other',
+  [
+    {
+      label: 'Other',
+      path: '/other/test',
+      icon: testSvg
+    }
+  ],
+  TestTwo,
+  'react'
 )
 
 core.notify({
@@ -144,3 +140,9 @@ core.dispatch('setAppName', 'Frontend Core')
 setTimeout(() => {
   core.setHeaderComponent(null)
 }, 3000)
+
+const unregisterFilter = core.pageFilter.registerFilter(() => false)
+
+setTimeout(() => {
+  unregisterFilter()
+}, 1000)

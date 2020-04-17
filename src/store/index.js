@@ -9,7 +9,7 @@ import { setAppName } from './actions/title'
 import appTitleReducer, { type AppTitleState } from './reducers/title'
 import thunk from 'redux-thunk'
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router'
-import history, { APP_PATH_PREFIX } from './history'
+import { APP_PATH_PREFIX } from './history'
 import coreInstance from '../coreInstance'
 import * as constants from './constants'
 import Core, { type FSA } from '../core'
@@ -36,7 +36,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export const createCoreStore = (core: Core) => {
   const store = createStore(
-    connectRouter(history)(
+    connectRouter(core.history)(
       combineReducers({
         menu: menuReducer.reduce,
         appTitle: appTitleReducer,
@@ -51,7 +51,7 @@ export const createCoreStore = (core: Core) => {
     composeEnhancers(
       applyMiddleware(
         thunk,
-        routerMiddleware(history),
+        routerMiddleware(core.history),
         menuReducer.middleware,
         saveNotificationsMiddleware,
         changeTitleMiddleware,
