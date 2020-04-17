@@ -2,7 +2,7 @@
 import React, { type ComponentType } from 'react'
 import ReactDom from 'react-dom'
 import * as R from 'ramda'
-import history from './store/history'
+import { createHistory } from './store/history'
 import { sendNotification } from './store/actions/notifications'
 import pageFilter from './pageFilter'
 import { ReactComponentLike } from 'prop-types'
@@ -76,14 +76,14 @@ export default class Core {
   modules: Array<CoreModule>
   activeEngines: { [name: engines]: moduleStatus }
   notifiers: { [string]: Array<Function> }
-  history: history
+  history: History
   header: ?ReactComponentLike
   pageFilter: PageFilterType
   constructor() {
     this.modules = []
     this.activeEngines = { react: 'loaded' }
     this.notifiers = {}
-    this.history = history
+    this.history = createHistory()
     this.header = null
     this.pageFilter = pageFilter(this)
   }

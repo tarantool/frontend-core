@@ -7,6 +7,7 @@ import core from './coreInstance'
 import AppTitle from './components/AppTitle'
 import apiMethods from './api'
 import analyticModule from './analytics'
+import store from './store'
 
 core.components = {
   AppTitle
@@ -17,7 +18,7 @@ core.logo = require('./components/tarantool-logo.svg')
 core.apiMethods = apiMethods
 core.analyticModule = analyticModule
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App store={store} core={core} />, document.getElementById('root'))
 
 export default core
 window.tarantool_enterprise_core = core

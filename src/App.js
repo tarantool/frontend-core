@@ -1,18 +1,21 @@
 // @flow
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router'
 import Routes from './components/Routes'
 // $FlowFixMe
 import 'antd/dist/antd.less'
-import history from './store/history'
-import store from './store'
 import './styles/reset'
 import { css } from 'react-emotion'
 import Menu from './components/Menu'
 import Header from './components/Header'
 import NotificationList from './components/NotificationList'
 import FavIcon from './components/FavIcon'
+import Core from './core'
+
+type AppProps = {
+  store: Object,
+  core: Core
+}
 
 const sideColor = '#000000;'
 const styles = {
@@ -52,8 +55,9 @@ const styles = {
   `
 }
 
-export default class App extends Component<any> {
+export default class App extends Component<AppProps> {
   render() {
+    const { store, core } = this.props
     return (
       <Provider store={store}>
         <div className={styles.layout}>
@@ -62,9 +66,7 @@ export default class App extends Component<any> {
             <Menu className={styles.sidemenu} />
             <div className={styles.content}>
               <Header />
-              <ConnectedRouter history={history}>
-                <Routes />
-              </ConnectedRouter>
+              <Routes core={core} />
             </div>
             <NotificationList />
           </div>
