@@ -15,13 +15,6 @@ type RoutesProps = {
 }
 
 class Routes extends React.Component<RoutesProps> {
-  mapRoutesModule() {
-    const modules = this.props.core.getModules()
-    return modules.map(module => (
-      <Route key={module.namespace} path={'/' + module.namespace} component={module.RootComponent} />
-    ))
-  }
-
   componentDidMount() {
     this.props.core.subscribe('registerModule', () => {
       this.forceUpdate()
@@ -29,17 +22,11 @@ class Routes extends React.Component<RoutesProps> {
   }
 
   render() {
-    const { routeIsAllowed, core } = this.props
-
-
-    return (
-      <div />
-    );
+    const { core } = this.props
 
     return (
       <ConnectedRouter history={core.history}>
         <Switch>
-          {routeIsAllowed && [this.mapRoutesModule()]}
           <Route path={'/'} component={NoComponent} />
         </Switch>
       </ConnectedRouter>
