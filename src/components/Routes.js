@@ -30,10 +30,16 @@ class Routes extends React.Component<RoutesProps> {
 
   render() {
     const { routeIsAllowed, core } = this.props
+
+
+    return (
+      <div />
+    );
+
     return (
       <ConnectedRouter history={core.history}>
         <Switch>
-          {routeIsAllowed && this.mapRoutesModule()}
+          {routeIsAllowed && [this.mapRoutesModule()]}
           <Route path={'/'} component={NoComponent} />
         </Switch>
       </ConnectedRouter>
