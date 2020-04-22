@@ -46,6 +46,7 @@ local function index_handler(_)
                 '<body>' ..
                     '<div id="root"></div>' ..
                     table.concat(entries) ..
+                    '<script>window.tarantool_enterprise_core.install()</script>'..
                 '</body>' ..
             '</html>'
     end

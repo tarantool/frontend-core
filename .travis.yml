@@ -1,13 +1,32 @@
 language: node_js
+
 node_js:
   - "node"
   - 8
-cache: false
+
+addons:
+  apt:
+    packages:
+      - libgconf-2-4
+
+cache:
+  # cache both npm modules and Cypress binary
+  directories:
+    - ~/.npm
+    - ~/.cache
+
+install:
+  - curl -L https://tarantool.io/installer.sh | VER=2.2 sudo -E bash
+  - sudo apt-get install -y tarantool-dev
+  - tarantoolctl rocks make
+  - tarantoolctl rocks install http 1.0.5
 
 script:
   - npm run lint
   - npm run flow
   - npm run test_once
+  - nohup tarantool example.lua &
+  - CYPRESS_BASE_URL=http://localhost:8080 npm run cy:run
 
 env:
   global:
