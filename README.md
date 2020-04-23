@@ -22,6 +22,10 @@ const core = window.tarantool_enterprise_core;
 core.register('module', [{label: 'Module', path: '/module/'}], Root);
 ```
 
+### window.tarantool_enterprise_core.install()
+
+Register main react element in #root element. In Lua part it's called by default.
+
 ### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void, menuFilter?: (MenuItem) => boolean)
 
 #### namespace

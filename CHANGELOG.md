@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Register in DOM only in Lua part, remove it from npm module part. You should use install method.
+
 ## [6.5.1]
 
 - Fix routes mapping
