@@ -18,7 +18,9 @@ core.logo = require('./components/tarantool-logo.svg')
 core.apiMethods = apiMethods
 core.analyticModule = analyticModule
 
-ReactDOM.render(<App store={store} core={core} />, document.getElementById('root'))
+core.install = () => {
+  ReactDOM.render(<App store={store} core={core}/>, document.getElementById('root'))
+}
 
 export default core
 window.tarantool_enterprise_core = core

@@ -14,7 +14,7 @@ local srv_name = httpd.tcp_server:name()
 log.info('Listening HTTP on %s:%s', srv_name.host, srv_name.port)
 
 front.init(httpd, {
-	enforce_root_redirect = false,
+	enforce_root_redirect = true,
 	prefix = '/tarantool',
 })
 -- front.add('module_one', require('module_one.bundle'))

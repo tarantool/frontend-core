@@ -60,7 +60,7 @@ export default class App extends Component<AppProps> {
     const { store, core } = this.props
     return (
       <Provider store={store}>
-        <div className={styles.layout}>
+        <div className={`${styles.layout} meta-tarantool-app`}>
           <FavIcon />
           <div className={styles.main}>
             <Menu className={styles.sidemenu} />

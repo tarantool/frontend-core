@@ -7,3 +7,5 @@ build
 *.snap
 *.xlog
 compiled_module
+cypress/screenshots/
+cypress/videos/
