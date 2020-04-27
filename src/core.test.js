@@ -26,6 +26,17 @@ const ReactDom = window.reactDom;
 // }
 // Core.analyticModule
 
+const didPromiseResolve = async (promiseToTest, timeout = 0) => {
+  let didResolve = false;
+  promiseToTest.then(() => didResolve = true);
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(didResolve);
+    }, timeout)
+  });
+};
+
 const Root = () => <div></div>;
 const genModuleWithNamespace = (namespace): CoreModule => ({
   namespace,
@@ -47,9 +58,8 @@ describe('checkNamespaces()', () => {
   const core = new Core();
 
   const module = genModuleWithNamespace('some-namespace');
-
   registerModule(core, module);
-  
+
   it('should reject module with used namespace', () => {
     const moduleWithSameNamespace = genModuleWithNamespace(module.namespace);
     expect(() => core.checkNamespace(moduleWithSameNamespace)).toThrow();
@@ -66,15 +76,14 @@ describe('register()', () => {
   const core = new Core();
 
   const module = genModuleWithNamespace('some-namespace');
-
   registerModule(core, module);
-  
+
   it('should reject module with used namespace', () => {
     const moduleWithSameNamespace = genModuleWithNamespace(module.namespace);
     expect(() => registerModule(core, moduleWithSameNamespace)).toThrow();
   });
 
-  it('should accept module with other (used for the first time) namespace', () => {
+  it('should accept module with other namespace', () => {
     const otherModule = genModuleWithNamespace('other-namespace');
     expect(() => registerModule(core, otherModule)).not.toThrow();
   });
@@ -114,5 +123,28 @@ describe('register()', () => {
 // Core.setHeaderComponent(headerComponent: any) {}
 // Core.subscribe(eventType: string, callback: Function) {}
 
-// Core.waitForModule(namespace: string): Promise < boolean > {}  
 
+describe('waitForModule()', () => {
+  const module = genModuleWithNamespace('some-namespace');
+
+  it('should resolve promise, when module with desired namespace is registered', () => {
+    const core = new Core();
+    const waitPromise = core.waitForModule(module.namespace)
+
+    registerModule(core, module);
+    return expect(didPromiseResolve(waitPromise)).resolves.toBe(true);
+  });
+
+  it(
+    'should NOT resolve promise, when module with other namespace is registered',
+    () => {
+      const core = new Core();
+      const waitPromise = core.waitForModule('namespace')
+      const module = genModuleWithNamespace('other-namespace');
+
+      registerModule(core, module);
+      return expect(didPromiseResolve(waitPromise)).resolves.toBe(false);
+    }
+  );
+
+});
