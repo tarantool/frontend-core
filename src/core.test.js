@@ -118,10 +118,42 @@ describe('register()', () => {
 //   filterPage
 // }
 
-// Core.register() {}
-
 // Core.setHeaderComponent(headerComponent: any) {}
-// Core.subscribe(eventType: string, callback: Function) {}
+
+
+describe('subscribe() and dispatch()', () => {
+  it('should pass dispatched data to subscribed callback', () => {
+    const core = new Core();
+    const eventType = 'some-event';
+    const eventData1 = {};
+    const eventData2 = {};
+
+    const handler = jest.fn();
+    core.subscribe(eventType, handler);
+
+    core.dispatch(eventType, eventData1);
+    expect(handler.mock.calls[0][0]).toBe(eventData1);
+
+    core.dispatch(eventType, eventData2);
+    expect(handler.mock.calls[1][0]).toBe(eventData2);
+  });
+
+  it('should NOT call listerens of other events', () => {
+    const core = new Core();
+    const eventTypeDispatched = 'some-event';
+    const eventTypeOther = 'other-event';
+
+    const handlerForDispatchedEvent = jest.fn();
+    const handlerForOtherEvent = jest.fn();
+    core.subscribe(eventTypeDispatched, handlerForDispatchedEvent);
+    core.subscribe(eventTypeOther, handlerForOtherEvent);
+
+    core.dispatch(eventTypeDispatched);
+    expect(handlerForDispatchedEvent).toBeCalled();
+    expect(handlerForOtherEvent).not.toBeCalled();
+  });
+
+});
 
 
 describe('waitForModule()', () => {
