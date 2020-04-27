@@ -87,6 +87,17 @@ describe('register()', () => {
     const otherModule = genModuleWithNamespace('other-namespace');
     expect(() => registerModule(core, otherModule)).not.toThrow();
   });
+
+  it('should dispatch "registerModule" event on module register', () => {
+    const fnRegister = jest.fn()
+    core.subscribe('registerModule', fnRegister)
+
+    registerModule(core, genModuleWithNamespace('namespace-1'));
+    expect(fnRegister).toBeCalledTimes(1)
+
+    registerModule(core, genModuleWithNamespace('namespace-2'));
+    expect(fnRegister).toBeCalledTimes(2);
+  });
 });
 
 
