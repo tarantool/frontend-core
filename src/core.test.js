@@ -1,18 +1,11 @@
 // @flow
-import { selectCurrentMenuItemLabel } from './store/selectors'
-import store from './store/index'
-import core from './coreInstance'
-// - - -
-
 import Core, {
   type MenuItemType,
   type FSA,
   type CoreModule,
 } from './core'
-
-// global import
-const React = window.react;
-const ReactDom = window.reactDom;
+import { registerModule } from './test-utils/coreInstance'
+import { didPromiseResolve } from './test-utils/promise'
 
 
 // Core.activeEngines: { [name: engines]: moduleStatus }
@@ -26,33 +19,13 @@ const ReactDom = window.reactDom;
 // }
 // Core.analyticModule
 
-const didPromiseResolve = async (promiseToTest, timeout = 0) => {
-  let didResolve = false;
-  promiseToTest.then(() => didResolve = true);
-
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(didResolve);
-    }, timeout)
-  });
-};
-
-const Root = () => <div></div>;
+const Root = () => '';
 const genModuleWithNamespace = (namespace): CoreModule => ({
   namespace,
   menu: ([]: any),
   RootComponent: Root,
   engine: 'react',
 });
-const registerModule = (core, module) => core.register(
-  module.namespace,
-  module.menu,
-  module.RootComponent,
-  module.engine,
-  module.menuMiddleware,
-  module.menuFilter
-);
-
 
 describe('checkNamespaces()', () => {
   const core = new Core();

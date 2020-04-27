@@ -327,7 +327,7 @@ Filter out pages.
 
 ### window.tarantool_enterprise_core.pageFilter.filterPage(MenuItemType):  boolean
 
-Is page pass filters
+Does page pass filters
 
 ### Core events
 

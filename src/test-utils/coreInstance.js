@@ -9,3 +9,12 @@ export const generateCoreWithStore = () => {
     store
   }
 }
+
+export const registerModule = (core, module) => core.register(
+  module.namespace,
+  module.menu,
+  module.RootComponent,
+  module.engine,
+  module.menuMiddleware,
+  module.menuFilter
+);
