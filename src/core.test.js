@@ -19,11 +19,11 @@ import { didPromiseResolve } from './test-utils/promise'
 // }
 // Core.analyticModule
 
-const Root = () => '';
+const RootComponent = () => '';
 const genModuleWithNamespace = (namespace): CoreModule => ({
   namespace,
-  menu: ([]: any),
-  RootComponent: Root,
+  menu: [],
+  RootComponent,
   engine: 'react',
 });
 

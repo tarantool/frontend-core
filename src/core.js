@@ -18,7 +18,7 @@ export type MenuItemType = {|
   items?: Array<MenuItemType>
 |}
 
-type halfMenuItem = {|
+export type halfMenuItem = {|
   label: string,
   path: string,
   icon?: string | Object
@@ -33,8 +33,7 @@ export type FSA = {
 
 type menuShape = ((action: FSA, state: [MenuItemType]) => (Array<MenuItemType> | Array<halfMenuItem>)) | Array<MenuItemType>
 
-
-const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => ({
+export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => ({
   selected: false,
   expanded: false,
   loading: false,
