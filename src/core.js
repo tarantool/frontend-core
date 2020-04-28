@@ -31,7 +31,8 @@ export type FSA = {
   meta?: any
 }
 
-type menuShape = ((action: FSA, state: [MenuItemType]) => (Array<MenuItemType> | Array<halfMenuItem>)) | Array<MenuItemType>
+type menuShape = ((action: FSA, state: [MenuItemType]) => (Array<MenuItemType> | Array<halfMenuItem>))
+  | Array<MenuItemType>
 
 export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => ({
   selected: false,

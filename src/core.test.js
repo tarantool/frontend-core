@@ -1,30 +1,16 @@
 // @flow
 import Core, {
-  type MenuItemType,
-  type FSA,
-  type CoreModule,
+  type CoreModule
 } from './core'
 import { registerModule } from './test-utils/coreInstance'
 import { didPromiseResolve } from './test-utils/promise'
-
-
-// Core.activeEngines: { [name: engines]: moduleStatus }
-// Core.apiMethods = {
-//   apolloLinkAfterware,
-//   apolloLinkMiddleware,
-//   apolloLinkOnError,
-//   axiosWizard,
-//   registerApolloHandler,
-//   registerAxiosHandler,
-// }
-// Core.analyticModule
 
 const RootComponent = () => '';
 const genModuleWithNamespace = (namespace): CoreModule => ({
   namespace,
   menu: [],
   RootComponent,
-  engine: 'react',
+  engine: 'react'
 });
 
 describe('checkNamespaces()', () => {
@@ -43,7 +29,6 @@ describe('checkNamespaces()', () => {
     expect(() => core.checkNamespace(otherModule)).not.toThrow();
   });
 });
-
 
 describe('register()', () => {
   const core = new Core();
@@ -72,38 +57,6 @@ describe('register()', () => {
     expect(fnRegister).toBeCalledTimes(2);
   });
 });
-
-
-// Core.components = {}
-// Core.constructor()
-
-// Core.dispatch(eventType: string, event: ?Object = null) {}
-
-// // async
-// Core.fetchEnginesAndNotify() {}
-
-// Core.getHeaderComponent() {}
-// Core.getModules() {}
-
-// Core.header
-// Core.history
-
-// Core.logo
-
-// Core.modules
-
-// Core.notifiers: { [string]: Array<Function> }
-// Core.notify()
-
-// Core.pageFilter = {
-//   registerFilter,
-//   getFilters,
-//   applyFilters,
-//   filterPage
-// }
-
-// Core.setHeaderComponent(headerComponent: any) {}
-
 
 describe('subscribe() and dispatch()', () => {
   it('should pass dispatched data to subscribed callback', () => {
@@ -136,9 +89,7 @@ describe('subscribe() and dispatch()', () => {
     expect(handlerForDispatchedEvent).toBeCalled();
     expect(handlerForOtherEvent).not.toBeCalled();
   });
-
 });
-
 
 describe('waitForModule()', () => {
   const module = genModuleWithNamespace('some-namespace');
@@ -162,5 +113,4 @@ describe('waitForModule()', () => {
       return expect(didPromiseResolve(waitPromise)).resolves.toBe(false);
     }
   );
-
 });

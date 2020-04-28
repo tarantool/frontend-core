@@ -1,14 +1,10 @@
 // @flow
-import { selectCurrentMenuItemLabel } from './store/selectors'
-import { generateCoreWithStore, genModuleWithNamespace, registerModule } from './test-utils/coreInstance'
+import { generateCoreWithStore, registerModule } from './test-utils/coreInstance'
 import {
   refineMenuItem,
-  type MenuItemType,
   type halfMenuItem,
-  type FSA,
-  type CoreModule,
+  type CoreModule
 } from './core'
-
 
 const RootComponent = () => '';
 
@@ -20,15 +16,15 @@ const genModuleWithFilter = (() => {
     RootComponent,
     engine: 'react',
     menuMiddleware: () => { },
-    menuFilter,
+    menuFilter
   });
 })();
 
 describe('page filter multi-module', () => {
-  const { coreInstance: core, store } = generateCoreWithStore();
+  const { coreInstance: core } = generateCoreWithStore();
   const pageToHide: halfMenuItem = {
     path: '/test',
-    label: 'Page to hide',
+    label: 'Page to hide'
   };
   const visiblePage = {
     path: '/other-page',
@@ -37,7 +33,7 @@ describe('page filter multi-module', () => {
 
   const hidingModule = genModuleWithFilter(
     [
-      pageToHide,
+      pageToHide
     ],
     (menuItem) => menuItem.path !== pageToHide.path
   );
@@ -45,11 +41,10 @@ describe('page filter multi-module', () => {
   const showingModule = genModuleWithFilter(
     [
       pageToHide,
-      visiblePage,
+      visiblePage
     ],
     (menuItem) => true
   );
-
 
   registerModule(core, showingModule);
 
@@ -61,8 +56,7 @@ describe('page filter multi-module', () => {
     registerModule(core, hidingModule);
     expect(core.pageFilter.filterPage(pageToHide)).toBe(false);
 
-    //not-filtered page should remain VISIBLE
+    // not-filtered page should remain VISIBLE
     expect(core.pageFilter.filterPage(visiblePage)).toBe(true);
   });
-
 });
