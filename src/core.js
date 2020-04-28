@@ -31,7 +31,8 @@ export type FSA = {
   meta?: any
 }
 
-type menuShape = (action: FSA, state: [MenuItemType]) => Array<MenuItemType> | Array<MenuItemType> | Array<halfMenuItem>
+type menuShape = ((action: FSA, state: [MenuItemType]) => (Array<MenuItemType> | Array<halfMenuItem>)) | Array<MenuItemType>
+
 
 const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => ({
   selected: false,
@@ -119,7 +120,7 @@ export default class Core {
   }
   register(
     namespace: string,
-    menu: menuShape,
+    menu: menuShape | Array<halfMenuItem>,
     RootComponent: ComponentType<any>,
     /**
      * @TODO remove "engine". Engines are deprecated since v6.5.x (april 2020),
@@ -129,7 +130,7 @@ export default class Core {
     menuMiddleware?: Object => void,
     menuFilter?: MenuItemType => boolean
   ) {
-    const addingModule = {
+    const addingModule: CoreModule = {
       namespace,
       menu: Array.isArray(menu) ? menu.map(refineMenuItem) : menu,
       menuMiddleware,
