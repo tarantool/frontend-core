@@ -13,7 +13,12 @@ export const initialState: PageFilterState = [defaultFnKey]
 export default (state: PageFilterState = initialState, action: FSA): PageFilterState => {
   switch (action.type) {
     case PAGE_FILTER_ADD: {
-      if (action.payload && typeof action.payload === 'object' && action.payload.fn && typeof action.payload.fn === 'string') return state.concat(action.payload.fn)
+      if (
+        action.payload &&
+        typeof action.payload === 'object' &&
+        action.payload.fn &&
+        typeof action.payload.fn === 'string'
+      ) return state.concat(action.payload.fn)
       else return state
     }
     case PAGE_FILTER_REMOVE: {
