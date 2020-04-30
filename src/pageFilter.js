@@ -5,9 +5,11 @@ import { PAGE_FILTER_ADD, PAGE_FILTER_REMOVE } from './store/constants'
 import Core from './core'
 import type { MenuItemType } from './core'
 
+type FilterFunction = MenuItemType => boolean
+
 export type PageFilterType = {
-  registerFilter: Function => Function,
-  getFilters: () => Array<Function>,
+  registerFilter: FilterFunction => Function,
+  getFilters: () => Array<FilterFunction>,
   applyFilters: (Array<MenuItemType>) => Array<MenuItemType>,
   filterPage: MenuItemType => boolean
 }
@@ -19,7 +21,7 @@ export const generateFilterApi = (core: Core): PageFilterType => {
   const applyFilters = pages => R.filter(R.allPass(filters))(pages)
   const filterPage = page => R.allPass(filters)(page)
 
-  const registerFilter = filter => {
+  const registerFilter = (filter: FilterFunction) => {
     filters.push(filter)
     // dispatch always should be after mutation
     core.dispatch('core:pageFilter:apply', getFilters())

@@ -24,6 +24,8 @@ install:
 script:
   - npm run lint
   - npm run flow
+  - npm ci
+  - npm run build_module
   - npm run test_once
   - nohup tarantool example.lua &
   - CYPRESS_BASE_URL=http://localhost:8080 npm run cy:run

@@ -1,5 +1,5 @@
 // @flow
-import nanoid from 'nanoid'
+import nanoid from '../../utils/nanoid'
 import {
   CHECK_NOTIFICATIONS,
   CLEAR_NOTIFICATIONS,
