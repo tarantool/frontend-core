@@ -9,34 +9,7 @@ class Test extends React.Component {
 }
 
 describe('page filter', () => {
-  it('filter out page support previous API', () => {
-    const { coreInstance, store } = generateCoreWithStore()
-    coreInstance.register(
-      'test',
-      [
-        {
-          label: 'Simple Title Example',
-          path: '/test/test',
-          icon: 'hdd'
-        },
-        {
-          label: 'Меня не видно',
-          path: '/test/icon/6'
-        }
-      ],
-      Test,
-      'react',
-      null,
-      ({ path }) => !path.includes('/test/icon/6')
-    )
-
-    const menu = selectMenu(store.getState())
-
-    const { pageFilter } = store.getState()
-
-    expect(menu).toHaveLength(1)
-    expect(pageFilter).toHaveLength(2)
-
+  it('filter out page', () => {
     const { coreInstance: newCore, store: newStore } = generateCoreWithStore()
 
     newCore.register(
@@ -60,8 +33,6 @@ describe('page filter', () => {
     const unsubFilter = newCore.pageFilter.registerFilter(({ path }) => !path.includes('/test/icon/6'))
 
     const newMenu = selectMenu(newStore.getState())
-
-    expect(menu).toStrictEqual(newMenu)
 
     unsubFilter()
 
