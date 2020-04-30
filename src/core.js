@@ -18,7 +18,7 @@ export type MenuItemType = {|
   items?: Array<MenuItemType>
 |}
 
-type halfMenuItem = {|
+export type halfMenuItem = {|
   label: string,
   path: string,
   icon?: string | Object
@@ -31,9 +31,10 @@ export type FSA = {
   meta?: any
 }
 
-type menuShape = (action: FSA, state: [MenuItemType]) => Array<MenuItemType> | Array<MenuItemType> | Array<halfMenuItem>
+type menuShape = ((action: FSA, state: [MenuItemType]) => (Array<MenuItemType> | Array<halfMenuItem>))
+  | Array<MenuItemType>
 
-const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => ({
+export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => ({
   selected: false,
   expanded: false,
   loading: false,
@@ -87,6 +88,10 @@ export default class Core {
     this.header = null
     this.pageFilter = pageFilter(this)
   }
+
+  /**
+   * @deprecated since v6.5.x (april 2020)
+   */
   setHeaderComponent(headerComponent: any) {
     this.header = headerComponent
     this.dispatch('setHeaderComponent')
@@ -115,13 +120,17 @@ export default class Core {
   }
   register(
     namespace: string,
-    menu: menuShape,
+    menu: menuShape | Array<halfMenuItem>,
     RootComponent: ComponentType<any>,
+    /**
+     * @TODO remove "engine". Engines are deprecated since v6.5.x (april 2020),
+     * we desided to use only React
+     */
     engine: engines = 'react',
     menuMiddleware?: Object => void,
     menuFilter?: MenuItemType => boolean
   ) {
-    const addingModule = {
+    const addingModule: CoreModule = {
       namespace,
       menu: Array.isArray(menu) ? menu.map(refineMenuItem) : menu,
       menuMiddleware,
@@ -136,6 +145,10 @@ export default class Core {
     }
     this.fetchEnginesAndNotify()
   }
+
+  /**
+   * @deprecated since v6.5.x (april 2020). "Engines" are deprecated
+   */
   async fetchEnginesAndNotify() {
     const currentEngines = R.uniq(this.modules.map(x => x.engine))
     let needLoad = false
@@ -164,6 +177,9 @@ export default class Core {
   getModules() {
     return this.modules
   }
+  /**
+   * @return Unsubscribe function
+   */
   subscribe(eventType: string, callback: Function) {
     if (!this.notifiers[eventType]) {
       this.notifiers[eventType] = []

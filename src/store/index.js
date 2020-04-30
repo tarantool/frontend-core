@@ -1,6 +1,6 @@
 // @flow
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import menuReducer, { type MenuState } from './reducers/menu'
+import { generateInstance as generateMenuReducerInstance, type MenuState } from './reducers/menu'
 import notificationsReducer, { type NotificationState } from './reducers/notifications'
 import uiReducer from './reducers/ui'
 import { changeTitleMiddleware } from './middlewares/title'
@@ -35,6 +35,7 @@ export type State = {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export const createCoreStore = (core: Core) => {
+  const menuReducer = generateMenuReducerInstance();
   const store = createStore(
     connectRouter(core.history)(
       combineReducers({
