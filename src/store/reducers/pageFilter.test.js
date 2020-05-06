@@ -32,8 +32,6 @@ describe('page filter', () => {
 
     const unsubFilter = newCore.pageFilter.registerFilter(({ path }) => !path.includes('/test/icon/6'))
 
-    const newMenu = selectMenu(newStore.getState())
-
     unsubFilter()
 
     const fullMenu = selectMenu(newStore.getState())

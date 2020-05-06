@@ -2,7 +2,7 @@
 import Core, {
   type CoreModule
 } from './core'
-import { registerModule, generateCoreWithStore } from './test-utils/coreInstance'
+import { registerModule } from './test-utils/coreInstance'
 import { didPromiseResolve } from './test-utils/promise'
 
 const RootComponent = () => '';
@@ -59,7 +59,6 @@ describe('register()', () => {
 });
 
 describe('resgiterModule()', () => {
-
   it('should register module', () => {
     const core = new Core()
     const module = genModuleWithNamespace('some-namespace')

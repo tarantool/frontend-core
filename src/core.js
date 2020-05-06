@@ -1,7 +1,6 @@
 // @flow
 import React, { type ComponentType } from 'react'
 import ReactDom from 'react-dom'
-import * as R from 'ramda'
 import { createHistory } from './store/history'
 import { sendNotification } from './store/actions/notifications'
 import pageFilter from './pageFilter'
@@ -102,13 +101,13 @@ export default class Core {
      * we desided to use only React
      */
     engine: string,
-    menuMiddleware?: Object => void,
+    menuMiddleware?: Object => void
   ) {
     return this.registerModule({
       namespace,
       menu,
       menuMiddleware,
-      RootComponent,
+      RootComponent
     })
   }
   registerModule({
@@ -116,17 +115,17 @@ export default class Core {
     menu,
     RootComponent,
     menuMiddleware
-   }: {
+  }: {
     namespace: string,
     menu: menuShape,
     RootComponent: ComponentType<any>,
-    menuMiddleware?: Object => void,
+    menuMiddleware?: Object => void
   }) {
     const addingModule: CoreModule = {
       namespace,
       menu: Array.isArray(menu) ? menu.map(refineMenuItem) : menu,
       menuMiddleware,
-      RootComponent,
+      RootComponent
     }
     this.checkNamespace(addingModule)
     this.modules.push(addingModule)

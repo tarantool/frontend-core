@@ -33,8 +33,7 @@ describe('page filter multi-module', () => {
   const hidingModule = genModuleWithFilter(
     [
       pageToHide
-    ],
-
+    ]
   );
 
   const showingModule = genModuleWithFilter(
