@@ -3,14 +3,16 @@ import { generateCoreWithStore, registerModule } from './test-utils/coreInstance
 import {
   refineMenuItem,
   type halfMenuItem,
+  type MenuItemType,
   type CoreModule
 } from './core'
+import { selectMenu } from './store/selectors';
 
 const RootComponent = () => '';
 
 const genModuleWithFilter = (() => {
   let namespaceId = 0;
-  return (menu: halfMenuItem[], menuFilter): CoreModule => ({
+  return (menu: (MenuItemType[] | halfMenuItem[]), menuFilter): CoreModule => ({
     namespace: `namespace-${namespaceId++}`,
     menu: menu.map(refineMenuItem),
     RootComponent,
@@ -22,7 +24,7 @@ const genModuleWithFilter = (() => {
 describe('page filter multi-module', () => {
   const { coreInstance: core } = generateCoreWithStore();
   const pageToHide: halfMenuItem = {
-    path: '/test',
+    path: '/page-to-hide',
     label: 'Page to hide'
   };
   const visiblePage = {
@@ -61,4 +63,47 @@ describe('page filter multi-module', () => {
     // not-filtered page should remain VISIBLE
     expect(core.pageFilter.filterPage(visiblePage)).toBe(true);
   });
+});
+
+
+describe('subpage filter', () => {
+  const { coreInstance: core, store } = generateCoreWithStore();
+  const subPage: MenuItemType = {
+    path: '/sub-page',
+    label: '',
+    icon: '',
+    loading: false,
+    selected: false,
+    expanded: true,
+  };
+
+  const parentPage: MenuItemType = {
+    path: '/parent-page',
+    label: '',
+    icon: '',
+    loading: false,
+    selected: false,
+    expanded: true,
+    items: [
+      subPage
+    ]
+  };
+
+  registerModule(core, genModuleWithFilter(
+    [
+      parentPage
+    ],
+    (menuItem) => menuItem.path !== subPage.path
+  ));
+
+  it('(make sure that subPage does NOT pass filter)', () => {
+    expect(core.pageFilter.filterPage(subPage)).toBe(false);
+  });
+
+  it('subPage should NOT present in the resulting menu', () => {
+    expect(
+      selectMenu(store.getState())[0].items
+    ).toEqual([]);
+  });
+
 });

@@ -15,7 +15,15 @@ export const selectMenu = createSelector<State, PageFilterState, MenuItemType[],
   state => state.menu,
   (filter: PageFilterState, menu: MenuItemType[]): MenuItemType[] => {
     const predicates = filter.map(predicateKey => getFnByKey(predicateKey))
-    return R.filter(R.allPass(predicates))(menu)
+    return R.filter(R.allPass(predicates))(menu).map(parentPage => {
+      if (!'items' in parentPage) {
+        return parentPage;
+      }
+      return {
+        ...parentPage,
+        items: R.filter(R.allPass(predicates))(parentPage.items)
+      }
+    });
   }
 )
 
