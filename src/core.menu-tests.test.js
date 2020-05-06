@@ -15,8 +15,7 @@ const genModuleWithFilter = (() => {
     menu: menu.map(refineMenuItem),
     RootComponent,
     engine: 'react',
-    menuMiddleware: () => { },
-    menuFilter
+    menuMiddleware: () => { }
   });
 })();
 
@@ -35,18 +34,21 @@ describe('page filter multi-module', () => {
     [
       pageToHide
     ],
-    (menuItem) => menuItem.path !== pageToHide.path
+
   );
 
   const showingModule = genModuleWithFilter(
     [
       pageToHide,
       visiblePage
-    ],
-    (menuItem) => true
+    ]
   );
 
+  const hidingFilter = (menuItem) => menuItem.path !== pageToHide.path
+  const casualFilter = (menuItem) => true
+
   registerModule(core, showingModule);
+  core.pageFilter.registerFilter(casualFilter)
 
   it('page should be VISIBLE when only "permissive" filters', () => {
     expect(core.pageFilter.filterPage(pageToHide)).toBe(true)
@@ -54,6 +56,7 @@ describe('page filter multi-module', () => {
 
   it('one module\'s page should be HIDDEN because of OTHER MODULE\'S filter', () => {
     registerModule(core, hidingModule);
+    core.pageFilter.registerFilter(hidingFilter)
     expect(core.pageFilter.filterPage(pageToHide)).toBe(false);
 
     // not-filtered page should remain VISIBLE
