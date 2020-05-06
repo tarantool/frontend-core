@@ -1,7 +1,6 @@
 // @flow
 import React, { type ComponentType } from 'react'
 import ReactDom from 'react-dom'
-import * as R from 'ramda'
 import { createHistory } from './store/history'
 import { sendNotification } from './store/actions/notifications'
 import pageFilter from './pageFilter'
@@ -43,46 +42,21 @@ export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType 
   ...item
 })
 
-const engineMap = {
-  react: 'react.js',
-  vue: 'vue.js'
-}
-
-type engines = $Keys<typeof engineMap>
-
 export type CoreModule = {
   namespace: string,
   menu: menuShape,
   menuMiddleware?: Object => void,
   RootComponent: ComponentType<any>,
-  engine: engines,
-  menuFilter?: MenuItemType => boolean
-}
-
-type moduleStatus = 'loading' | 'loaded' | 'not_loaded'
-
-const loadEngine = (engineSrc: string): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script')
-    script.async = true
-    script.src = engineSrc
-    script.onload = () => {
-      resolve(true)
-    }
-    document.body && document.body.appendChild(script)
-  })
 }
 
 export default class Core {
   modules: Array<CoreModule>
-  activeEngines: { [name: engines]: moduleStatus }
   notifiers: { [string]: Array<Function> }
   history: History
   header: ?ReactComponentLike
   pageFilter: PageFilterType
   constructor() {
     this.modules = []
-    this.activeEngines = { react: 'loaded' }
     this.notifiers = {}
     this.history = createHistory()
     this.header = null
@@ -126,47 +100,36 @@ export default class Core {
      * @TODO remove "engine". Engines are deprecated since v6.5.x (april 2020),
      * we desided to use only React
      */
-    engine: engines = 'react',
-    menuMiddleware?: Object => void,
-    menuFilter?: MenuItemType => boolean
+    engine: string,
+    menuMiddleware?: Object => void
   ) {
+    return this.registerModule({
+      namespace,
+      menu,
+      menuMiddleware,
+      RootComponent
+    })
+  }
+  registerModule({
+    namespace,
+    menu,
+    RootComponent,
+    menuMiddleware
+  }: {
+    namespace: string,
+    menu: menuShape,
+    RootComponent: ComponentType<any>,
+    menuMiddleware?: Object => void
+  }) {
     const addingModule: CoreModule = {
       namespace,
       menu: Array.isArray(menu) ? menu.map(refineMenuItem) : menu,
       menuMiddleware,
-      RootComponent,
-      engine,
-      menuFilter
+      RootComponent
     }
     this.checkNamespace(addingModule)
     this.modules.push(addingModule)
-    if (addingModule.menuFilter) {
-      this.pageFilter.registerFilter(addingModule.menuFilter)
-    }
-    this.fetchEnginesAndNotify()
-  }
-
-  /**
-   * @deprecated since v6.5.x (april 2020). "Engines" are deprecated
-   */
-  async fetchEnginesAndNotify() {
-    const currentEngines = R.uniq(this.modules.map(x => x.engine))
-    let needLoad = false
-    for (const curEngine of currentEngines) {
-      const status = this.activeEngines[curEngine] || 'not_loaded'
-      if (status !== 'loaded') {
-        needLoad = true
-      }
-      if (status === 'not_loaded') {
-        this.activeEngines[curEngine] = 'loading'
-        await loadEngine(engineMap[curEngine])
-        this.activeEngines[curEngine] = 'loaded'
-        this.dispatch('registerModule', this.getModules())
-      }
-    }
-    if (!needLoad) {
-      this.dispatch('registerModule', this.getModules())
-    }
+    this.dispatch('registerModule', this.getModules())
   }
   checkNamespace(module: CoreModule) {
     const namespaces = this.modules.map(x => x.namespace)

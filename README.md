@@ -26,7 +26,7 @@ core.register('module', [{label: 'Module', path: '/module/'}], Root);
 
 Register main react element in #root element. In Lua part it's called by default.
 
-### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void, menuFilter?: (MenuItem) => boolean)
+### window.tarantool_enteprise_core.registerModule({ namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void})
 
 #### namespace
 
@@ -128,24 +128,15 @@ This is a redux middleware for dispatch some custom events or add reaction on yo
 
 It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want dispatch action on menu events from other modules.
 
-#### menuFilter (deprecated)
+### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void, menuFilter?: (MenuItem) => boolean)
 
-It will be used as global filter. You could hide some items that's not suitable for your usage.
+Deprecated method. Arguments type same as new method.
 
-Example:
+#### menuMiddleware
 
-```
-const hideModule = {
-  namespace: 'test-2',
-  menu: tasksMenu,
-  RootComponent: () => null,
-  engine: 'react',
-  menuFilter: ({ path }) => !path.includes('space')
-}
-```
+This is a redux middleware for dispatch some custom events or add reaction on your custom events.
 
-It will hide all menu items that has `'space'` in their URIs.
-
+It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want dispatch action on menu events from other modules.
 
 ### window.tarantool_enterprise_core.checkNamespace(module: string)
 

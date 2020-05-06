@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Register in DOM only in Lua part, remove it from npm module part. You should use install method.
 - Remove nanoid package because of weird webpack build
+- Remove engine code from Core (but save as args for compatibility)
+- Add registerModule method and deprecate method register
 
 ## [6.5.1]
 

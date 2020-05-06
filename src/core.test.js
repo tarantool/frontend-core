@@ -58,6 +58,45 @@ describe('register()', () => {
   });
 });
 
+describe('resgiterModule()', () => {
+  it('should register module', () => {
+    const core = new Core()
+    const module = genModuleWithNamespace('some-namespace')
+    core.registerModule(module)
+
+    expect(core.getModules()[0].namespace).toBe('some-namespace')
+  })
+
+  it('should reject module with used namespace', () => {
+    const core = new Core();
+
+    const module = genModuleWithNamespace('some-namespace');
+    core.registerModule(module)
+    const moduleWithSameNamespace = genModuleWithNamespace(module.namespace);
+    expect(() => core.registerModule(moduleWithSameNamespace)).toThrow();
+  });
+
+  it('should accept module with other namespace', () => {
+    const core = new Core();
+    const module = genModuleWithNamespace('some-namespace');
+    core.registerModule(module)
+    const otherModule = genModuleWithNamespace('other-namespace');
+    expect(() => core.registerModule(otherModule)).not.toThrow();
+  });
+
+  it('should dispatch "registerModule" event on module register', () => {
+    const core = new Core()
+    const fnRegister = jest.fn()
+    core.subscribe('registerModule', fnRegister)
+
+    core.registerModule(genModuleWithNamespace('namespace-1'))
+    expect(fnRegister).toBeCalledTimes(1)
+
+    core.registerModule(genModuleWithNamespace('namespace-2'))
+    expect(fnRegister).toBeCalledTimes(2);
+  });
+})
+
 describe('subscribe() and dispatch()', () => {
   it('should pass dispatched data to subscribed callback', () => {
     const core = new Core();
