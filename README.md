@@ -329,6 +329,14 @@ Example:
 window.tarantool_enterprise_core.dispatch('dispatchToken', { type: 'ADD_CLUSTER_USERS_MENU_ITEM' });
 ```
 
+### Emittable core events
+
+`setHeaderComponent` - Header component was passed to frontend core.
+
+`core:pageFilter:apply` - Emits on modifying page filters before applying. Provides an array of filtering functions.
+
+`core:pageFilter:applied` - Emits on modifying page filters aftter applying. Provides an array of filtering functions.
+
 ## Rock
 
 Core module and other UI modules bundled as Lua files that contains bundle files.
