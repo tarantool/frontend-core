@@ -17,7 +17,7 @@ export type MenuItemType = {|
   items?: Array<MenuItemType>
 |}
 
-export type halfMenuItem = {|
+type halfMenuItem = {|
   label: string,
   path: string,
   icon?: string | Object,

@@ -2,7 +2,6 @@
 import { generateCoreWithStore, registerModule } from './test-utils/coreInstance'
 import {
   refineMenuItem,
-  type halfMenuItem,
   type MenuItemType,
   type CoreModule
 } from './core'
@@ -12,7 +11,7 @@ const RootComponent = () => '';
 
 const genModuleWithFilter = (() => {
   let namespaceId = 0;
-  return (menu: (MenuItemType[] | halfMenuItem[]), menuFilter): CoreModule => ({
+  return (menu: MenuItemType[], menuFilter): CoreModule => ({
     namespace: `namespace-${namespaceId++}`,
     menu: menu.map(refineMenuItem),
     RootComponent,
@@ -21,16 +20,20 @@ const genModuleWithFilter = (() => {
   });
 })();
 
+const stubPage = (path, items = []): MenuItemType => ({
+  path,
+  label: '',
+  icon: '',
+  loading: false,
+  selected: false,
+  expanded: true,
+  items
+});
+
 describe('page filter multi-module', () => {
   const { coreInstance: core } = generateCoreWithStore();
-  const pageToHide: halfMenuItem = {
-    path: '/page-to-hide',
-    label: 'Page to hide'
-  };
-  const visiblePage = {
-    path: '/other-page',
-    label: 'Other page'
-  };
+  const pageToHide = stubPage('/page-to-hide');
+  const visiblePage = stubPage('/other-page');
 
   const hidingModule = genModuleWithFilter(
     [
@@ -65,19 +68,9 @@ describe('page filter multi-module', () => {
   });
 });
 
-
 describe('sub-page filtering', () => {
   const { coreInstance: core, store } = generateCoreWithStore();
 
-  const stubPage = (path, items = []): MenuItemType => ({
-    path,
-    label: '',
-    icon: '',
-    loading: false,
-    selected: false,
-    expanded: true,
-    items
-  });
   const hiddenSubPage = stubPage('/hidden-sub-page');
   const shownSubPage = stubPage('/shown-sub-page');
 
@@ -107,5 +100,4 @@ describe('sub-page filtering', () => {
     expect(resultMenu.length).toBe(1);
     expect(resultMenu[0].path).toBe(parentOfTwo.path);
   });
-
 });
