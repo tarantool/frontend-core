@@ -14,16 +14,30 @@ export const selectMenu = createSelector<State, PageFilterState, MenuItemType[],
   state => state.pageFilter,
   state => state.menu,
   (filter: PageFilterState, menu: MenuItemType[]): MenuItemType[] => {
-    const predicates = filter.map(predicateKey => getFnByKey(predicateKey))
-    return R.filter(R.allPass(predicates))(menu).map(parentPage => {
-      if (!'items' in parentPage) {
+    const predicates = filter.map(predicateKey => getFnByKey(predicateKey));
+
+    // filter top level pages
+    const shallowFilteredMenu = R.filter(R.allPass(predicates))(menu);
+
+    // filter second level pages
+    const resultMenu = shallowFilteredMenu.map(parentPage => {
+      if (!('items' in parentPage)) {
         return parentPage;
       }
       return {
         ...parentPage,
         items: R.filter(R.allPass(predicates))(parentPage.items)
       }
+    }).filter((parentPage, index) => {
+      // if the page initially had .items with empty array, keep this page
+      const pageBeforeChildrenFilter = shallowFilteredMenu[index];
+      if (pageBeforeChildrenFilter.items && pageBeforeChildrenFilter.items.length === 0) {
+        return true;
+      }
+      return !('items' in parentPage) || parentPage.items.length > 0
     });
+
+    return resultMenu;
   }
 )
 

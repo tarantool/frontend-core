@@ -66,44 +66,46 @@ describe('page filter multi-module', () => {
 });
 
 
-describe('subpage filter', () => {
+describe('sub-page filtering', () => {
   const { coreInstance: core, store } = generateCoreWithStore();
-  const subPage: MenuItemType = {
-    path: '/sub-page',
-    label: '',
-    icon: '',
-    loading: false,
-    selected: false,
-    expanded: true,
-  };
 
-  const parentPage: MenuItemType = {
-    path: '/parent-page',
+  const stubPage = (path, items = []): MenuItemType => ({
+    path,
     label: '',
     icon: '',
     loading: false,
     selected: false,
     expanded: true,
-    items: [
-      subPage
-    ]
-  };
+    items
+  });
+  const hiddenSubPage = stubPage('/hidden-sub-page');
+  const shownSubPage = stubPage('/shown-sub-page');
+
+  const parentOfTwo = stubPage('/parent-of-two', [ hiddenSubPage, shownSubPage ]);
+  const parentOfOneHiddenPage = stubPage('/parent-of-one-hidden-page', [ hiddenSubPage ]);
 
   registerModule(core, genModuleWithFilter(
     [
-      parentPage
+      parentOfTwo,
+      parentOfOneHiddenPage
     ],
-    (menuItem) => menuItem.path !== subPage.path
+    (menuItem) => menuItem.path !== hiddenSubPage.path
   ));
 
   it('(make sure that subPage does NOT pass filter)', () => {
-    expect(core.pageFilter.filterPage(subPage)).toBe(false);
+    expect(core.pageFilter.filterPage(hiddenSubPage)).toBe(false);
   });
 
-  it('subPage should NOT present in the resulting menu', () => {
+  const resultMenu = selectMenu(store.getState());
+  it('filtered out subPage should NOT present in the resulting menu', () => {
     expect(
-      selectMenu(store.getState())[0].items
-    ).toEqual([]);
+      resultMenu[0].items
+    ).toEqual([ shownSubPage ]);
+  });
+
+  it('PARENT should NOT present in menu, if all its CHILDREN are hidden', () => {
+    expect(resultMenu.length).toBe(1);
+    expect(resultMenu[0].path).toBe(parentOfTwo.path);
   });
 
 });
