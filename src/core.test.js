@@ -1,12 +1,12 @@
 // @flow
 import Core, {
-  type CoreModule
+  type InputCoreModule
 } from './core'
 import { registerModule } from './test-utils/coreInstance'
 import { didPromiseResolve } from './test-utils/promise'
 
 const RootComponent = () => '';
-const genModuleWithNamespace = (namespace): CoreModule => ({
+const genModuleWithNamespace = (namespace): InputCoreModule => ({
   namespace,
   menu: [],
   RootComponent,

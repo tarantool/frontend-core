@@ -20,7 +20,8 @@ export type MenuItemType = {|
 export type halfMenuItem = {|
   label: string,
   path: string,
-  icon?: string | Object
+  icon?: string | Object,
+  items?: Array<halfMenuItem>
 |}
 
 export type FSA = {
@@ -30,21 +31,51 @@ export type FSA = {
   meta?: any
 }
 
-type menuShape = ((action: FSA, state: [MenuItemType]) => (Array<MenuItemType> | Array<halfMenuItem>))
+type menuShape = ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>)
   | Array<MenuItemType>
 
-export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => ({
-  selected: false,
-  expanded: false,
-  loading: false,
-  items: [],
-  icon: 'menu',
-  ...item
-})
+type inputMenuShape = ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>)
+  | Array<MenuItemType | halfMenuItem>
+
+export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => {
+  if (item.expanded) {
+    return {
+      selected: false,
+      expanded: false,
+      loading: false,
+      items: [],
+      icon: 'menu',
+      ...item
+    }
+  }
+
+  const items : Array<MenuItemType> = []
+
+  for (const i of (item.items || [])) {
+    items.push(refineMenuItem(i))
+  }
+
+  return {
+    selected: false,
+    expanded: false,
+    loading: false,
+    items,
+    icon: item.icon || 'menu',
+    label: item.label,
+    path: item.path
+  }
+}
 
 export type CoreModule = {
   namespace: string,
   menu: menuShape,
+  menuMiddleware?: Object => void,
+  RootComponent: ComponentType<any>,
+}
+
+export type InputCoreModule = {
+  namespace: string,
+  menu: inputMenuShape,
   menuMiddleware?: Object => void,
   RootComponent: ComponentType<any>,
 }
@@ -94,7 +125,7 @@ export default class Core {
   }
   register(
     namespace: string,
-    menu: menuShape | Array<halfMenuItem>,
+    menu: inputMenuShape,
     RootComponent: ComponentType<any>,
     /**
      * @TODO remove "engine". Engines are deprecated since v6.5.x (april 2020),
@@ -117,7 +148,7 @@ export default class Core {
     menuMiddleware
   }: {
     namespace: string,
-    menu: menuShape,
+    menu: inputMenuShape,
     RootComponent: ComponentType<any>,
     menuMiddleware?: Object => void
   }) {
@@ -131,7 +162,7 @@ export default class Core {
     this.modules.push(addingModule)
     this.dispatch('registerModule', this.getModules())
   }
-  checkNamespace(module: CoreModule) {
+  checkNamespace(module: CoreModule | InputCoreModule) {
     const namespaces = this.modules.map(x => x.namespace)
     if (namespaces.indexOf(module.namespace) >= 0) {
       throw new Error('namespace_already_in_use')
