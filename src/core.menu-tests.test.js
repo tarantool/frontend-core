@@ -1,5 +1,5 @@
 // @flow
-import { generateCoreWithStore, registerModule } from './test-utils/coreInstance'
+import { generateCoreWithStore } from './test-utils/coreInstance'
 import {
   refineMenuItem,
   type MenuItemType,
@@ -9,10 +9,10 @@ import { selectMenu } from './store/selectors';
 
 const RootComponent = () => '';
 
-const genModuleWithFilter = (() => {
-  let namespaceId = 0;
-  return (menu: MenuItemType[], menuFilter): CoreModule => ({
-    namespace: `namespace-${namespaceId++}`,
+const stubModule = (() => {
+  let uniqueId = 0;
+  return (menu: MenuItemType[]): CoreModule => ({
+    namespace: `namespace-${uniqueId++}`,
     menu: menu.map(refineMenuItem),
     RootComponent,
     engine: 'react',
@@ -35,23 +35,19 @@ describe('page filter multi-module', () => {
   const pageToHide = stubPage('/page-to-hide');
   const visiblePage = stubPage('/other-page');
 
-  const hidingModule = genModuleWithFilter(
-    [
-      pageToHide
-    ]
-  );
+  const hidingModule = stubModule([
+    pageToHide
+  ]);
 
-  const showingModule = genModuleWithFilter(
-    [
-      pageToHide,
-      visiblePage
-    ]
-  );
+  const showingModule = stubModule([
+    pageToHide,
+    visiblePage
+  ]);
 
   const hidingFilter = (menuItem) => menuItem.path !== pageToHide.path
   const casualFilter = (menuItem) => true
 
-  registerModule(core, showingModule);
+  core.registerModule(showingModule);
   core.pageFilter.registerFilter(casualFilter)
 
   it('page should be VISIBLE when only "permissive" filters', () => {
@@ -59,7 +55,7 @@ describe('page filter multi-module', () => {
   });
 
   it('one module\'s page should be HIDDEN because of OTHER MODULE\'S filter', () => {
-    registerModule(core, hidingModule);
+    core.registerModule(hidingModule);
     core.pageFilter.registerFilter(hidingFilter)
     expect(core.pageFilter.filterPage(pageToHide)).toBe(false);
 
@@ -77,13 +73,12 @@ describe('sub-page filtering', () => {
   const parentOfTwo = stubPage('/parent-of-two', [ hiddenSubPage, shownSubPage ]);
   const parentOfOneHiddenPage = stubPage('/parent-of-one-hidden-page', [ hiddenSubPage ]);
 
-  registerModule(core, genModuleWithFilter(
-    [
-      parentOfTwo,
-      parentOfOneHiddenPage
-    ],
-    (menuItem) => menuItem.path !== hiddenSubPage.path
-  ));
+  core.registerModule(stubModule([
+    parentOfTwo,
+    parentOfOneHiddenPage
+  ]));
+
+  core.pageFilter.registerFilter(menuItem => menuItem.path !== hiddenSubPage.path);
 
   it('(make sure that subPage does NOT pass filter)', () => {
     expect(core.pageFilter.filterPage(hiddenSubPage)).toBe(false);

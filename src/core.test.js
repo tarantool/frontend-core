@@ -2,7 +2,6 @@
 import Core, {
   type InputCoreModule
 } from './core'
-import { registerModule } from './test-utils/coreInstance'
 import { didPromiseResolve } from './test-utils/promise'
 
 const RootComponent = () => '';
@@ -17,7 +16,7 @@ describe('checkNamespaces()', () => {
   const core = new Core();
 
   const module = genModuleWithNamespace('some-namespace');
-  registerModule(core, module);
+  core.registerModule(module);
 
   it('should reject module with used namespace', () => {
     const moduleWithSameNamespace = genModuleWithNamespace(module.namespace);
@@ -34,26 +33,26 @@ describe('register()', () => {
   const core = new Core();
 
   const module = genModuleWithNamespace('some-namespace');
-  registerModule(core, module);
+  core.registerModule(module);
 
   it('should reject module with used namespace', () => {
     const moduleWithSameNamespace = genModuleWithNamespace(module.namespace);
-    expect(() => registerModule(core, moduleWithSameNamespace)).toThrow();
+    expect(() => core.registerModule(moduleWithSameNamespace)).toThrow();
   });
 
   it('should accept module with other namespace', () => {
     const otherModule = genModuleWithNamespace('other-namespace');
-    expect(() => registerModule(core, otherModule)).not.toThrow();
+    expect(() => core.registerModule(otherModule)).not.toThrow();
   });
 
   it('should dispatch "registerModule" event on module register', () => {
     const fnRegister = jest.fn()
     core.subscribe('registerModule', fnRegister)
 
-    registerModule(core, genModuleWithNamespace('namespace-1'));
+    core.registerModule(genModuleWithNamespace('namespace-1'));
     expect(fnRegister).toBeCalledTimes(1)
 
-    registerModule(core, genModuleWithNamespace('namespace-2'));
+    core.registerModule(genModuleWithNamespace('namespace-2'));
     expect(fnRegister).toBeCalledTimes(2);
   });
 });
@@ -137,7 +136,7 @@ describe('waitForModule()', () => {
     const core = new Core();
     const waitPromise = core.waitForModule(module.namespace)
 
-    registerModule(core, module);
+    core.registerModule(module);
     return expect(didPromiseResolve(waitPromise)).resolves.toBe(true);
   });
 
@@ -148,7 +147,7 @@ describe('waitForModule()', () => {
       const waitPromise = core.waitForModule('namespace')
       const module = genModuleWithNamespace('other-namespace');
 
-      registerModule(core, module);
+      core.registerModule(module);
       return expect(didPromiseResolve(waitPromise)).resolves.toBe(false);
     }
   );
