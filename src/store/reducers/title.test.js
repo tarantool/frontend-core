@@ -1,7 +1,5 @@
 import reducer from './title'
 import * as constants from '../constants'
-import { generateInstance } from './menu'
-import { locationAction } from './menu.test'
 
 test('app name and title should be changed', () => {
   const title = 'Section first'

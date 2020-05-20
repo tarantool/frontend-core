@@ -6,7 +6,7 @@ describe('Title middlware', () => {
   const fakeNext = () => { };
   const fakeStore = (title) => ({
     getState: () => ({
-      appTitle: { title },
+      appTitle: { title }
     })
   });
 
