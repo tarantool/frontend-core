@@ -3,7 +3,7 @@ import * as constants from '../constants'
 
 // Only one level of nesting depth allowed in side menu
 
-const locationAction = pathname => ({
+export const locationAction = pathname => ({
   type: constants.LOCATION_CHANGE,
   payload: {
     location: {
