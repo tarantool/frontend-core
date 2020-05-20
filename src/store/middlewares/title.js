@@ -1,5 +1,4 @@
 // @flow
-// import { TITLE_SET, TITLE_RESET } from '../constants'
 import { selectTitle } from '../selectors'
 import { type FSA } from '../../core'
 
