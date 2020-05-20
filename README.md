@@ -429,3 +429,7 @@ You can use it in your frontend development mode with our npm package `@tarantoo
 ## Bundle to lua
 
 We use plugin to bundle our static as Lua. Check it out here: https://github.com/tarantool/lua-bundler-webpack-plugin
+
+# Boilerplate 
+
+Stub project: https://github.com/tarantool/frontend-stub
