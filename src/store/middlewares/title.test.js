@@ -1,6 +1,6 @@
 import { changeTitleMiddleware } from './title'
 import { generateCoreWithStore } from '../../test-utils/coreInstance'
-import { locationAction } from '../reducers/menu.test'
+import { locationAction } from '../../test-utils/reduxActions'
 
 describe('Title middlware', () => {
   const fakeNext = () => { };
