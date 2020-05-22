@@ -8,3 +8,10 @@ export const locationAction = pathname => ({
     }
   }
 })
+
+export const titleSetAction = title => ({
+  type: constants.TITLE_SET,
+  payload: {
+    title
+  }
+})
