@@ -1,5 +1,6 @@
 #!/usr/bin/env tarantool
 
+local json = require('json')
 local core_bundle = require('frontend-core.bundle')
 
 local index_body = nil
@@ -7,11 +8,13 @@ local modules = {
     -- [1] = namespace
     -- [namespace] = filemap
 }
+local variables = {}
 local prefix = ''
 
 local function index_handler(_)
     if index_body == nil then
         local entries = {}
+        local vars = {}
         for _, namespace in ipairs(modules) do
             local mod = modules[namespace]
 
@@ -20,6 +23,10 @@ local function index_handler(_)
                 data = mod.__data()
             else
                 data = mod
+            end
+
+            for key, value in pairs(variables) do
+                table.insert(vars, string.format('%s:%s,', key, value))
             end
 
             for filename, file in pairs(data) do
@@ -34,13 +41,19 @@ local function index_handler(_)
             end
         end
 
+        local vars_form = ''
+        if vars ~= nil then
+            vars_form = '__TNT_PASSED_VARIABLES__={' .. table.concat(vars) .. '}'
+        end
+
         index_body =
             '<!doctype html>' ..
             '<html>' ..
                 '<head>' ..
                     '<title>Tarantool Cartridge</title>'..
                     '<script>'..
-                    ('window.__tarantool_admin_prefix = %q'):format(prefix)..
+                    ('window.__tarantool_admin_prefix = %q;'):format(prefix)..
+                    vars_form ..
                     '</script>'..
                 '</head>' ..
                 '<body>' ..
@@ -107,6 +120,13 @@ local function add(namespace, filemap)
     return true
 end
 
+local function set_variable(name, value)
+    variables[name] = json.encode(value)
+    -- invalidate cached index_body
+    index_body = nil
+    return true
+end
+
 local function init(httpd, options)
     if options == nil then
         options = {}
@@ -164,4 +184,5 @@ end
 return {
     init = init,
     add = add,
+    set_variable = set_variable
 }

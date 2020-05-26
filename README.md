@@ -320,6 +320,10 @@ Filter out pages.
 
 Does page pass filters
 
+### window.\_\_TNT_PASSED_VARIABLES__
+
+Object contains values passed from lua part.
+
 ### Core events
 
 `dispatchToken` - transmits action to core redux store.
@@ -409,15 +413,26 @@ Register routes `/admin/` and `/static/`, and redirect from `/` to `/admin/` in 
 
 `bundle` - a frontend bundle loaded as a lua table.
 
-# Development usage
+### set_variable(key, value)
+
+Passes value from lua to browser's global object `__TNT_PASSED_VARIABLES__`.
+
+Example:
+```lua
+front.set_variable('authPath', 'https://sso.example.com')
+front.set_variable('thresold', 42)
+front.set_variable('editorParams', {smarttabs: true, padding: 2})
+```
+
+## Development usage
 
 You can use it in your frontend development mode with our npm package `@tarantoo.io/frontend-core`, but you need use external `react` and `react-dom` from our package.
 
-## Install development package
+### Install development package
 
 `npm i -s @tarantool.io/frontend-core`
 
-## Part of webpack config example
+### Part of webpack config example
 
 ```
   externals: {
@@ -426,7 +441,7 @@ You can use it in your frontend development mode with our npm package `@tarantoo
   },
 ```
 
-## Bundle to lua
+### Bundle to lua
 
 We use plugin to bundle our static as Lua. Check it out here: https://github.com/tarantool/lua-bundler-webpack-plugin
 
