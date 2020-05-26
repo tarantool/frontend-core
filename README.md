@@ -1,8 +1,8 @@
 # Tarantool Front-end Core
 
-It's core module for admin UI. Any UI submodules should be register at core.
+It's core module for admin UI. Any UI submodules should be registered at core.
 
-It has two parts. Lua part as rock that will be used at your project. JS part that will be compiled at Lua bundle. JS part based on React.
+It has two parts. Lua part as rock that will be used in your project. JS part that will be compiled as Lua bundle. JS part is based on React.
 
 # Architecture
 
@@ -77,7 +77,7 @@ Example of static menu:
 [{label: 'Module', path: '/module/'}]
 ```
 
-Or can be described in more way:
+Or can be described in more detailed way:
 
 ```
   label: string,
@@ -92,8 +92,8 @@ It's full state of menu item.
 
 #### RootComponent
 
-RootComponent can be any React Component. If you want using routing in module you should
-using history from core component for menu updating.
+RootComponent can be any React Component. If you want to use routing in module you should
+use history from core component for menu updating.
 
 
 Example with `react-router-dom`:
@@ -118,25 +118,19 @@ class Root extends React.Component{
 }
 ```
 
-Route should using same namespace of module. You shold start all of your routes with `/test`.
+Route should use same namespace of module. You shold start all your routes with `/test`.
 
-You can use any technology inside that you want.
+You can use any desired technology inside.
 
 #### menuMiddleware
 
-This is a redux middleware for dispatch some custom events or add reaction on your custom events.
+This is a redux middleware for dispatching some custom events or adding a reaction to your custom events.
 
-It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want dispatch action on menu events from other modules.
+It should be used if you want to do async loading of menu elements or some another dynamic changes. Or if you want to dispatch an action on menu events from other modules.
 
 ### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void, menuFilter?: (MenuItem) => boolean)
 
-Deprecated method. Arguments type same as new method.
-
-#### menuMiddleware
-
-This is a redux middleware for dispatch some custom events or add reaction on your custom events.
-
-It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want dispatch action on menu events from other modules.
+Deprecated method. Arguments type same as in new method `.registerModule()`.
 
 ### window.tarantool_enterprise_core.checkNamespace(module: string)
 
@@ -205,7 +199,7 @@ More about context of usage [https://github.com/axios/axios#interceptors]. So re
 
 ### window.tarantool_enterprise_core.apiMethods.axiosWizard(axiosInstance)
 
-You should use it for your axios instance for using same middlewares.
+You should use it for your axios instance to use same middlewares.
 
 Example:
 
@@ -405,7 +399,7 @@ Register routes `/admin/` and `/static/`, and redirect from `/` to `/admin/` in 
 
 ### add(namespace, bundle)
 
-`namespace` - using for namespace module. Should be same name as your JS namespace module.
+`namespace` - used for namespace module. Should be same name as your JS module namespace.
 
 `bundle` - a frontend bundle loaded as a lua table.
 
@@ -430,6 +424,6 @@ You can use it in your frontend development mode with our npm package `@tarantoo
 
 We use plugin to bundle our static as Lua. Check it out here: https://github.com/tarantool/lua-bundler-webpack-plugin
 
-# Boilerplate 
+# Boilerplate
 
 Stub project: https://github.com/tarantool/frontend-stub
