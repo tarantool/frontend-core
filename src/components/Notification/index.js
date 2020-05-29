@@ -1,10 +1,11 @@
 import * as React from 'react'
 import { css, cx } from 'emotion'
+import { format } from 'date-fns'
+import { Button } from '@tarantool.io/ui-kit'
 import close from './close.svg'
 import failCircle from './fail-circle.svg'
 import successCircle from './success-circle.svg'
 import { hideNotification } from '../../store/actions/notifications'
-import { format } from 'date-fns'
 
 const styles = {
   container: css`
@@ -45,10 +46,10 @@ const styles = {
     margin-left: 30px;
   `,
   title: css`
-    display: inline;
+    display: block;
     font-weight: 600;
     font-family: Open Sans;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     line-height: 1.5;
     letter-spacing: 0.32px;
     color: #000000;
@@ -63,9 +64,11 @@ const styles = {
       font-weight: 600;
     }
   `,
-  delimiter: css`
-    display: block;
-    height: 4px;
+  infoBlock: css`
+    margin-top: 8px;
+  `,
+  detailsButton: css`
+    background: #fff;
   `
 }
 
@@ -94,6 +97,14 @@ const shortStyles = {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.65);
     padding-bottom: 7px;
+    margin-left: auto;
+  `,
+  infoBlock: css`
+    display: flex;
+    align-items: center;
+  `,
+  detailsButton: css`
+    background: #fff;
   `
 }
 
@@ -107,7 +118,22 @@ const iconMap = {
   error: failCircle
 }
 
-export default ({ title, message, type, uuid, dispatch, initedAt, className = '', isShort = false }) => {
+const getDetailsButtonText = type => (
+  type === 'error' ? 'Error details' : 'More details'
+);
+
+export default ({
+  title,
+  message,
+  details,
+  onDetailsClick,
+  type,
+  uuid,
+  dispatch,
+  initedAt,
+  className = '',
+  isShort = false
+}) => {
   const icon = iconMap[type] ? <img src={iconMap[type]} className={isShort ? shortStyles.icon : styles.icon} /> : null
   if (isShort) {
     return (
@@ -115,7 +141,19 @@ export default ({ title, message, type, uuid, dispatch, initedAt, className = ''
         {icon}
         <div className={shortStyles.content}>{title}</div>
         {message ? <div className={shortStyles.content} dangerouslySetInnerHTML={{ __html: message }}></div> : null}
-        <div className={shortStyles.date}>{format(initedAt, 'HH:mm d MMM yyyy')}</div>
+        <div className={shortStyles.infoBlock}>
+          {details &&
+            <Button
+              onClick={() => onDetailsClick(details)}
+              intent="secondary"
+              size="s"
+              className={shortStyles.detailsButton}
+            >
+              {getDetailsButtonText(type)}
+            </Button>
+          }
+          <div className={shortStyles.date}>{format(initedAt, 'HH:mm d MMM yyyy')}</div>
+        </div>
       </div>
     )
   }
@@ -125,12 +163,16 @@ export default ({ title, message, type, uuid, dispatch, initedAt, className = ''
       <div className={styles.content}>
         <img src={close} className={styles.close} />
         {title ? (
-          <React.Fragment>
-            <span className={styles.title}>{title}</span>
-            <div className={styles.delimiter}></div>
-          </React.Fragment>
+          <span className={styles.title}>{title}</span>
         ) : null}
         {message ? <span className={styles.text} dangerouslySetInnerHTML={{ __html: message }}></span> : null}
+        {details &&
+          <div className={styles.infoBlock}>
+            <Button onClick={() => onDetailsClick(details)} intent="secondary" className={styles.detailsButton}>
+              {getDetailsButtonText(type)}
+            </Button>
+          </div>
+        }
       </div>
     </div>
   )

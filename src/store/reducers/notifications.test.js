@@ -26,6 +26,34 @@ describe('notifications', () => {
     expect(modifiedState.active[0].message).toBe(example.message)
   })
 
+  it('notification may be without details', () => {
+    const action = sendNotification(example)
+
+    const modifiedState = notificationReducer(initialState, action)
+
+    expect(modifiedState.active[0].details).toBe(null)
+  })
+
+  it('send notification with details', () => {
+    const example = {
+      type: 'error',
+      title: 'title',
+      message: 'message',
+      details: 'details about error'
+    }
+
+    const action = sendNotification(example)
+
+    const modifiedState = notificationReducer(initialState, action)
+
+    expect(modifiedState.active).toHaveLength(1)
+
+    expect(modifiedState.active[0].type).toBe(example.type)
+    expect(modifiedState.active[0].title).toBe(example.title)
+    expect(modifiedState.active[0].message).toBe(example.message)
+    expect(modifiedState.active[0].details).toBe(example.details)
+  })
+
   it('dismiss notification', () => {
     const action = sendNotification(example)
 

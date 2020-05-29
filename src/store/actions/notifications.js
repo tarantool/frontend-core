@@ -16,6 +16,7 @@ type SendNotification = {
   type: 'default' | 'warning' | 'error' | 'success',
   title: string,
   message?: string,
+  details?: string,
   timeout?: number,
   createdAt?: number
 }
@@ -26,6 +27,7 @@ export type SendNotificationAction = {
     type: 'default' | 'warning' | 'error' | 'success',
     title: ?string,
     message: ?string,
+    details?: ?string,
     timeout: number,
     uuid: string,
     createdAt: number
@@ -88,15 +90,17 @@ export const sendNotification = ({
   type = 'default',
   title,
   message,
+  details,
   timeout = 30000,
   createdAt = Date.now()
 }: SendNotification): SendNotificationAction => {
-  const uuid = nanoid()
+  const uuid: string = nanoid()
 
   const payload = {
     type,
     title: title || null,
     message: message || null,
+    details: details || null,
     timeout,
     uuid,
     createdAt
