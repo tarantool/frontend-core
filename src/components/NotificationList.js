@@ -1,15 +1,9 @@
 import * as React from 'react'
 import { css } from 'emotion'
 import { connect } from 'react-redux'
-import {
-  Modal,
-  PopupBody,
-  PopupFooter,
-  CopyToClipboard,
-  Button
-} from '@tarantool.io/ui-kit'
 import { selectActiveNotifications } from '../store/selectors'
 import Notification from './Notification'
+import NotificationDetails from './NotificationDetails'
 
 const styles = {
   container: css`
@@ -39,26 +33,9 @@ export default connect(state => ({
 
   return (
     <div className={styles.container}>
-      <Modal
-        title='Details'
-        visible={showDetailsModal}
-        onClose={() => setShowDetailsModal(false)}
-      >
-        <PopupBody>{details}</PopupBody>
-        <PopupFooter
-          controls={[
-            <CopyToClipboard
-              key="copy"
-              content={details}
-              size='s'
-              intent='iconic'
-            >
-              Copy details
-            </CopyToClipboard>,
-            <Button key="close" text='Close' onClick={() => setShowDetailsModal(false)} />
-          ]}
-        />
-      </Modal>
+      <NotificationDetails {...{ showDetailsModal, setShowDetailsModal }}>
+        {details}
+      </NotificationDetails>
       <div className={styles.innerContainer}>
         {notifications.map(x => (
           <Notification

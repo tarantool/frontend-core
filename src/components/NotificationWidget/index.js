@@ -2,16 +2,13 @@ import * as React from 'react'
 import { css, cx } from 'react-emotion'
 import { connect } from 'react-redux'
 import {
-  Modal,
-  PopupBody,
-  PopupFooter,
-  CopyToClipboard,
   Button
 } from '@tarantool.io/ui-kit'
 import bell from './notification.svg'
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
 import type { NotificationItem } from '../../store/reducers/notifications'
 import Notification from '../Notification'
+import NotificationDetails from '../NotificationDetails'
 import { isExistsHiddenNonRead, selectHiddenNotifications } from '../../store/selectors'
 import { AutoScroll } from '../AutoScroll'
 
@@ -119,38 +116,18 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
     this.setState({ details, showDetailsModal: true });
   }
 
-  renderDetailsModal = () => {
-    const {
-      showDetailsModal,
-      details
-    } = this.state;
-    return (
-      <Modal
-        title='Details'
-        visible={showDetailsModal}
-        onClose={() => this.setState({ showDetailsModal: false })}
-      >
-        <PopupBody>{details}</PopupBody>
-        <PopupFooter
-          controls={[
-            <CopyToClipboard
-              key="copy"
-              content={details}
-            >
-              Copy details
-            </CopyToClipboard>,
-            <Button key="close" text='Close' onClick={() => this.setState({ showDetailsModal: false })} />
-          ]}
-        />
-      </Modal>
-    );
+  setShowDetailsModal = (doShow: boolean) => {
+    this.setState({ showDetailsModal: doShow });
   }
 
   render(): React.ReactNode {
-    const { dispatch, notifications, showList, active } = this.props
+    const { dispatch, notifications, showList, active } = this.props;
+    const { showDetailsModal, details } = this.state;
     return (
       <div className={styles.container} ref={r => (this.refEl = r)}>
-        {this.renderDetailsModal()}
+        <NotificationDetails {...{ showDetailsModal, setShowDetailsModal: this.setShowDetailsModal }}>
+          {details}
+        </NotificationDetails>
         <div
           className={cx(styles.bell, active ? styles.bellActive : null)}
           onClick={() => {

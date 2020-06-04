@@ -102,8 +102,11 @@ core.notify({
 core.notify({
   type: 'error',
   title: 'Привет',
-  message: `Create the replicaset "Name of replicaset #2"
-   to with server "pim.dmitrov_ storages_ msk_eapi_trn57_5" executed successfully`
+  message: 'GraphQL error: "localhost:3303": Connection refused',
+  details: 'stack traceback:\n\t' +
+    '.../cartridge/cartridge/pool.lua:125: in function \'connect\'\n\t' +
+    '.../cartridge/cartridge/pool.lua:144: in function ' +
+    '<.../cartridge/cartridge/pool.lua:142>'
 })
 core.notify({
   type: 'default',
