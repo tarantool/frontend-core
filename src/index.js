@@ -47,6 +47,8 @@ class TestTwo extends React.Component<null> {
         <Router history={core.history}>
           <Switch>
             <Route path={'/other/test'} component={() => <div>2</div>} />
+            <Route path={'/other/test2'} component={() => <div>3</div>} />
+            <Route path={'/other/test3'} component={() => <div>4</div>} />
             <Route path={'/'} component={() => <div>Not found</div>} />
           </Switch>
         </Router>
@@ -75,6 +77,16 @@ core.register(
       label: 'Other',
       path: '/other/test',
       icon: testSvg
+    },
+    {
+      label: 'Other2',
+      path: '/other/test2',
+      icon: testSvg
+    },
+    {
+      label: 'Other4',
+      path: '/other/test3',
+      icon: 'hdd'
     }
   ],
   TestTwo,

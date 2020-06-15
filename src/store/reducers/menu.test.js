@@ -1,16 +1,6 @@
 import { defaultReducer, generateInstance, matchPath } from './menu'
-import * as constants from '../constants'
-
+import { locationAction } from '../../test-utils/reduxActions'
 // Only one level of nesting depth allowed in side menu
-
-const locationAction = pathname => ({
-  type: constants.LOCATION_CHANGE,
-  payload: {
-    location: {
-      pathname
-    }
-  }
-})
 
 describe('reduce choose by part of path', () => {
   const nestedMenuState = [
