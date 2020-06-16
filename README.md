@@ -146,7 +146,7 @@ Throw error if module is already registered.
 
 Return registered modules.
 
-### window.tarantool_enterprise_core.notify({ title: string, message: string, type: 'default' | 'success' | 'error', timeout: number}) : void
+### window.tarantool_enterprise_core.notify({ title: string, message: string, details?: string, type: 'default' | 'success' | 'error', timeout: number}) : void
 
 Show notification. Title and message are text of notication.
 

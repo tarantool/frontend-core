@@ -1,11 +1,14 @@
 import * as React from 'react'
 import { css, cx } from 'react-emotion'
 import { connect } from 'react-redux'
+import {
+  Button
+} from '@tarantool.io/ui-kit'
 import bell from './notification.svg'
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
 import type { NotificationItem } from '../../store/reducers/notifications'
 import Notification from '../Notification'
-import Button from '../Button'
+import NotificationDetails from '../NotificationDetails'
 import { isExistsHiddenNonRead, selectHiddenNotifications } from '../../store/selectors'
 import { AutoScroll } from '../AutoScroll'
 
@@ -87,6 +90,10 @@ type NotificationWidgetProps = {
 }
 
 class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
+  state = {
+    details: null,
+    showDetailsModal: false
+  }
   refEl = null
   clickHandler = e => {
     if (this.refEl !== e.target && !this.refEl.contains(e.target)) {
@@ -105,10 +112,22 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
     }
   }
 
+  handleDetailsClick = details => {
+    this.setState({ details, showDetailsModal: true });
+  }
+
+  setShowDetailsModal = (doShow: boolean) => {
+    this.setState({ showDetailsModal: doShow });
+  }
+
   render(): React.ReactNode {
-    const { dispatch, notifications, showList, active } = this.props
+    const { dispatch, notifications, showList, active } = this.props;
+    const { showDetailsModal, details } = this.state;
     return (
       <div className={styles.container} ref={r => (this.refEl = r)}>
+        <NotificationDetails {...{ showDetailsModal, setShowDetailsModal: this.setShowDetailsModal }}>
+          {details}
+        </NotificationDetails>
         <div
           className={cx(styles.bell, active ? styles.bellActive : null)}
           onClick={() => {
@@ -124,7 +143,13 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
                 <div className={styles.notificationInner}>
                   {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
                   {notifications.map(x => (
-                    <Notification key={x.uuid} className={styles.listItem} {...x} isShort={true} />
+                    <Notification
+                      key={x.uuid}
+                      className={styles.listItem}
+                      {...x}
+                      onDetailsClick={details => this.handleDetailsClick(details)}
+                      isShort={true}
+                    />
                   ))}
                 </div>
               </AutoScroll>

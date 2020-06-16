@@ -41,6 +41,7 @@ export const notificationFields = [
   'type',
   'title',
   'message',
+  'details',
   'timeout',
   'pausedAt',
   'createdAt',

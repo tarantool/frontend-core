@@ -187,14 +187,16 @@ export default class Core {
     type,
     title,
     message,
+    details,
     timeout
   }: {
     type: 'default' | 'success' | 'error',
     title: string,
     message?: string,
+    details?: string,
     timeout?: number
   }) {
-    this.dispatch('dispatchToken', sendNotification({ type, title, message, timeout }))
+    this.dispatch('dispatchToken', sendNotification({ type, title, message, details, timeout }))
   }
 }
 

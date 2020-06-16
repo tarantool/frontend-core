@@ -3,6 +3,7 @@ import { css } from 'emotion'
 import { connect } from 'react-redux'
 import { selectActiveNotifications } from '../store/selectors'
 import Notification from './Notification'
+import NotificationDetails from './NotificationDetails'
 
 const styles = {
   container: css`
@@ -19,14 +20,31 @@ const styles = {
   `
 }
 
+const handleDetailsClick = (details, setDetails, setShowDetailsModal) => {
+  setDetails(details);
+  setShowDetailsModal(true);
+};
+
 export default connect(state => ({
   notifications: selectActiveNotifications(state)
 }))(({ notifications, dispatch }) => {
+  const [details, setDetails] = React.useState(null);
+  const [showDetailsModal, setShowDetailsModal] = React.useState(false);
+
   return (
     <div className={styles.container}>
+      <NotificationDetails {...{ showDetailsModal, setShowDetailsModal }}>
+        {details}
+      </NotificationDetails>
       <div className={styles.innerContainer}>
         {notifications.map(x => (
-          <Notification key={x.uuid} {...x} dispatch={dispatch} className={styles.item} />
+          <Notification
+            key={x.uuid}
+            {...x}
+            onDetailsClick={details => handleDetailsClick(details, setDetails, setShowDetailsModal)}
+            dispatch={dispatch}
+            className={styles.item}
+          />
         ))}
       </div>
     </div>
