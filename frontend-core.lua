@@ -14,7 +14,6 @@ local prefix = ''
 local function index_handler(_)
     if index_body == nil then
         local entries = {}
-        local vars = {}
         for _, namespace in ipairs(modules) do
             local mod = modules[namespace]
 
@@ -23,10 +22,6 @@ local function index_handler(_)
                 data = mod.__data()
             else
                 data = mod
-            end
-
-            for key, value in pairs(variables) do
-                table.insert(vars, string.format('%s:%s,', key, value))
             end
 
             for filename, file in pairs(data) do
@@ -41,11 +36,6 @@ local function index_handler(_)
             end
         end
 
-        local vars_form = ''
-        if vars ~= nil then
-            vars_form = '__TNT_PASSED_VARIABLES__={' .. table.concat(vars) .. '}'
-        end
-
         index_body =
             '<!doctype html>' ..
             '<html>' ..
@@ -53,7 +43,7 @@ local function index_handler(_)
                     '<title>Tarantool Cartridge</title>'..
                     '<script>'..
                     ('window.__tarantool_admin_prefix = %q;'):format(prefix)..
-                    vars_form ..
+                    ('window.__tarantool_variables = %s;'):format(json.encode(variables))..
                     '</script>'..
                 '</head>' ..
                 '<body>' ..
@@ -121,7 +111,11 @@ local function add(namespace, filemap)
 end
 
 local function set_variable(name, value)
-    variables[name] = json.encode(value)
+    if type(name) ~= 'string' then
+        error('Bad argument #1 to set_variable' ..
+            ' (string expected, got ' .. type(name) .. ')', 2)
+    end
+    variables[name] = value
     -- invalidate cached index_body
     index_body = nil
     return true
