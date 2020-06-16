@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Remove base64 inline Roboto fonts & add Inter font
-
 - Update set title when change location
+- Passing data to frontend with `front.set_variable()`
 
 ## [7.0.0]
 
