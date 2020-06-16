@@ -12,7 +12,7 @@
     "@babel/plugin-proposal-decorators": "7.4.4",
     "@babel/preset-flow": "7.0.0",
     "@babel/runtime": "7.5.5",
-    "@tarantool.io/ui-kit": "0.17.0",
+    "@tarantool.io/ui-kit": "0.18.0",
     "antd": "3.23.2",
     "apollo-link": "^1.2.13",
     "apollo-link-error": "^1.1.12",
