@@ -320,7 +320,7 @@ Filter out pages.
 
 Does page pass filters
 
-### window.\_\_TNT_PASSED_VARIABLES__
+### window.\_\_tarantool_variables
 
 Object contains values passed from lua part.
 
@@ -415,7 +415,7 @@ Register routes `/admin/` and `/static/`, and redirect from `/` to `/admin/` in 
 
 ### set_variable(key, value)
 
-Passes value from lua to browser's global object `__TNT_PASSED_VARIABLES__`.
+Passes value from lua to browser's global object `__tarantool_variables`.
 
 Example:
 ```lua

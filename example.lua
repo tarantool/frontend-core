@@ -17,10 +17,9 @@ front.init(httpd, {
 	enforce_root_redirect = true,
 	prefix = '/tarantool',
 })
--- front.add('module_one', require('module_one.bundle'))
 front.set_variable('var1', 'value1')
 front.set_variable('var2', 42)
 front.set_variable('var3', { 1, 2, 3, 'a', 'b', 'c' })
 front.set_variable('var4', { a = 'a', b = 'b', c = 'c' })
--- front.add('module_two', require('module_two.bundle'))
+front.set_variable('var5', [[ !@#$%^&*(\/)"'.,><? ]])
 
