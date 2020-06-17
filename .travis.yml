@@ -52,7 +52,7 @@ jobs:
             $ROCK_NAME-$TRAVIS_TAG-1.rockspec &&
             tarantoolctl rocks make $ROCK_NAME-$TRAVIS_TAG-1.rockspec &&
             tarantoolctl rocks pack $ROCK_NAME $TRAVIS_TAG-1 &&
-            curl --fail -X PUT -F "rockspec=$ROCK_NAME-$TRAVIS_TAG-1.rockspec"
+            curl --fail -X PUT -F "rockspec=@$ROCK_NAME-$TRAVIS_TAG-1.rockspec"
             https://$ROCKS_USERNAME:$ROCKS_PASSWORD@$ROCKS_SERVER &&
             curl --fail -X PUT -F "rockspec=@$ROCK_NAME-$TRAVIS_TAG-1.all.rock"
             https://$ROCKS_USERNAME:$ROCKS_PASSWORD@$ROCKS_SERVER
