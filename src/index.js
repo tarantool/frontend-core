@@ -103,10 +103,11 @@ core.notify({
   type: 'error',
   title: 'Привет',
   message: 'GraphQL error: "localhost:3303": Connection refused',
-  details: 'stack traceback:\n\t' +
+  details: 'NetboxError: GraphQL error: "localhost:3303": Connection refused\n\n' +
+    '```\nstack traceback:\n\t' +
     '.../cartridge/cartridge/pool.lua:125: in function \'connect\'\n\t' +
     '.../cartridge/cartridge/pool.lua:144: in function ' +
-    '<.../cartridge/cartridge/pool.lua:142>'
+    '<.../cartridge/cartridge/pool.lua:142>\n```'
 })
 core.notify({
   type: 'default',

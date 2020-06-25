@@ -29,6 +29,7 @@ export type NotificationItem = {
   type: 'default' | 'warning' | 'error' | 'success',
   title: ?string,
   message: ?string,
+  details: ?string,
   timeout: number,
   pausedAt: ?number,
   createdAt: number,

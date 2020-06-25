@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react'
 import { css } from 'emotion'
 import { connect } from 'react-redux'
@@ -20,28 +21,22 @@ const styles = {
   `
 }
 
-const handleDetailsClick = (details, setDetails, setShowDetailsModal) => {
-  setDetails(details);
-  setShowDetailsModal(true);
-};
-
 export default connect(state => ({
   notifications: selectActiveNotifications(state)
 }))(({ notifications, dispatch }) => {
-  const [details, setDetails] = React.useState(null);
-  const [showDetailsModal, setShowDetailsModal] = React.useState(false);
+  const [notificationInModal, setNotificationInModal] = React.useState(null);
 
   return (
     <div className={styles.container}>
-      <NotificationDetails {...{ showDetailsModal, setShowDetailsModal }}>
-        {details}
-      </NotificationDetails>
+      <NotificationDetails {...{ notificationInModal, setNotificationInModal }} />
       <div className={styles.innerContainer}>
         {notifications.map(x => (
           <Notification
             key={x.uuid}
             {...x}
-            onDetailsClick={details => handleDetailsClick(details, setDetails, setShowDetailsModal)}
+            onDetailsClick={details => {
+              setNotificationInModal(x);
+            }}
             dispatch={dispatch}
             className={styles.item}
           />
