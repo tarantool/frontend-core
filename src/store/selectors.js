@@ -30,7 +30,11 @@ export const selectCurrentMenuItemLabel = (state: State): string => {
 
   return ''
 }
+
+export const selectAppName = (state: State) => state.appTitle.appName
+
 export const selectTitle = (state: State) => state.appTitle.title || selectCurrentMenuItemLabel(state)
+
 export const selectBreadcrumbs = (state: State): AppTitleProps[] => [
   ...state.appTitle.propsList.slice(0, -1),
   { title: selectTitle(state) }
