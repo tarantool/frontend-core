@@ -1,42 +1,42 @@
 // @flow
 import * as React from 'react'
 import {
+  Markdown,
   Modal,
-  PopupBody,
-  PopupFooter,
   CopyToClipboard,
   Button
 } from '@tarantool.io/ui-kit'
+import type { NotificationItem } from '../store/reducers/notifications';
 
 type NotificationDetailsProps = {
-  showDetailsModal: boolean,
-  children: string,
-  setShowDetailsModal: (boolean) => void
+  notificationInModal: NotificationItem | null,
+  setNotificationInModal: (NotificationItem | null) => void
 };
 
 const NotificationDetails = ({
-  showDetailsModal,
-  children: details,
-  setShowDetailsModal
-}: NotificationDetailsProps) => (
-  <Modal
-    title='Details'
-    visible={showDetailsModal}
-    onClose={() => setShowDetailsModal(false)}
-  >
-    <PopupBody>{details}</PopupBody>
-    <PopupFooter
-      controls={[
+  notificationInModal,
+  setNotificationInModal
+}: NotificationDetailsProps) => {
+  const { details, title } = (notificationInModal || {});
+  return (
+    <Modal
+      title={title}
+      visible={!!notificationInModal}
+      onClose={() => setNotificationInModal(null)}
+      wide
+      footerControls={[
         <CopyToClipboard
           key="copy"
           content={details}
         >
-          Copy details
+        Copy details
         </CopyToClipboard>,
-        <Button key="close" text='Close' onClick={() => setShowDetailsModal(false)} />
+        <Button key="close" text='Close' onClick={() => setNotificationInModal(null)} />
       ]}
-    />
-  </Modal>
-);
+    >
+      <Markdown text={details} />
+    </Modal>
+  );
+};
 
 export default NotificationDetails

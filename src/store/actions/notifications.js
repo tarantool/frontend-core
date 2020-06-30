@@ -27,7 +27,7 @@ export type SendNotificationAction = {
     type: 'default' | 'warning' | 'error' | 'success',
     title: ?string,
     message: ?string,
-    details?: ?string,
+    details: ?string,
     timeout: number,
     uuid: string,
     createdAt: number

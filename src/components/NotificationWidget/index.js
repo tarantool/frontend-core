@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react'
 import { css, cx } from 'react-emotion'
 import { connect } from 'react-redux'
@@ -89,18 +90,24 @@ type NotificationWidgetProps = {
   dispatch: Function
 }
 
-class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
-  state = {
-    details: null,
-    showDetailsModal: false
-  }
-  refEl = null
-  clickHandler = e => {
-    if (this.refEl !== e.target && !this.refEl.contains(e.target)) {
+type NotificationWidgetState = {
+  notificationInModal: NotificationItem | null
+}
+
+class NotificationWidget extends React.PureComponent<NotificationWidgetProps, NotificationWidgetState> {
+  state = { notificationInModal: null }
+  refEl = React.createRef<HTMLElement>();
+  clickHandler = (e: MouseEvent | TouchEvent) => {
+    if (
+      e.target instanceof Node &&
+      this.refEl.current &&
+      this.refEl.current !== e.target &&
+      !this.refEl.current.contains(e.target)
+    ) {
       this.props.dispatch(hideNotificationList())
     }
   }
-  componentDidUpdate(prevProps: Readonly<NotificationWidgetProps>): void {
+  componentDidUpdate(prevProps: NotificationWidgetProps): void {
     if (prevProps.showList !== this.props.showList) {
       if (this.props.showList) {
         document.addEventListener('mousedown', this.clickHandler, true)
@@ -112,22 +119,16 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
     }
   }
 
-  handleDetailsClick = details => {
-    this.setState({ details, showDetailsModal: true });
+  setNotificationInModal = (notificationInModal: NotificationItem | null) => {
+    this.setState({ notificationInModal });
   }
 
-  setShowDetailsModal = (doShow: boolean) => {
-    this.setState({ showDetailsModal: doShow });
-  }
-
-  render(): React.ReactNode {
+  render() {
     const { dispatch, notifications, showList, active } = this.props;
-    const { showDetailsModal, details } = this.state;
+    const { notificationInModal } = this.state;
     return (
-      <div className={styles.container} ref={r => (this.refEl = r)}>
-        <NotificationDetails {...{ showDetailsModal, setShowDetailsModal: this.setShowDetailsModal }}>
-          {details}
-        </NotificationDetails>
+      <div className={styles.container} ref={this.refEl}>
+        <NotificationDetails {...{ notificationInModal, setNotificationInModal: this.setNotificationInModal }} />
         <div
           className={cx(styles.bell, active ? styles.bellActive : null)}
           onClick={() => {
@@ -144,10 +145,10 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps> {
                   {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
                   {notifications.map(x => (
                     <Notification
+                      {...x}
                       key={x.uuid}
                       className={styles.listItem}
-                      {...x}
-                      onDetailsClick={details => this.handleDetailsClick(details)}
+                      onDetailsClick={details => this.setNotificationInModal(x)}
                       isShort={true}
                     />
                   ))}
