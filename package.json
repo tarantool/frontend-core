@@ -1,6 +1,6 @@
 {
   "name": "@tarantool.io/frontend-core",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "main": "compiled_module/core.js",
   "repository": {
     "type": "git",
