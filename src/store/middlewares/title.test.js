@@ -1,21 +1,22 @@
 import { changeTitleMiddleware } from './title'
 import { generateCoreWithStore } from '../../test-utils/coreInstance'
-import { locationAction, titleSetAction } from '../../test-utils/reduxActions'
+import { locationAction } from '../../test-utils/reduxActions'
+import { setTitle, setAppName } from '../../store/actions/title'
 import AppTitle from '../../components/AppTitle'
 import { Route, Router, Switch } from 'react-router-dom'
 
 describe('Title middlware', () => {
   const fakeNext = () => { };
-  const fakeStore = (title) => ({
+  const fakeStore = (appName, title) => ({
     getState: () => ({
-      appTitle: { title }
+      appTitle: { appName, title }
     })
   });
 
   it('should be set title', () => {
-    changeTitleMiddleware(fakeStore('title'))(fakeNext)({ type: 'Nothing' })
+    changeTitleMiddleware(fakeStore('appName', 'title'))(fakeNext)({ type: 'Nothing' })
 
-    expect(document.title).toBe('title');
+    expect(document.title).toBe('appName: title');
   })
 
   it('should be changed onClick', () => {
@@ -44,11 +45,11 @@ describe('Title middlware', () => {
       'react'
     )
 
+    newStore.dispatch(setAppName('SampleApp'))
     newStore.dispatch(locationAction('/one'))
-    expect(document.title).toBe('one')
-
+    expect(document.title).toBe('SampleApp: one')
     newStore.dispatch(locationAction('/two'))
-    expect(document.title).toBe('two')
+    expect(document.title).toBe('SampleApp: two')
   })
 
   it('should be correct work with appTitle', () => {
@@ -90,12 +91,13 @@ describe('Title middlware', () => {
       'react'
     )
 
-    newStore.dispatch(titleSetAction('AppTitle'))
+    newStore.dispatch(setAppName('SampleApp'))
+    newStore.dispatch(setTitle({ title: 'AppTitle' }))
 
     newStore.dispatch(locationAction('/one'))
-    expect(document.title).toBe('AppTitle')
+    expect(document.title).toBe('SampleApp: AppTitle')
 
     newStore.dispatch(locationAction('/two'))
-    expect(document.title).toBe('AppTitle')
+    expect(document.title).toBe('SampleApp: AppTitle')
   })
 })
