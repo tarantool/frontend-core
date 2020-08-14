@@ -37,6 +37,10 @@ export const matchPath = (path: ?string, link: string, exact: boolean = false): 
   path = path.split('?')[0]
   path = R.last(path) === '/' ? path.slice(0, -1) : path
 
+  if (path === '/this/test') {
+    console.log('match', path, link, exact)
+  }
+
   return link === path || (!exact && path.indexOf(link) === 0 && path[link.length] === '/')
 }
 
@@ -72,12 +76,12 @@ const updateLink = (activeLink: ?string) => (menuItem: MenuItemType): MenuItemTy
   }
 }
 
-const expand = (activeLink: ?string) => (menuItem: MenuItemType): MenuItemType => {
+const expand = (activeLink: ?string, expanded: boolean) => (menuItem: MenuItemType): MenuItemType => {
   const { path } = menuItem
 
   return {
     ...menuItem,
-    expanded: matchPath(activeLink, path, true)
+    expanded: matchPath(activeLink, path, expanded) && expanded
   }
 }
 
@@ -97,7 +101,7 @@ export const defaultReducer = (defaultState: MenuState = []) => (
     case constants.EXPAND:
       if (payload && payload.location && payload.location.pathname) {
         const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
-        return mapMenuTree(state, expand(activeLink))
+        return mapMenuTree(state, expand(activeLink, payload.expanded))
       } else {
         return state
       }

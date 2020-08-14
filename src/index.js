@@ -7,7 +7,7 @@ import { Router, Route, Switch } from 'react-router-dom'
 import AppTitle from './components/AppTitle'
 import core from './coreInstance'
 import store from './store/index'
-import testSvg from './components/Notification/success-circle.svg'
+import { IconTrash, IconInfo, IconTask, IconEdit } from '@tarantool.io/ui-kit'
 
 const rootElement = document.getElementById('root')
 if (rootElement) {
@@ -96,12 +96,48 @@ core.register(
     {
       label: 'Other',
       path: '/other/test',
-      icon: testSvg
+      icon: <IconInfo />
+    },
+    {
+      label: 'This test',
+      path: `/this/test`,
+      icon: <IconTrash />,
+      items: [
+        {
+          label: 'Test1',
+          path: `/this/test/1`
+        },
+        {
+          label: 'Test2',
+          path: `/this/test/2`
+        }, {
+          label: 'Test3',
+          path: `/this/test/3`
+        }
+      ]
+    },
+    {
+      label: 'that test2',
+      path: `/that/test`,
+      icon: <IconEdit />,
+      items: [
+        {
+          label: 'Test1',
+          path: `/that/test/5`
+        },
+        {
+          label: 'Test2',
+          path: `/that/test/6`
+        }, {
+          label: 'Test3',
+          path: `/that/test/7`
+        }
+      ]
     },
     {
       label: 'Other2',
       path: '/other/test2',
-      icon: testSvg
+      icon: <IconTask />
     },
     {
       label: 'Other3',
@@ -109,15 +145,11 @@ core.register(
       icon: 'hdd'
     },
     {
-      label: 'Other4',
-      path: '/other/test4',
-      icon: 'hdd',
-      items: [
-        {
-          label: 'Otther4-1',
-          path: '/other/test4/subtest1'
-        }
-      ]
+      icon: <IconInfo/>,
+      label: 'Documentation',
+      path: 'https://www.tarantool.io/en/doc',
+      type: 'external',
+      pinBottom: true
     }
   ],
   TestTwo,
