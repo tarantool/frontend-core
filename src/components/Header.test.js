@@ -70,8 +70,8 @@ describe('Header component', () => {
       </Provider>
     )
 
-    expect(component.root.findAllByType('h1')).toEqual([])
-    expect(component.root.findAllByType('span')[2].children[0]).toEqual('Cluster')
+    expect(component.root.findAllByType('span').map(el => el.children)).toEqual([['/'], ['Cluster']])
+    expect(component.root.findAllByType('span')[1].children[0]).toEqual('Cluster')
   })
 
   it('display appTitle.title and appName', () => {
@@ -91,7 +91,6 @@ describe('Header component', () => {
       </Provider>
     )
 
-    expect(component.root.findByType('h1').children[0]).toEqual('App Name')
-    expect(component.root.findAllByType('span')[2].children[0]).toEqual('App Title')
+    expect(component.root.findAllByType('span')[0].children[0]).toEqual('App Name')
   })
 })

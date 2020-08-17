@@ -2,9 +2,7 @@
 import * as React from 'react'
 import { css, cx } from 'react-emotion'
 import { connect } from 'react-redux'
-import {
-  Button
-} from '@tarantool.io/ui-kit'
+import { Button } from '@tarantool.io/ui-kit'
 import bell from './notification.svg'
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
 import type { NotificationItem } from '../../store/reducers/notifications'
