@@ -21,9 +21,7 @@ const styles = {
   `
 }
 
-export default connect(state => ({
-  notifications: selectActiveNotifications(state)
-}))(({ notifications, dispatch }) => {
+const NotificationList = ({ notifications, dispatch }) => {
   const [notificationInModal, setNotificationInModal] = React.useState(null);
 
   return (
@@ -44,4 +42,8 @@ export default connect(state => ({
       </div>
     </div>
   )
-})
+}
+
+export default connect(state => ({
+  notifications: selectActiveNotifications(state)
+}))(NotificationList)
