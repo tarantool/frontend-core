@@ -44,12 +44,32 @@ class TestTwo extends React.Component<null> {
   render() {
     return (
       <div>
+        <AppTitle title={'TestTwo Root'} path='/other' />
         <Router history={core.history}>
           <Switch>
-            <Route path={'/other/test'} component={() => <div>2</div>} />
-            <Route path={'/other/test2'} component={() => <div>3</div>} />
-            <Route path={'/other/test3'} component={() => <div>4</div>} />
-            <Route path={'/'} component={() => <div>Not found</div>} />
+            <Route path='/other/test' component={() => <div>1</div>} />
+            <Route path='/other/test2' component={() => <div>2</div>} />
+            <Route path='/other/test3' component={() => <div>3</div>} />
+            <Route
+              path='/other/test4'
+              exact
+              render={() => (
+                <div>
+                  <AppTitle title='my test4' path='/other/test4' />
+                  4
+                </div>
+              )}
+            />
+            <Route
+              path='/other/test4/subtest1'
+              render={() => (
+                <div>
+                  <AppTitle title='Subpage' propsList={[{title: 'adasd', path: '/other/dasd'}]} />
+                  4-1
+                </div>
+              )}
+            />
+            <Route path='/' component={() => <div>Not found</div>} />
           </Switch>
         </Router>
       </div>
@@ -84,9 +104,20 @@ core.register(
       icon: testSvg
     },
     {
-      label: 'Other4',
+      label: 'Other3',
       path: '/other/test3',
       icon: 'hdd'
+    },
+    {
+      label: 'Other4',
+      path: '/other/test4',
+      icon: 'hdd',
+      items: [
+        {
+          label: 'Otther4-1',
+          path: '/other/test4/subtest1'
+        }
+      ]
     }
   ],
   TestTwo,

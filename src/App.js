@@ -2,10 +2,11 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import Routes from './components/Routes'
+import { colors } from '@tarantool.io/ui-kit'
 // $FlowFixMe
 import 'antd/dist/antd.less'
 import './styles/reset'
-import { css } from 'react-emotion'
+import { css, cx } from 'react-emotion'
 import Menu from './components/Menu'
 import Header from './components/Header'
 import NotificationList from './components/NotificationList'
@@ -17,14 +18,7 @@ type AppProps = {
   core: Core
 }
 
-const sideColor = '#000000;'
 const styles = {
-  layout: css`
-    display: flex;
-    margin: 0 auto;
-    height: 100vh;
-    flex-direction: column;
-  `,
   main: css`
     display: flex;
     flex-grow: 1;
@@ -35,13 +29,15 @@ const styles = {
     align-items: stretch;
     position: relative;
     max-width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
   `,
   flexMain: css`
     display: flex;
   `,
   content: css`
     display: block;
-    background: #f0f2f5;
+    background: ${colors.baseBg};
     flex-grow: 1;
     max-height: 100vh;
     overflow: auto;
@@ -50,7 +46,7 @@ const styles = {
     flex-grow: 0;
     flex-shrink: 0;
     box-sizing: border-box;
-    background: ${sideColor};
+    background: #000000;
     z-index: 1;
   `
 }
@@ -60,16 +56,14 @@ export default class App extends Component<AppProps> {
     const { store, core } = this.props
     return (
       <Provider store={store}>
-        <div className={`${styles.layout} meta-tarantool-app`}>
+        <div className={cx(styles.main, 'meta-tarantool-app')}>
           <FavIcon />
-          <div className={styles.main}>
-            <Menu className={styles.sidemenu} />
-            <div className={styles.content}>
-              <Header />
-              <Routes core={core} />
-            </div>
-            <NotificationList />
+          <Menu className={styles.sidemenu} />
+          <div className={styles.content}>
+            <Header />
+            <Routes core={core} />
           </div>
+          <NotificationList />
         </div>
       </Provider>
     )

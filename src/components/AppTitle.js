@@ -1,4 +1,5 @@
 // @flow
+import * as React from 'react'
 import withSideEffect from 'react-side-effect'
 import { setTitle } from '../store/actions/title'
 import core from '../coreInstance'
@@ -12,4 +13,13 @@ const handleStateChange = ({ title, propsList = [] }: { title: string, propsList
   core.dispatch('dispatchToken', setTitle({ title, propsList }))
 }
 
-export default withSideEffect(reducePropsToState, handleStateChange)(() => null)
+const AppTitle = withSideEffect(reducePropsToState, handleStateChange)(() => null)
+
+type AppTitlePropsDeprecated = AppTitleProps & { link?: string }
+
+export default ({ title, path, link }: AppTitlePropsDeprecated) => (
+  <AppTitle
+    title={title}
+    path={path || link}
+  />
+)
