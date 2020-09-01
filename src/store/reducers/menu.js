@@ -37,10 +37,6 @@ export const matchPath = (path: ?string, link: string, exact: boolean = false): 
   path = path.split('?')[0]
   path = R.last(path) === '/' ? path.slice(0, -1) : path
 
-  if (path === '/this/test') {
-    console.log('match', path, link, exact)
-  }
-
   return link === path || (!exact && path.indexOf(link) === 0 && path[link.length] === '/')
 }
 

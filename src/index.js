@@ -96,12 +96,12 @@ core.register(
     {
       label: 'Other',
       path: '/other/test',
-      icon: <IconInfo />
+      icon: IconInfo
     },
     {
       label: 'This test',
       path: `/this/test`,
-      icon: <IconTrash />,
+      icon: IconTrash,
       items: [
         {
           label: 'Test1',
@@ -119,7 +119,7 @@ core.register(
     {
       label: 'that test2',
       path: `/that/test`,
-      icon: <IconEdit />,
+      icon: IconEdit,
       items: [
         {
           label: 'Test1',
@@ -137,7 +137,7 @@ core.register(
     {
       label: 'Other2',
       path: '/other/test2',
-      icon: <IconTask />
+      icon: IconTask
     },
     {
       label: 'Other3',
@@ -145,7 +145,7 @@ core.register(
       icon: 'hdd'
     },
     {
-      icon: <IconInfo/>,
+      icon: IconInfo,
       label: 'Documentation',
       path: 'https://www.tarantool.io/en/doc',
       type: 'external',

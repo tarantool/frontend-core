@@ -6,7 +6,7 @@ import { push } from 'connected-react-router'
 import type { MenuItemType } from '../../core'
 import { expand } from '../../store/actions/menu'
 import { selectMenu } from '../../store/selectors'
-import { Menu } from '@tarantool.io/ui-kit';
+import { SideMenu } from '@tarantool.io/ui-kit';
 import { APP_PATH_PREFIX } from '../../store/history'
 
 type MenuProps = {
@@ -46,7 +46,7 @@ export function Index(props: MenuProps) {
   }
 
   return (
-    <Menu
+    <SideMenu
       menu={menu}
       path={path}
       onMenuItemClick={onClick}
