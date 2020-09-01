@@ -13,7 +13,7 @@ core.components = {
   AppTitle
 }
 
-core.logo = require('./components/tarantool-logo.svg')
+core.logo = require('./assets/tarantool-logo-full.svg')
 
 core.apiMethods = apiMethods
 core.analyticModule = analyticModule

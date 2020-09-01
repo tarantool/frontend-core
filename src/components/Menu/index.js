@@ -2,12 +2,15 @@
 
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import { css } from 'emotion'
 import { push } from 'connected-react-router'
+import { SideMenu } from '@tarantool.io/ui-kit'
 import type { MenuItemType } from '../../core'
 import { expand } from '../../store/actions/menu'
 import { selectMenu } from '../../store/selectors'
-import { SideMenu } from '@tarantool.io/ui-kit';
 import { APP_PATH_PREFIX } from '../../store/history'
+import logo from '../../assets/tarantool-logo-full.svg'
+import logoCompact from '../../assets/tarantool-logo-compact.svg'
 
 type MenuProps = {
   menu: Array<MenuItemType>,
@@ -15,6 +18,15 @@ type MenuProps = {
   path: string,
   className: string
 }
+
+const logoStyle = css`margin-left: 24px;`;
+
+const renderLogo = collapsed => (
+  <img
+    className={!collapsed && logoStyle}
+    src={collapsed ? logoCompact : logo}
+  />
+);
 
 export function Index(props: MenuProps) {
   const { menu, dispatch, path, className } = props
@@ -53,6 +65,7 @@ export function Index(props: MenuProps) {
       toggleExpand={onExpand}
       className={className}
       pathPrefix={APP_PATH_PREFIX}
+      renderMenuLogo={renderLogo}
     />
   )
 }
