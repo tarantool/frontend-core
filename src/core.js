@@ -25,7 +25,9 @@ export type halfMenuItem = {|
   label: string,
   path: string,
   icon?: string | Object,
-  items?: Array<halfMenuItem>
+  items?: Array<halfMenuItem>,
+  type?: 'internal' | 'external',
+  pinBottom?: boolean
 |}
 
 export type FSA = {
