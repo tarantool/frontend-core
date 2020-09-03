@@ -72,12 +72,12 @@ const updateLink = (activeLink: ?string) => (menuItem: MenuItemType): MenuItemTy
   }
 }
 
-const expand = (activeLink: ?string) => (menuItem: MenuItemType): MenuItemType => {
+const expand = (activeLink: ?string, expanded: boolean) => (menuItem: MenuItemType): MenuItemType => {
   const { path } = menuItem
 
   return {
     ...menuItem,
-    expanded: matchPath(activeLink, path, true)
+    expanded: matchPath(activeLink, path, expanded) && expanded
   }
 }
 
@@ -97,7 +97,7 @@ export const defaultReducer = (defaultState: MenuState = []) => (
     case constants.EXPAND:
       if (payload && payload.location && payload.location.pathname) {
         const activeLink = getStrongestMatchingLink(state, payload.location.pathname)
-        return mapMenuTree(state, expand(activeLink))
+        return mapMenuTree(state, expand(activeLink, payload.expanded))
       } else {
         return state
       }

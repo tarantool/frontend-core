@@ -7,6 +7,8 @@ import pageFilter from './pageFilter'
 import { ReactComponentLike } from 'prop-types'
 import type { PageFilterType } from './pageFilter'
 
+export type MenuItemTypes = 'internal' | 'external'
+
 export type MenuItemType = {|
   label: string,
   path: string,
@@ -14,14 +16,18 @@ export type MenuItemType = {|
   expanded: boolean,
   loading: boolean,
   icon: string | Object,
-  items?: Array<MenuItemType>
+  items?: Array<MenuItemType>,
+  type?: MenuItemTypes,
+  pinBottom?: boolean,
 |}
 
 export type halfMenuItem = {|
   label: string,
   path: string,
   icon?: string | Object,
-  items?: Array<halfMenuItem>
+  items?: Array<halfMenuItem>,
+  type?: 'internal' | 'external',
+  pinBottom?: boolean
 |}
 
 export type FSA = {
@@ -62,7 +68,9 @@ export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType 
     items,
     icon: item.icon || 'menu',
     label: item.label,
-    path: item.path
+    path: item.path,
+    type: item.type,
+    pinBottom: item.pinBottom
   }
 }
 

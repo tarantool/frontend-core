@@ -46,7 +46,6 @@ const styles = {
     flex-grow: 0;
     flex-shrink: 0;
     box-sizing: border-box;
-    background: #000000;
     z-index: 1;
   `
 }
