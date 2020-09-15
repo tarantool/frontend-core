@@ -20,6 +20,7 @@ install:
   - sudo apt-get install -y tarantool-dev
   - tarantoolctl rocks make
   - tarantoolctl rocks install http 1.0.5
+  - npm install cypress@4.12.1
 
 script:
   - npm run lint
