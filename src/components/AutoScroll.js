@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Scrollbar from './Scrollbar'
+import React, { useState, useEffect, useRef } from 'react';
+import { Scrollbar } from '@tarantool.io/ui-kit';
 
 export function AutoScroll({ className, maxHeight, children }) {
   const [height, setHeight] = useState(0)

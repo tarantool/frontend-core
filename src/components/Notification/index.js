@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { css, cx } from 'emotion'
 import { format } from 'date-fns'
-import { Button } from '@tarantool.io/ui-kit'
+import { Button, baseFontFamily } from '@tarantool.io/ui-kit'
 import close from './close.svg'
 import failCircle from './fail-circle.svg'
 import successCircle from './success-circle.svg'
@@ -48,14 +48,14 @@ const styles = {
   title: css`
     display: block;
     font-weight: 600;
-    font-family: Open Sans;
+    font-family: ${baseFontFamily};
     margin-bottom: 8px;
     line-height: 1.5;
     letter-spacing: 0.32px;
     color: #000000;
   `,
   text: css`
-    font-family: Open Sans;
+    font-family: ${baseFontFamily};
     font-size: 14px;
     font-weight: normal;
     line-height: 1.57;
@@ -86,14 +86,14 @@ const shortStyles = {
     height: 16px;
   `,
   content: css`
-    font-family: Open Sans;
+    font-family: ${baseFontFamily};
     font-size: 14px;
     color: #000;
     display: block;
     margin: 0 0 4px 0;
   `,
   date: css`
-    font-family: Open Sans;
+    font-family: ${baseFontFamily};
     font-size: 12px;
     color: rgba(0, 0, 0, 0.65);
     padding-bottom: 7px;
