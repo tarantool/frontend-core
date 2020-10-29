@@ -1,7 +1,6 @@
 // @flow
 import * as R from 'ramda'
 import * as constants from '../constants'
-import noop from 'lodash/noop'
 import type { MenuItemType, FSA, CoreModule } from '../../core'
 
 const initialState = []
@@ -13,6 +12,8 @@ type SubStore = {
   middleware: Object => void,
   namespace: string
 }
+
+const noop = () => undefined
 
 const mapMenuTree = (menuState: MenuItemType[], fn: (item: MenuItemType) => MenuItemType) => {
   const stack = [...menuState.map(fn)]

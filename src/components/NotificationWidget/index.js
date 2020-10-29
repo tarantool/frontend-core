@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react'
-import { css, cx } from 'react-emotion'
+import { css, cx } from 'emotion'
 import { connect } from 'react-redux'
-import { Button } from '@tarantool.io/ui-kit'
+import { Button, baseFontFamily } from '@tarantool.io/ui-kit'
 import bell from './notification.svg'
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
 import type { NotificationItem } from '../../store/reducers/notifications'
@@ -70,7 +70,7 @@ const styles = {
   `,
   noNotification: css`
     font-size: 14px;
-    font-family: Open Sans;
+    font-family: ${baseFontFamily};
   `,
   listItem: css`
     border-bottom: 1px solid #e8e8e8;

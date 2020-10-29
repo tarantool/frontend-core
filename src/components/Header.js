@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { css, cx } from 'react-emotion'
+import { css, cx } from 'emotion'
 import { Breadcrumbs } from '@tarantool.io/ui-kit'
 import { selectBreadcrumbs } from '../store/selectors'
 import { push } from 'connected-react-router'
