@@ -68,7 +68,7 @@ class Header extends React.Component<HeaderProps> {
         <div className={styles.titleContainer}>
           <Breadcrumbs
             appName={appName}
-            breadcrumbs={breadcrumbs}
+            items={breadcrumbs}
             onLinkClick={onLinkClick}
           />
         </div>
