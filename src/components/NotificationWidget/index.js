@@ -2,8 +2,7 @@
 import * as React from 'react'
 import { css, cx } from 'emotion'
 import { connect } from 'react-redux'
-import { Button, baseFontFamily } from '@tarantool.io/ui-kit'
-import bell from './notification.svg'
+import { Button, baseFontFamily, IconBell } from '@tarantool.io/ui-kit'
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
 import type { NotificationItem } from '../../store/reducers/notifications'
 import Notification from '../Notification'
@@ -34,10 +33,6 @@ const styles = {
       background-color: #f5222d;
       border-radius: 6px;
     }
-  `,
-  bellIcon: css`
-    width: 16px;
-    height: 16px;
   `,
   notificationList: css`
     z-index: 1;
@@ -133,7 +128,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
             dispatch(showList ? hideNotificationList() : showNotificationList())
           }}
         >
-          <img src={bell} className={styles.bellIcon} />
+          <IconBell />
         </div>
         {showList && (
           <div className={styles.notificationList}>

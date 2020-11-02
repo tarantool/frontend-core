@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased
 
 - Removed Open Sans font, antd and another unused code parts
+- Used AppLayout & AppHeader from UI-Kit
 
 ## [7.3.0]
 
