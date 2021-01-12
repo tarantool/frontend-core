@@ -2,6 +2,7 @@
 import * as React from 'react'
 import { css } from 'emotion'
 import { connect } from 'react-redux'
+import { zIndex } from '@tarantool.io/ui-kit'
 import { selectActiveNotifications } from '../store/selectors'
 import Notification from './Notification'
 import NotificationDetails from './NotificationDetails'
@@ -11,7 +12,7 @@ const styles = {
     position: fixed;
     right: 24px;
     bottom: 24px;
-    z-index: 10;
+    z-index: ${zIndex.notification};
   `,
   innerContainer: css`
     position: relative;
