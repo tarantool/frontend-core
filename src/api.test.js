@@ -8,6 +8,8 @@ import gql from 'graphql-tag'
 
 import { generateApiMethod } from './api'
 
+axios.defaults.adapter = require('axios/lib/adapters/http')
+
 const callFn = fn => (r, n) => {
   fn(r)
   return n(r)
