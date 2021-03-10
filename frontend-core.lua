@@ -17,8 +17,6 @@ local function index_handler(_)
         for _, namespace in ipairs(modules) do
             local mod = modules[namespace]
 
-            if mod == nil then goto continue end
-
             local data
             if type(mod.__data) == 'function' then
                 data = mod.__data()
@@ -36,7 +34,6 @@ local function index_handler(_)
                     )
                 end
             end
-            ::continue::
         end
 
         index_body =
