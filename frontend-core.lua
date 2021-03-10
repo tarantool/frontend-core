@@ -17,6 +17,8 @@ local function index_handler(_)
         for _, namespace in ipairs(modules) do
             local mod = modules[namespace]
 
+            if mod == nil then goto continue end
+
             local data
             if type(mod.__data) == 'function' then
                 data = mod.__data()
@@ -34,6 +36,7 @@ local function index_handler(_)
                     )
                 end
             end
+            ::continue::
         end
 
         index_body =
@@ -89,7 +92,7 @@ local function static_handler(req)
     }
 end
 
-local function add(namespace, filemap)
+local function add(namespace, filemap, replace)
     if type(namespace) ~= 'string' then
         error('Bad argument #1 to add' ..
             ' (string expected, got ' .. type(namespace) .. ')', 2)
@@ -99,12 +102,29 @@ local function add(namespace, filemap)
             ' (table expected, got ' .. type(filemap) .. ')', 2)
     end
 
-    if modules[namespace] ~= nil then
+    if modules[namespace] ~= nil and replace ~= true then
         return nil, string.format('Front module %q already added', namespace)
+    elseif modules[namespace] == nil then
+        table.insert(modules, namespace)
     end
 
-    table.insert(modules, namespace)
     modules[namespace] = filemap
+    -- invalidate cached index_body
+    index_body = nil
+    return true
+end
+
+local function remove(namespace)
+    if type(namespace) ~= 'string' then
+        error('Bad argument #1 to remove' ..
+            ' (string expected, got ' .. type(namespace) .. ')', 2)
+    end
+
+    if modules[namespace] == nil then
+        return nil, string.format('Front module %q not exists', namespace)
+    end
+
+    modules[namespace] = nil
     -- invalidate cached index_body
     index_body = nil
     return true
@@ -178,5 +198,6 @@ end
 return {
     init = init,
     add = add,
+    remove = remove,
     set_variable = set_variable
 }
