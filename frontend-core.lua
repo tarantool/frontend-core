@@ -125,6 +125,14 @@ local function remove(namespace)
     end
 
     modules[namespace] = nil
+
+    for i, mod_name in ipairs(modules) do
+        if mod_name == namespace then
+            table.remove(modules, i)
+            break
+        end
+    end
+
     -- invalidate cached index_body
     index_body = nil
     return true
