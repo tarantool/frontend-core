@@ -36,9 +36,16 @@ front.init(httpd, {
   prefix = '/tarantool',
 })
 front.add('space_a', data_a)
-front.add('space_a', data_b)
-front.add('space_b', data_b)
-front.remove('space_b')
+front.add('space_b', data_a)
+
+-- Module relacement check
+-- front.add('space_b', data_b) -- should fail
+front.add('space_b', data_b, true) -- shuld succeed
+
+-- Module deletion check
+front.add('space_c', data_a)
+front.remove('space_c')
+
 front.set_variable('var1', 'value1')
 front.set_variable('var2', 42)
 front.set_variable('var3', { 1, 2, 3, 'a', 'b', 'c' })

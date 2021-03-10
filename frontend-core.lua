@@ -103,7 +103,7 @@ local function add(namespace, filemap, replace)
     end
 
     if modules[namespace] ~= nil and replace ~= true then
-        return nil, string.format('Front module %q already added', namespace)
+        error(string.format('Front module %q already added', namespace))
     elseif modules[namespace] == nil then
         table.insert(modules, namespace)
     end
@@ -121,7 +121,7 @@ local function remove(namespace)
     end
 
     if modules[namespace] == nil then
-        return nil, string.format('Front module %q not exists', namespace)
+        error(string.format('Front module %q not exists', namespace))
     end
 
     modules[namespace] = nil
