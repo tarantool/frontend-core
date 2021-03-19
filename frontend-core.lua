@@ -100,11 +100,11 @@ local function add(namespace, filemap, replace)
     end
     if replace ~= nil and type(replace) ~= 'boolean' then
         error('Bad argument #3 to add' ..
-        ' (?boolean expected, got ' .. type(replace) .. ')', 2)
+            ' (?boolean expected, got ' .. type(replace) .. ')', 2)
     end
 
     if modules[namespace] ~= nil and replace ~= true then
-        error(string.format('Front module %q already added', namespace))
+        return nil, string.format('Front module %q already added', namespace)
     elseif modules[namespace] == nil then
         table.insert(modules, namespace)
     end
@@ -122,7 +122,7 @@ local function remove(namespace)
     end
 
     if modules[namespace] == nil then
-        error(string.format('Front module %q not exists', namespace))
+        return nil, string.format('Front module %q not exists', namespace)
     end
 
     modules[namespace] = nil
