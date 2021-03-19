@@ -98,6 +98,10 @@ local function add(namespace, filemap, replace)
         error('Bad argument #2 to add' ..
             ' (table expected, got ' .. type(filemap) .. ')', 2)
     end
+    if replace ~= nil and type(replace) ~= 'boolean' then
+        error('Bad argument #3 to add' ..
+        ' (?boolean expected, got ' .. type(replace) .. ')', 2)
+    end
 
     if modules[namespace] ~= nil and replace ~= true then
         error(string.format('Front module %q already added', namespace))
