@@ -407,11 +407,17 @@ Register routes `/admin/` and `/static/`, and redirect from `/` to `/admin/` in 
 
 `/static/` - route for static files that will be used at application.
 
-### add(namespace, bundle)
+### add(namespace, bundle, replace)
 
 `namespace` - using for namespace module. Should be same name as your JS namespace module.
 
 `bundle` - a frontend bundle loaded as a lua table.
+
+`replace` - if true, will replace exists module.
+
+### remove(namespace)
+
+Removes front-end module.
 
 ### set_variable(key, value)
 

@@ -89,7 +89,7 @@ local function static_handler(req)
     }
 end
 
-local function add(namespace, filemap)
+local function add(namespace, filemap, replace)
     if type(namespace) ~= 'string' then
         error('Bad argument #1 to add' ..
             ' (string expected, got ' .. type(namespace) .. ')', 2)
@@ -98,13 +98,42 @@ local function add(namespace, filemap)
         error('Bad argument #2 to add' ..
             ' (table expected, got ' .. type(filemap) .. ')', 2)
     end
-
-    if modules[namespace] ~= nil then
-        return nil, string.format('Front module %q already added', namespace)
+    if replace ~= nil and type(replace) ~= 'boolean' then
+        error('Bad argument #3 to add' ..
+            ' (?boolean expected, got ' .. type(replace) .. ')', 2)
     end
 
-    table.insert(modules, namespace)
+    if modules[namespace] ~= nil and replace ~= true then
+        return nil, string.format('Front module %q already added', namespace)
+    elseif modules[namespace] == nil then
+        table.insert(modules, namespace)
+    end
+
     modules[namespace] = filemap
+    -- invalidate cached index_body
+    index_body = nil
+    return true
+end
+
+local function remove(namespace)
+    if type(namespace) ~= 'string' then
+        error('Bad argument #1 to remove' ..
+            ' (string expected, got ' .. type(namespace) .. ')', 2)
+    end
+
+    if modules[namespace] == nil then
+        return nil, string.format('Front module %q not exists', namespace)
+    end
+
+    modules[namespace] = nil
+
+    for i, mod_name in ipairs(modules) do
+        if mod_name == namespace then
+            table.remove(modules, i)
+            break
+        end
+    end
+
     -- invalidate cached index_body
     index_body = nil
     return true
@@ -178,5 +207,6 @@ end
 return {
     init = init,
     add = add,
+    remove = remove,
     set_variable = set_variable
 }
