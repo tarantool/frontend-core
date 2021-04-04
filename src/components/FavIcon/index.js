@@ -1,6 +1,7 @@
 // @flow
 import { Component } from 'react'
-import icon from './favicon@32.png'
+import icon32 from './favicon@32.png'
+import icon128 from './favicon@128.png'
 import iconSvg from './favicon.svg'
 
 export default class FavIcon extends Component<any> {
@@ -10,14 +11,23 @@ export default class FavIcon extends Component<any> {
     svgIconElement.setAttribute('href', iconSvg)
     svgIconElement.setAttribute('type', 'image/svg+xml')
     svgIconElement.setAttribute('sizes', 'any')
-    document.head && document.head.appendChild(svgIconElement)
 
     const pngIconElement = document.createElement('link')
     pngIconElement.setAttribute('rel', 'shortcut icon')
-    pngIconElement.setAttribute('href', icon)
+    pngIconElement.setAttribute('href', icon32)
     pngIconElement.setAttribute('type', 'image/png')
     pngIconElement.setAttribute('sizes', '32x32')
-    document.head && document.head.appendChild(pngIconElement)
+
+    const pngAppleIconElement = document.createElement('link')
+    pngAppleIconElement.setAttribute('rel', 'apple-touch-icon')
+    pngAppleIconElement.setAttribute('href', icon128)
+    pngAppleIconElement.setAttribute('type', 'image/png')
+    pngAppleIconElement.setAttribute('sizes', '180x180')
+
+    document.head &&
+      document.head.appendChild(svgIconElement) &&
+      document.head.appendChild(pngIconElement) &&
+      document.head.appendChild(pngAppleIconElement)
   }
 
   render() {
