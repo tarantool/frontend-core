@@ -156,27 +156,38 @@ core.register(
   'react'
 )
 
-core.notify({
-  type: 'success',
-  title: 'Hello',
-  message: `Create the replicaset <b>"Name of replicaset #2"</b>
- to with server "pim.dmitrov_ storages_ msk_eapi_trn57_5" executed successfully`
-})
-core.notify({
-  type: 'error',
-  title: 'Привет',
-  message: 'GraphQL error: "localhost:3303": Connection refused',
-  details: 'NetboxError: GraphQL error: "localhost:3303": Connection refused\n\n' +
-    '```\nstack traceback:\n\t' +
-    '.../cartridge/cartridge/pool.lua:125: in function \'connect\'\n\t' +
-    '.../cartridge/cartridge/pool.lua:144: in function ' +
-    '<.../cartridge/cartridge/pool.lua:142>\n```'
-})
-core.notify({
-  type: 'default',
-  title: 'hello',
-  message: `Тут что-то интересное произошло`
-})
+setTimeout(
+  () => core.notify({
+    type: 'success',
+    title: 'Hello',
+    message: `Create the replicaset "Name of replicaset #5"
+  to with server "pim.dmitrov_ storages_ msk_eapi_trn57_5" executed successfully`
+  }),
+  2000
+)
+
+setTimeout(
+  () => core.notify({
+    type: 'error',
+    title: 'Привет',
+    message: 'GraphQL error: "localhost:3303": Connection refused',
+    details: 'NetboxError: GraphQL error: "localhost:3303": Connection refused\n\n' +
+      '```\nstack traceback:\n\t' +
+      '.../cartridge/cartridge/pool.lua:125: in function \'connect\'\n\t' +
+      '.../cartridge/cartridge/pool.lua:144: in function ' +
+      '<.../cartridge/cartridge/pool.lua:142>\n```'
+  }),
+  4000
+);
+
+setTimeout(
+  () => core.notify({
+    type: 'success',
+    title: 'hello',
+    message: `Тут что-то интересное произошло`
+  }),
+  7000
+)
 
 for (let i = 0; i < 5; i++) {
   core.notify({

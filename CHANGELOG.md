@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Updated Tarantool favicon.
 
+- Updated popup nitifications.
+
 ## [7.6.0]
 
 - `replace` and `remove` features in lua for exists front-end modules.

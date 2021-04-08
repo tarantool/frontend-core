@@ -142,7 +142,6 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
                       key={x.uuid}
                       className={styles.listItem}
                       onDetailsClick={details => this.setNotificationInModal(x)}
-                      isShort={true}
                     />
                   ))}
                 </div>
