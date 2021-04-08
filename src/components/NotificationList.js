@@ -1,47 +1,35 @@
 // @flow
 import * as React from 'react'
-import { css } from 'emotion'
 import { connect } from 'react-redux'
-import { zIndex } from '@tarantool.io/ui-kit'
-import { selectActiveNotifications } from '../store/selectors'
-import Notification from './Notification'
-import NotificationDetails from './NotificationDetails'
+import { Button, PopupNotificationList } from '@tarantool.io/ui-kit'
+import { selectActiveNotifications } from '../store/selectors';
+import NotificationDetails from './NotificationDetails';
+import { hideNotification } from '../store/actions/notifications';
 
-const styles = {
-  container: css`
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    z-index: ${zIndex.notification};
-  `,
-  innerContainer: css`
-    position: relative;
-  `,
-  item: css`
-    margin-top: 24px;
-  `
-}
+const getDetailsButtonText = type => (
+  type === 'error' ? 'Error details' : 'More details'
+);
 
 const NotificationList = ({ notifications, dispatch }) => {
   const [notificationInModal, setNotificationInModal] = React.useState(null);
 
   return (
-    <div className={styles.container}>
+    <>
       <NotificationDetails {...{ notificationInModal, setNotificationInModal }} />
-      <div className={styles.innerContainer}>
-        {notifications.map(x => (
-          <Notification
-            key={x.uuid}
-            {...x}
-            onDetailsClick={details => {
-              setNotificationInModal(x);
-            }}
-            dispatch={dispatch}
-            className={styles.item}
-          />
-        ))}
-      </div>
-    </div>
+      <PopupNotificationList
+        notifications={notifications.map(x => ({
+          heading: x.title,
+          intent: x.type,
+          onClose: () => dispatch(hideNotification(x.uuid)),
+          text: x.message,
+          key: x.uuid,
+          details: x.details &&
+            <Button onClick={() => setNotificationInModal(x)} intent='base'>
+              {getDetailsButtonText(x.type)}
+            </Button>
+        }))}
+      />
+    </>
   )
 }
 
