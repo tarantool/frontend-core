@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
 const url = require('url');
 
 // Make sure any symlinks in the project folder are resolved:
@@ -10,6 +11,12 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
 const envPublicUrl = process.env.PUBLIC_URL;
+
+const publicUrlOrPath = getPublicUrlOrPath(
+  process.env.NODE_ENV === 'development',
+  require(resolveApp('package.json')).homepage,
+  process.env.PUBLIC_URL
+);
 
 function ensureSlash(path, needsSlash) {
   const hasSlash = path.endsWith('/');
@@ -54,4 +61,5 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
+  publicUrlOrPath
 };

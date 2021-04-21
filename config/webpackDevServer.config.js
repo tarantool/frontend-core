@@ -50,6 +50,7 @@ module.exports = function(proxy, allowedHost) {
     // use an image, put it in `src` and `import` it from JavaScript instead.
     contentBase: paths.appPublic,
     // By default files from `contentBase` will not trigger a page reload.
+    injectClient: false,
     watchContentBase: true,
     // Enable hot reloading server. It will provide /sockjs-node/ endpoint
     // for the WebpackDevServer client so it can learn when the files were
@@ -63,12 +64,13 @@ module.exports = function(proxy, allowedHost) {
     // WebpackDevServer is noisy by default so we emit custom message instead
     // by listening to the compiler events with `compiler.plugin` calls above.
     quiet: true,
+    transportMode: 'ws',
     // Reportedly, this avoids CPU overload on some systems.
     // https://github.com/facebookincubator/create-react-app/issues/293
     // src/node_modules is not ignored to support absolute imports
     // https://github.com/facebookincubator/create-react-app/issues/1065
     watchOptions: {
-      ignored: ignoredFiles(paths.appSrc),
+      ignored: ignoredFiles(paths.appSrc)
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === 'https',
@@ -77,7 +79,7 @@ module.exports = function(proxy, allowedHost) {
     historyApiFallback: {
       // Paths with dots should still use the history fallback.
       // See https://github.com/facebookincubator/create-react-app/issues/387.
-      disableDotRule: true,
+      disableDotRule: true
     },
     public: allowedHost,
     proxy,
@@ -89,7 +91,7 @@ module.exports = function(proxy, allowedHost) {
       // We do this in development to avoid hitting the production cache if
       // it used the same host and port.
       // https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
-      app.use(noopServiceWorkerMiddleware());
-    },
+      app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
+    }
   };
 };
