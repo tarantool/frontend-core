@@ -88,12 +88,19 @@ function g.test_init_custom_prefix()
         "/tarantool/static/:namespace/*filename",
         "/tarantool/admin/*any",
         "/tarantool/admin",
+        "/tarantool",
         "/",
     })
 
+    -- check redirection works
     local resp = http_cli.request('GET', 'localhost:8080')
     t.assert_equals(resp.status, 200)
     t.assert(resp.body)
+
+    local resp = http_cli.request('GET', 'localhost:8080/tarantool')
+    t.assert_equals(resp.status, 200)
+    t.assert(resp.body)
+
 
     -- disable redirections
     cleanup_httpd()
