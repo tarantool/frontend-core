@@ -1,0 +1,83 @@
+name: Tests
+
+on:
+  push:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [ubuntu-18.04]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+
+      # Setup tarantool
+      - uses: tarantool/setup-tarantool@v1
+        with:
+          tarantool-version: '1.10'
+
+      ##################################################################
+      # Setup luacheck and luatest
+      - name: Cache rocks
+        uses: actions/cache@v2
+        id: cache-test-rocks
+        with:
+          path: .rocks/
+          key: cache-test-rocks-${{ matrix.runs-on }}-${{ hashFiles('frontend-core-scm-1.rockspec') }}
+          restore-keys: cache-test-rocks-${{ matrix.runs-on }}
+      -
+        run: tarantoolctl rocks install luacheck
+        if: steps.cache-test-rocks.outputs.cache-hit != 'true'
+      -
+        run: tarantoolctl rocks install luatest 0.5.2
+        if: steps.cache-test-rocks.outputs.cache-hit != 'true'
+      -
+        run: tarantoolctl rocks install http 1.1.0
+        if: steps.cache-test-rocks.outputs.cache-hit != 'true'
+
+      ##################################################################
+      # Setup cypress
+      - run: echo ~/node_modules/.bin/ >> $GITHUB_PATH
+      - name: Cache cypress
+        id: cache-cypress
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/node_modules
+            ~/.cache/Cypress
+          key: cypress-cache-6.2.0-${{ runner.os }}-0
+      - name: Install cypress
+        run: |
+          cd ~
+          npm install cypress@6.2.0
+          npx cypress verify
+        if: steps.cache-cypress.outputs.cache-hit != 'true'
+
+      ##################################################################
+      # Run lua tests
+      - run: .rocks/bin/luacheck .
+      # Build module
+      - run: tarantoolctl rocks make
+      - run: .rocks/bin/luatest -v
+
+      ##################################################################
+      # Run js tests
+      - run: npm run lint
+      - run: npm run flow
+      - run: npm ci
+      - run: npm run build_module
+      - run: npm run test_once
+
+      - name: Run cypress
+        run: |
+          nohup tarantool example.lua &
+          CYPRESS_BASE_URL=http://localhost:8080 npm run cy:run
+        env:
+          NODE_ENV: production
+          BABEL_ENV: production
+          
+      # Cleanup cached paths
+      - run: tarantoolctl rocks remove frontend-core
