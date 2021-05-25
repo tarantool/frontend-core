@@ -16,7 +16,7 @@ g.after_all(function()
     g.httpd:stop()
 end)
 
-function g.set_window_variables()
+function g.test_set_window_variables()
     local resp = http_cli.request('GET', 'localhost:8080')
     t.assert_equals(resp.status, 200)
     t.assert(resp.body)

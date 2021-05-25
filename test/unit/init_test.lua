@@ -24,24 +24,24 @@ end)
 
 function g.test_broken_init()
     t.assert_error_msg_contains(
-        "bad argument #1 to init (?table expected, got nil)",
+        "bad argument #1 to frontend.init (table expected, got nil)",
         front.init
     )
 
     t.assert_error_msg_contains(
-        "bad argument #2 to init (?table expected, got number)",
+        "bad argument #2 to frontend.init (?table expected, got number)",
         front.init, g.httpd, 5
     )
 
     t.assert_error_msg_contains(
         "bad argument options.enforce_root_redirect" ..
-        " to init (?boolean expected, got number)", 
+        " to frontend.init (?boolean expected, got number)", 
         front.init, g.httpd, {enforce_root_redirect = 5}
     )
 
     t.assert_error_msg_contains(
         "bad argument options.prefix" ..
-        " to init (?string expected, got number)", 
+        " to frontend.init (?string expected, got number)", 
         front.init, g.httpd, {prefix = 5}
     )
 end
@@ -77,7 +77,7 @@ function g.test_init_without_prefix()
     })
 
     local resp = http_cli.request('GET', 'localhost:8080',
-        nil --, -- {follow_location = false}
+        nil, {follow_location = false}
     )
     t.assert_equals(resp.status, 200)
 end
