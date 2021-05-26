@@ -35,13 +35,13 @@ function g.test_broken_init()
 
     t.assert_error_msg_contains(
         "bad argument options.enforce_root_redirect" ..
-        " to frontend.init (?boolean expected, got number)", 
+        " to frontend.init (?boolean expected, got number)",
         front.init, g.httpd, {enforce_root_redirect = 5}
     )
 
     t.assert_error_msg_contains(
         "bad argument options.prefix" ..
-        " to frontend.init (?string expected, got number)", 
+        " to frontend.init (?string expected, got number)",
         front.init, g.httpd, {prefix = 5}
     )
 end
