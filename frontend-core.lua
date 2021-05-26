@@ -152,7 +152,8 @@ end
 
 local function init(httpd, options)
     if type(httpd) ~= 'table' then
-        local err = string.format("bad argument #1 to frontend.init" ..
+        local err = string.format(
+            "bad argument #1 to frontend-core.init" ..
             " (table expected, got %s)", type(httpd)
         )
         error(err, 2)
@@ -160,7 +161,8 @@ local function init(httpd, options)
     if options == nil then
         options = {}
     elseif type(options) ~= 'table' then
-        local err = string.format("bad argument #2 to frontend.init" ..
+        local err = string.format(
+            "bad argument #2 to frontend-core.init" ..
             " (?table expected, got %s)", type(options)
         )
         error(err, 2)
@@ -170,8 +172,10 @@ local function init(httpd, options)
     if options.enforce_root_redirect == nil then
         enforce_root_redirect = true
     elseif type(options.enforce_root_redirect) ~= 'boolean' then
-        local err = string.format("bad argument options.enforce_root_redirect" ..
-            " to frontend.init (?boolean expected, got %s)", type(options.enforce_root_redirect)
+        local err = string.format(
+            "bad argument options.enforce_root_redirect" ..
+            " to frontend-core.init (?boolean expected, got %s)",
+            type(options.enforce_root_redirect)
         )
         error(err, 2)
     else
@@ -181,8 +185,10 @@ local function init(httpd, options)
     if options.prefix == nil then
         prefix = ''
     elseif type(options.prefix) ~= 'string' then
-        local err = string.format("bad argument options.prefix" ..
-            " to frontend.init (?string expected, got %s)", type(options.prefix)
+        local err = string.format(
+            "bad argument options.prefix" ..
+            " to frontend-core.init (?string expected, got %s)",
+            type(options.prefix)
         )
         error(err, 2)
     else
