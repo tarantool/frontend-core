@@ -213,6 +213,8 @@ local function init(httpd, options)
         end)
     end
 
+    index_body = nil
+
     add('core', core_bundle)
     return true
 end
