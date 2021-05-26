@@ -153,7 +153,7 @@ end
 local function init(httpd, options)
     if type(httpd) ~= 'table' then
         local err = string.format("bad argument #1 to frontend.init" ..
-            " (table expected, got %s)", type(options)
+            " (table expected, got %s)", type(httpd)
         )
         error(err, 2)
     end
