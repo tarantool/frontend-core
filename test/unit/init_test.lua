@@ -58,11 +58,9 @@ function g.test_init_without_prefix()
         "/",
     })
 
-    local resp = http_cli.request('GET', 'localhost:8080',
-        nil, {follow_location = false}
-    )
-    t.assert_equals(resp.status, 302)
-    t.assert_equals(resp.headers.location, "/admin")
+    local resp = http_cli.request('GET', 'localhost:8080')
+    t.assert_equals(resp.status, 200)
+    t.assert(resp.body)
 
     -- disable redirections
     cleanup_httpd()
@@ -76,10 +74,9 @@ function g.test_init_without_prefix()
         "/admin",
     })
 
-    local resp = http_cli.request('GET', 'localhost:8080',
-        nil, {follow_location = false}
-    )
+    local resp = http_cli.request('GET', 'localhost:8080')
     t.assert_equals(resp.status, 200)
+    t.assert_not(resp.body)
 end
 
 function g.test_init_custom_prefix()
@@ -94,11 +91,9 @@ function g.test_init_custom_prefix()
         "/",
     })
 
-    local resp = http_cli.request('GET', 'localhost:8080',
-        nil, {follow_location = false}
-    )
-    t.assert_equals(resp.status, 302)
-    t.assert_equals(resp.headers.location, "/tarantool/admin")
+    local resp = http_cli.request('GET', 'localhost:8080')
+    t.assert_equals(resp.status, 200)
+    t.assert(resp.body)
 
     -- disable redirections
     cleanup_httpd()
@@ -112,8 +107,7 @@ function g.test_init_custom_prefix()
         "/tarantool/admin",
     })
 
-    local resp = http_cli.request('GET', 'localhost:8080',
-        nil, {follow_location = false}
-    )
+    local resp = http_cli.request('GET', 'localhost:8080')
     t.assert_equals(resp.status, 200)
+    t.assert_not(resp.body)
 end
