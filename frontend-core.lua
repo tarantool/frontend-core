@@ -151,11 +151,20 @@ local function set_variable(name, value)
 end
 
 local function init(httpd, options)
+    if type(httpd) ~= 'table' then
+        local err = string.format(
+            "bad argument #1 to frontend-core.init" ..
+            " (table expected, got %s)", type(httpd)
+        )
+        error(err, 2)
+    end
     if options == nil then
         options = {}
     elseif type(options) ~= 'table' then
-        local err = string.format("bad argument #2 to init" ..
-        " (?table expected, got %s)", type(options))
+        local err = string.format(
+            "bad argument #2 to frontend-core.init" ..
+            " (?table expected, got %s)", type(options)
+        )
         error(err, 2)
     end
 
@@ -163,8 +172,11 @@ local function init(httpd, options)
     if options.enforce_root_redirect == nil then
         enforce_root_redirect = true
     elseif type(options.enforce_root_redirect) ~= 'boolean' then
-        local err = string.format("bad argument options.enforce_root_redirect" ..
-        " to init (?boolean expected, got %s)", type(options.enforce_root_redirect))
+        local err = string.format(
+            "bad argument options.enforce_root_redirect" ..
+            " to frontend-core.init (?boolean expected, got %s)",
+            type(options.enforce_root_redirect)
+        )
         error(err, 2)
     else
         enforce_root_redirect = options.enforce_root_redirect
@@ -172,6 +184,13 @@ local function init(httpd, options)
 
     if options.prefix == nil then
         prefix = ''
+    elseif type(options.prefix) ~= 'string' then
+        local err = string.format(
+            "bad argument options.prefix" ..
+            " to frontend-core.init (?string expected, got %s)",
+            type(options.prefix)
+        )
+        error(err, 2)
     else
         prefix = options.prefix
     end
@@ -199,6 +218,8 @@ local function init(httpd, options)
             return cx:redirect_to(prefix .. '/admin')
         end)
     end
+
+    index_body = nil
 
     add('core', core_bundle)
     return true
