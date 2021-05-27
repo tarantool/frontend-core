@@ -78,6 +78,6 @@ jobs:
         env:
           NODE_ENV: production
           BABEL_ENV: production
-          
+
       # Cleanup cached paths
       - run: tarantoolctl rocks remove frontend-core
