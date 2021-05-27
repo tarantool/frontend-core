@@ -150,6 +150,10 @@ local function set_variable(name, value)
     return true
 end
 
+local function redirect(cx)
+    return cx:redirect_to(prefix .. '/admin')
+end
+
 local function init(httpd, options)
     if type(httpd) ~= 'table' then
         local err = string.format(
@@ -214,9 +218,14 @@ local function init(httpd, options)
         httpd:route({
             path = '/',
             method = 'GET',
-        }, function (cx)
-            return cx:redirect_to(prefix .. '/admin')
-        end)
+        }, redirect)
+
+        if prefix ~= '' then
+            httpd:route({
+                path = prefix,
+                method = 'GET',
+            }, redirect)
+        end
     end
 
     index_body = nil

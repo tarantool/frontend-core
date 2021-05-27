@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Invalidate `index_body` cache in case of re-init.
 - Make error messages more clear.
 - Enhance options validation.
+- Add redirection to `prefix/admin` for route that equals `prefix`
 
 ## [7.7.0]
 
