@@ -13,6 +13,7 @@
     "emotion"
   ],
   "rules": {
+    "dot-notation": "off",
     "no-var": "error",
     "prefer-const": ["error"],
     "prefer-arrow-callback": ["error"],

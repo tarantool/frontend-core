@@ -109,9 +109,11 @@ export default class Core {
     this.header = headerComponent
     this.dispatch('setHeaderComponent')
   }
+
   getHeaderComponent() {
     return this.header
   }
+
   waitForModule(namespace: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const unwait = this.subscribe('registerModule', () => {
@@ -123,6 +125,7 @@ export default class Core {
       })
     })
   }
+
   dispatch(eventType: string, event: ?Object = null) {
     if (!this.notifiers[eventType]) {
       this.notifiers[eventType] = []
@@ -131,6 +134,7 @@ export default class Core {
       callback(event)
     }
   }
+
   register(
     namespace: string,
     menu: inputMenuShape,
@@ -149,6 +153,7 @@ export default class Core {
       RootComponent
     })
   }
+
   registerModule({
     namespace,
     menu,
@@ -170,15 +175,18 @@ export default class Core {
     this.modules.push(addingModule)
     this.dispatch('registerModule', this.getModules())
   }
+
   checkNamespace(module: CoreModule | InputCoreModule) {
     const namespaces = this.modules.map(x => x.namespace)
     if (namespaces.indexOf(module.namespace) >= 0) {
       throw new Error('namespace_already_in_use')
     }
   }
+
   getModules() {
     return this.modules
   }
+
   /**
    * @return Unsubscribe function
    */
@@ -191,6 +199,7 @@ export default class Core {
       this.notifiers[eventType] = this.notifiers[eventType].filter(f => f !== callback)
     }
   }
+
   notify({
     type,
     title,
