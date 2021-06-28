@@ -9,3 +9,4 @@ build
 compiled_module
 cypress/screenshots/
 cypress/videos/
+release.sh
