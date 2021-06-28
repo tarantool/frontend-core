@@ -166,7 +166,7 @@ test('api methods: graphql', async() => {
   `
   const apiMethods = generateApiMethod()
   const httpLink = new HttpLink({
-    uri: `http://localhost/graphql`,
+    uri: 'http://localhost/graphql',
     credentials: 'include',
     fetchOptions: {
       mode: 'no-cors'

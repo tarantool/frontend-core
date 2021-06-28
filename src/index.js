@@ -64,7 +64,7 @@ class TestTwo extends React.Component<null> {
               path='/other/test4/subtest1'
               render={() => (
                 <div>
-                  <AppTitle title='Subpage' propsList={[{title: 'adasd', path: '/other/dasd'}]} />
+                  <AppTitle title='Subpage' propsList={[{ title: 'adasd', path: '/other/dasd' }]} />
                   4-1
                 </div>
               )}
@@ -100,37 +100,37 @@ core.register(
     },
     {
       label: 'This test',
-      path: `/this/test`,
+      path: '/this/test',
       icon: IconTrash,
       items: [
         {
           label: 'Test1',
-          path: `/this/test/1`
+          path: '/this/test/1'
         },
         {
           label: 'Test2',
-          path: `/this/test/2`
+          path: '/this/test/2'
         }, {
           label: 'Test3',
-          path: `/this/test/3`
+          path: '/this/test/3'
         }
       ]
     },
     {
       label: 'that test2',
-      path: `/that/test`,
+      path: '/that/test',
       icon: IconEdit,
       items: [
         {
           label: 'Test1',
-          path: `/that/test/5`
+          path: '/that/test/5'
         },
         {
           label: 'Test2',
-          path: `/that/test/6`
+          path: '/that/test/6'
         }, {
           label: 'Test3',
-          path: `/that/test/7`
+          path: '/that/test/7'
         }
       ]
     },
@@ -184,7 +184,7 @@ setTimeout(
   () => core.notify({
     type: 'success',
     title: 'hello',
-    message: `Тут что-то интересное произошло`
+    message: 'Тут что-то интересное произошло'
   }),
   7000
 )

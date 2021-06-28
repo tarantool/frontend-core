@@ -162,17 +162,17 @@ export class MainReducer {
     }
     const reducer = Array.isArray(module.menu)
       ? {
-        state: module.menu,
-        reducer: defaultReducer(module.menu),
-        middleware: module.menuMiddleware || noop,
-        namespace: module.namespace
-      }
+          state: module.menu,
+          reducer: defaultReducer(module.menu),
+          middleware: module.menuMiddleware || noop,
+          namespace: module.namespace
+        }
       : {
-        state: initialState,
-        reducer: module.menu,
-        middleware: module.menuMiddleware || noop,
-        namespace: module.namespace
-      }
+          state: initialState,
+          reducer: module.menu,
+          middleware: module.menuMiddleware || noop,
+          namespace: module.namespace
+        }
     this.subStores.push(reducer)
     this.installedStores[module.namespace] = true
 

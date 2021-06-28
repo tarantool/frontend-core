@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import { css, cx } from 'emotion'
+import { css, cx } from '@emotion/css'
 import { connect } from 'react-redux'
 import { Button, baseFontFamily, IconBell } from '@tarantool.io/ui-kit'
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
@@ -100,6 +100,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
       this.props.dispatch(hideNotificationList())
     }
   }
+
   componentDidUpdate(prevProps: NotificationWidgetProps): void {
     if (prevProps.showList !== this.props.showList) {
       if (this.props.showList) {

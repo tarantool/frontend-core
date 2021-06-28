@@ -2,6 +2,6 @@
   "presets": ["react-app", "@babel/preset-flow"],
   "plugins": [
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    "emotion"
+    "@emotion"
   ]
 }

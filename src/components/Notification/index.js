@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css, cx } from 'emotion'
+import { css, cx } from '@emotion/css'
 import { format } from 'date-fns'
 import { Button, baseFontFamily } from '@tarantool.io/ui-kit'
 import failCircle from './fail-circle.svg'

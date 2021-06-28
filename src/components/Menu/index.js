@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { css } from 'emotion'
+import { css } from '@emotion/css'
 import { push } from 'connected-react-router'
 import { SideMenu } from '@tarantool.io/ui-kit'
 import type { MenuItemType } from '../../core'
