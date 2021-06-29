@@ -73,7 +73,7 @@ export default ({
             {getDetailsButtonText(type)}
           </Button>
         }
-        <div className={styles.date}>{format(initedAt, 'HH:mm d MMM yyyy')}</div>
+        <div className={styles.date}>{initedAt ? format(initedAt, 'HH:mm d MMM yyyy') : ''}</div>
       </div>
     </div>
   )
