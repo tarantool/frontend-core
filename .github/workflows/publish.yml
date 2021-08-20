@@ -30,7 +30,8 @@ jobs:
       # Make a release
       - run: echo TAG=${GITHUB_REF##*/} >> $GITHUB_ENV
       - run: tarantoolctl rocks new_version --tag ${{ env.TAG }}
-      - run: tarantoolctl rocks make frontend-core-${{ env.TAG }}-1.rockspec
+      - run: sed -i '/branch = "master"/d' frontend-core-${{ env.TAG }}-1.rockspec
+      - run: tarantoolctl rocks install frontend-core-${{ env.TAG }}-1.rockspec
       - run: tarantoolctl rocks pack frontend-core ${{ env.TAG }}
 
       - uses: tarantool/rocks.tarantool.org/github-action@master
