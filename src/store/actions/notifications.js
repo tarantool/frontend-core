@@ -1,5 +1,5 @@
 // @flow
-import nanoid from '../../utils/nanoid'
+import nanoid from '../../utils/nanoid';
 import {
   CHECK_NOTIFICATIONS,
   CLEAR_NOTIFICATIONS,
@@ -9,8 +9,8 @@ import {
   PAUSE_NOTIFICATION_TIMER,
   SEND_NOTIFICATION,
   SHOW_NOTIFICATION_LIST,
-  UNPAUSE_NOTIFICATION_TIMER
-} from '../constants'
+  UNPAUSE_NOTIFICATION_TIMER,
+} from '../constants';
 
 type SendNotification = {
   type: 'default' | 'warning' | 'error' | 'success',
@@ -18,8 +18,8 @@ type SendNotification = {
   message?: string,
   details?: string,
   timeout?: number,
-  createdAt?: number
-}
+  createdAt?: number,
+};
 
 export type SendNotificationAction = {
   type: typeof SEND_NOTIFICATION,
@@ -30,61 +30,61 @@ export type SendNotificationAction = {
     details: ?string,
     timeout: number,
     uuid: string,
-    createdAt: number
-  |}
-}
+    createdAt: number,
+  |},
+};
 
 export type CheckNotificationsAction = {
   type: typeof CHECK_NOTIFICATIONS,
   payload: {
-    ts: number
-  }
-}
+    ts: number,
+  },
+};
 
 export type HideNotificationAction = {
   type: typeof HIDE_NOTIFICATION,
   payload: {
-    uuid: string
-  }
-}
+    uuid: string,
+  },
+};
 
 export type ShowNotificationListAction = {
   type: typeof SHOW_NOTIFICATION_LIST,
-  payload: {}
-}
+  payload: {},
+};
 
 export type HideNotificationListAction = {
   type: typeof HIDE_NOTIFICATION_LIST,
-  payload: {}
-}
+  payload: {},
+};
 
 export type PauseNotificationTimerAction = {
   type: typeof PAUSE_NOTIFICATION_TIMER,
   payload: {
     uuid: string,
-    ts: number
-  }
-}
+    ts: number,
+  },
+};
 
 export type UnpauseNotificationTimerAction = {
   type: typeof UNPAUSE_NOTIFICATION_TIMER,
   payload: {
     uuid: string,
-    ts: number
-  }
-}
+    ts: number,
+  },
+};
 
 export type ClearNotificationsAction = {
   type: typeof CLEAR_NOTIFICATIONS,
-  payload: {}
-}
+  payload: {},
+};
 
 export type GarbageNotificationsAction = {
   type: typeof GARBAGE_NOTIFICATIONS,
   payload: {
-    ts: number
-  }
-}
+    ts: number,
+  },
+};
 
 export const sendNotification = ({
   type = 'default',
@@ -92,9 +92,9 @@ export const sendNotification = ({
   message,
   details,
   timeout = 30000,
-  createdAt = Date.now()
+  createdAt = Date.now(),
 }: SendNotification): SendNotificationAction => {
-  const uuid: string = nanoid()
+  const uuid: string = nanoid();
 
   const payload = {
     type,
@@ -103,60 +103,60 @@ export const sendNotification = ({
     details: details || null,
     timeout,
     uuid,
-    createdAt
-  }
+    createdAt,
+  };
 
   return {
     type: SEND_NOTIFICATION,
-    payload
-  }
-}
+    payload,
+  };
+};
 
 export const checkNotifications = (ts: number = Date.now()): CheckNotificationsAction => ({
   type: CHECK_NOTIFICATIONS,
-  payload: { ts }
-})
+  payload: { ts },
+});
 
 export const hideNotification = (uuid: string): HideNotificationAction => ({
   type: HIDE_NOTIFICATION,
   payload: {
-    uuid
-  }
-})
+    uuid,
+  },
+});
 
 export const pauseNotificationTimer = (uuid: string) => ({
   type: PAUSE_NOTIFICATION_TIMER,
   payload: {
     uuid,
-    ts: Date.now()
-  }
-})
+    ts: Date.now(),
+  },
+});
 export const unpauseNotificationTimer = (uuid: string) => ({
   type: UNPAUSE_NOTIFICATION_TIMER,
   payload: {
     uuid,
-    ts: Date.now()
-  }
-})
+    ts: Date.now(),
+  },
+});
 
 export const showNotificationList = (): ShowNotificationListAction => ({
   type: SHOW_NOTIFICATION_LIST,
-  payload: {}
-})
+  payload: {},
+});
 
 export const hideNotificationList = (): HideNotificationListAction => ({
   type: HIDE_NOTIFICATION_LIST,
-  payload: {}
-})
+  payload: {},
+});
 
 export const clearNotifications = (): ClearNotificationsAction => ({
   type: CLEAR_NOTIFICATIONS,
-  payload: {}
-})
+  payload: {},
+});
 
 export const garbageNotifications = (ts: number = Date.now()): GarbageNotificationsAction => ({
   type: GARBAGE_NOTIFICATIONS,
   payload: {
-    ts
-  }
-})
+    ts,
+  },
+});

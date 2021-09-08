@@ -1,4 +1,4 @@
 type AppTitleProps = {
   title: string,
-  path?: string
+  path?: string,
 };

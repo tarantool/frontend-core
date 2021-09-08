@@ -1,14 +1,15 @@
 // @flow
-import * as React from 'react'
-import { css, cx } from '@emotion/css'
-import { connect } from 'react-redux'
-import { Button, baseFontFamily, IconBell } from '@tarantool.io/ui-kit'
-import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications'
-import type { NotificationItem } from '../../store/reducers/notifications'
-import Notification from '../Notification'
-import NotificationDetails from '../NotificationDetails'
-import { isExistsHiddenNonRead, selectHiddenNotifications } from '../../store/selectors'
-import { AutoScroll } from '../AutoScroll'
+import React from 'react';
+import { connect } from 'react-redux';
+import { css, cx } from '@emotion/css';
+import { Button, IconBell, baseFontFamily } from '@tarantool.io/ui-kit';
+
+import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications';
+import type { NotificationItem } from '../../store/reducers/notifications';
+import { isExistsHiddenNonRead, selectHiddenNotifications } from '../../store/selectors';
+import { AutoScroll } from '../AutoScroll';
+import Notification from '../Notification';
+import NotificationDetails from '../NotificationDetails';
 
 const styles = {
   container: css`
@@ -73,22 +74,22 @@ const styles = {
     &:last-child {
       border-bottom: none;
     }
-  `
-}
+  `,
+};
 
 type NotificationWidgetProps = {
   notifications: Array<NotificationItem>,
   active: boolean,
   showList: boolean,
-  dispatch: Function
-}
+  dispatch: Function,
+};
 
 type NotificationWidgetState = {
-  notificationInModal: NotificationItem | null
-}
+  notificationInModal: NotificationItem | null,
+};
 
 class NotificationWidget extends React.PureComponent<NotificationWidgetProps, NotificationWidgetState> {
-  state = { notificationInModal: null }
+  state = { notificationInModal: null };
   refEl = React.createRef<HTMLElement>();
   clickHandler = (e: MouseEvent | TouchEvent) => {
     if (
@@ -97,25 +98,25 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
       this.refEl.current !== e.target &&
       !this.refEl.current.contains(e.target)
     ) {
-      this.props.dispatch(hideNotificationList())
+      this.props.dispatch(hideNotificationList());
     }
-  }
+  };
 
   componentDidUpdate(prevProps: NotificationWidgetProps): void {
     if (prevProps.showList !== this.props.showList) {
       if (this.props.showList) {
-        document.addEventListener('mousedown', this.clickHandler, true)
-        document.addEventListener('touchstart', this.clickHandler, true)
+        document.addEventListener('mousedown', this.clickHandler, true);
+        document.addEventListener('touchstart', this.clickHandler, true);
       } else {
-        document.removeEventListener('mousedown', this.clickHandler, true)
-        document.removeEventListener('touchstart', this.clickHandler, true)
+        document.removeEventListener('mousedown', this.clickHandler, true);
+        document.removeEventListener('touchstart', this.clickHandler, true);
       }
     }
   }
 
   setNotificationInModal = (notificationInModal: NotificationItem | null) => {
     this.setState({ notificationInModal });
-  }
+  };
 
   render() {
     const { dispatch, notifications, showList, active } = this.props;
@@ -126,7 +127,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
         <div
           className={cx(styles.bell, active ? styles.bellActive : null)}
           onClick={() => {
-            dispatch(showList ? hideNotificationList() : showNotificationList())
+            dispatch(showList ? hideNotificationList() : showNotificationList());
           }}
         >
           <IconBell />
@@ -137,12 +138,12 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
               <AutoScroll maxHeight={230}>
                 <div className={styles.notificationInner}>
                   {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
-                  {notifications.map(x => (
+                  {notifications.map((x) => (
                     <Notification
                       {...x}
                       key={x.uuid}
                       className={styles.listItem}
-                      onDetailsClick={details => this.setNotificationInModal(x)}
+                      onDetailsClick={() => this.setNotificationInModal(x)}
                     />
                   ))}
                 </div>
@@ -156,12 +157,12 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
           </div>
         )}
       </div>
-    )
+    );
   }
 }
 
-export default connect(state => ({
+export default connect((state) => ({
   notifications: selectHiddenNotifications(state),
   active: isExistsHiddenNonRead(state),
-  showList: state.ui.showNotificationList
-}))(NotificationWidget)
+  showList: state.ui.showNotificationList,
+}))(NotificationWidget);

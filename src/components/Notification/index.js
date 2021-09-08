@@ -1,9 +1,10 @@
-import * as React from 'react'
-import { css, cx } from '@emotion/css'
-import { format } from 'date-fns'
-import { Button, baseFontFamily } from '@tarantool.io/ui-kit'
-import failCircle from './fail-circle.svg'
-import successCircle from './success-circle.svg'
+import React from 'react';
+import { css, cx } from '@emotion/css';
+import { format } from 'date-fns';
+import { Button, baseFontFamily } from '@tarantool.io/ui-kit';
+
+import failCircle from './fail-circle.svg';
+import successCircle from './success-circle.svg';
 
 const styles = {
   container: css`
@@ -35,46 +36,30 @@ const styles = {
   infoBlock: css`
     display: flex;
     align-items: center;
-  `
-}
+  `,
+};
 
 const iconMap = {
   success: successCircle,
-  error: failCircle
-}
+  error: failCircle,
+};
 
-const getDetailsButtonText = type => (
-  type === 'error' ? 'Error details' : 'More details'
-);
+const getDetailsButtonText = (type) => (type === 'error' ? 'Error details' : 'More details');
 
-export default ({
-  title,
-  message,
-  details,
-  onDetailsClick,
-  type,
-  uuid,
-  dispatch,
-  initedAt,
-  className = ''
-}) => {
+export default ({ title, message, details, onDetailsClick, type, initedAt, className = '' }) => {
   return (
     <div className={cx(styles.container, className)}>
-      {iconMap[type] ? <img src={iconMap[type]} className={styles.icon} /> : null}
+      {iconMap[type] ? <img src={iconMap[type]} className={styles.icon} alt="icon" /> : null}
       <div className={styles.content}>{title}</div>
       {message ? <div className={styles.content} dangerouslySetInnerHTML={{ __html: message }}></div> : null}
       <div className={styles.infoBlock}>
-        {details &&
-          <Button
-            onClick={() => onDetailsClick(details)}
-            intent='base'
-            size='s'
-          >
+        {details && (
+          <Button onClick={() => onDetailsClick(details)} intent="base" size="s">
             {getDetailsButtonText(type)}
           </Button>
-        }
+        )}
         <div className={styles.date}>{initedAt ? format(initedAt, 'HH:mm d MMM yyyy') : ''}</div>
       </div>
     </div>
-  )
-}
+  );
+};
