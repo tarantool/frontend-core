@@ -8,18 +8,18 @@ const fnKeyMap = new Map<Function, string>();
 fnMap['1'] = 1;
 delete fnMap['1'];
 
-export const getKeyByFn: (Function) => ?string = (fn) => fnKeyMap.get(fn);
+export const getKeyByFn = (fn: ?Function): ?string => (fn ? fnKeyMap.get(fn) : undefined);
 
-export const disposableFunctionKey: (Function) => string = (fn) => {
+export const disposableFunctionKey = (fn: Function): string => {
   const key = getKeyByFn(fn) || nanoid();
   fnMap[key] = fn;
   fnKeyMap.set(fn, key);
   return key;
 };
 
-export const getFnByKey: (string) => Function = (key) => fnMap[key];
+export const getFnByKey = (key: string): ?Function => fnMap[key];
 
-export const disposeFnByKey: (string) => void = (key) => {
+export const disposeFnByKey = (key: string): void => {
   const fn = fnMap[key];
   delete fnMap[key];
   fnKeyMap.delete(fn);

@@ -1,5 +1,4 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-// @flow
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
@@ -65,7 +64,7 @@ test('not found', () => {
   }
 
   class RouteProvider extends React.Component {
-    render(): React.ReactNode {
+    render() {
       const { store, core } = this.props;
       return (
         <div>

@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Update prettier and eslint configurations;
 
+- Lock `react` and `react-dom` to `^16.14.0` version;
+
 ## [7.10.0]
 
 - Pass menu subitems to filtering
