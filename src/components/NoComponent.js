@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 export default class NoComponent extends React.Component {
   render() {
-    return <div>Not loaded</div>
+    return <div>Not loaded</div>;
   }
 }

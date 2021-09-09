@@ -1,13 +1,15 @@
 // @flow
-import React, { type ComponentType } from 'react'
-import ReactDom from 'react-dom'
-import { createHistory } from './store/history'
-import { sendNotification } from './store/actions/notifications'
-import pageFilter from './pageFilter'
-import { ReactComponentLike } from 'prop-types'
-import type { PageFilterType } from './pageFilter'
+import React from 'react';
+import type { ComponentType } from 'react';
+import ReactDom from 'react-dom';
+import { ReactComponentLike } from 'prop-types';
 
-export type MenuItemTypes = 'internal' | 'external'
+import pageFilter from './pageFilter';
+import type { PageFilterType } from './pageFilter';
+import { sendNotification } from './store/actions/notifications';
+import { createHistory } from './store/history';
+
+export type MenuItemTypes = 'internal' | 'external';
 
 export type MenuItemType = {|
   label: string,
@@ -19,7 +21,7 @@ export type MenuItemType = {|
   items?: Array<MenuItemType>,
   type?: MenuItemTypes,
   pinBottom?: boolean,
-|}
+|};
 
 export type halfMenuItem = {|
   label: string,
@@ -27,21 +29,21 @@ export type halfMenuItem = {|
   icon?: string | Object,
   items?: Array<halfMenuItem>,
   type?: 'internal' | 'external',
-  pinBottom?: boolean
-|}
+  pinBottom?: boolean,
+|};
 
 export type FSA = {
   type: string,
   payload?: any,
   error?: boolean,
-  meta?: any
-}
+  meta?: any,
+};
 
-type menuShape = ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>)
-  | Array<MenuItemType>
+type menuShape = ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>) | Array<MenuItemType>;
 
-type inputMenuShape = ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>)
-  | Array<MenuItemType | halfMenuItem>
+type inputMenuShape =
+  | ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>)
+  | Array<MenuItemType | halfMenuItem>;
 
 export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => {
   if (item.expanded) {
@@ -51,14 +53,14 @@ export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType 
       loading: false,
       items: [],
       icon: 'menu',
-      ...item
-    }
+      ...item,
+    };
   }
 
-  const items : Array<MenuItemType> = []
+  const items: Array<MenuItemType> = [];
 
-  for (const i of (item.items || [])) {
-    items.push(refineMenuItem(i))
+  for (const i of item.items || []) {
+    items.push(refineMenuItem(i));
   }
 
   return {
@@ -70,68 +72,68 @@ export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType 
     label: item.label,
     path: item.path,
     type: item.type,
-    pinBottom: item.pinBottom
-  }
-}
+    pinBottom: item.pinBottom,
+  };
+};
 
 export type CoreModule = {
   namespace: string,
   menu: menuShape,
-  menuMiddleware?: Object => void,
+  menuMiddleware?: (Object) => void,
   RootComponent: ComponentType<any>,
-}
+};
 
 export type InputCoreModule = {
   namespace: string,
   menu: inputMenuShape,
-  menuMiddleware?: Object => void,
+  menuMiddleware?: (Object) => void,
   RootComponent: ComponentType<any>,
-}
+};
 
 export default class Core {
-  modules: Array<CoreModule>
-  notifiers: { [string]: Array<Function> }
-  history: History
-  header: ?ReactComponentLike
-  pageFilter: PageFilterType
+  modules: Array<CoreModule>;
+  notifiers: { [string]: Array<Function> };
+  history: History;
+  header: ?ReactComponentLike;
+  pageFilter: PageFilterType;
   constructor() {
-    this.modules = []
-    this.notifiers = {}
-    this.history = createHistory()
-    this.header = null
-    this.pageFilter = pageFilter(this)
+    this.modules = [];
+    this.notifiers = {};
+    this.history = createHistory();
+    this.header = null;
+    this.pageFilter = pageFilter(this);
   }
 
   /**
    * @deprecated since v6.5.x (april 2020)
    */
   setHeaderComponent(headerComponent: any) {
-    this.header = headerComponent
-    this.dispatch('setHeaderComponent')
+    this.header = headerComponent;
+    this.dispatch('setHeaderComponent');
   }
 
   getHeaderComponent() {
-    return this.header
+    return this.header;
   }
 
   waitForModule(namespace: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const unwait = this.subscribe('registerModule', () => {
-        const modules = this.getModules().filter(x => x.namespace === namespace)
+        const modules = this.getModules().filter((x) => x.namespace === namespace);
         if (modules.length > 0) {
-          unwait()
-          resolve(true)
+          unwait();
+          resolve(true);
         }
-      })
-    })
+      });
+    });
   }
 
   dispatch(eventType: string, event: ?Object = null) {
     if (!this.notifiers[eventType]) {
-      this.notifiers[eventType] = []
+      this.notifiers[eventType] = [];
     }
     for (const callback of this.notifiers[eventType]) {
-      callback(event)
+      callback(event);
     }
   }
 
@@ -144,47 +146,47 @@ export default class Core {
      * we desided to use only React
      */
     engine: string,
-    menuMiddleware?: Object => void
+    menuMiddleware?: (Object) => void
   ) {
     return this.registerModule({
       namespace,
       menu,
       menuMiddleware,
-      RootComponent
-    })
+      RootComponent,
+    });
   }
 
   registerModule({
     namespace,
     menu,
     RootComponent,
-    menuMiddleware
+    menuMiddleware,
   }: {
     namespace: string,
     menu: inputMenuShape,
     RootComponent: ComponentType<any>,
-    menuMiddleware?: Object => void
+    menuMiddleware?: (Object) => void,
   }) {
     const addingModule: CoreModule = {
       namespace,
       menu: Array.isArray(menu) ? menu.map(refineMenuItem) : menu,
       menuMiddleware,
-      RootComponent
-    }
-    this.checkNamespace(addingModule)
-    this.modules.push(addingModule)
-    this.dispatch('registerModule', this.getModules())
+      RootComponent,
+    };
+    this.checkNamespace(addingModule);
+    this.modules.push(addingModule);
+    this.dispatch('registerModule', this.getModules());
   }
 
   checkNamespace(module: CoreModule | InputCoreModule) {
-    const namespaces = this.modules.map(x => x.namespace)
+    const namespaces = this.modules.map((x) => x.namespace);
     if (namespaces.indexOf(module.namespace) >= 0) {
-      throw new Error('namespace_already_in_use')
+      throw new Error('namespace_already_in_use');
     }
   }
 
   getModules() {
-    return this.modules
+    return this.modules;
   }
 
   /**
@@ -192,12 +194,12 @@ export default class Core {
    */
   subscribe(eventType: string, callback: Function) {
     if (!this.notifiers[eventType]) {
-      this.notifiers[eventType] = []
+      this.notifiers[eventType] = [];
     }
-    this.notifiers[eventType].push(callback)
+    this.notifiers[eventType].push(callback);
     return () => {
-      this.notifiers[eventType] = this.notifiers[eventType].filter(f => f !== callback)
-    }
+      this.notifiers[eventType] = this.notifiers[eventType].filter((f) => f !== callback);
+    };
   }
 
   notify({
@@ -205,18 +207,18 @@ export default class Core {
     title,
     message,
     details,
-    timeout
+    timeout,
   }: {
     type: 'default' | 'success' | 'error',
     title: string,
     message?: string,
     details?: string,
-    timeout?: number
+    timeout?: number,
   }) {
-    this.dispatch('dispatchToken', sendNotification({ type, title, message, details, timeout }))
+    this.dispatch('dispatchToken', sendNotification({ type, title, message, details, timeout }));
   }
 }
 
 // global export
-window.react = React
-window.reactDom = ReactDom
+window.react = React;
+window.reactDom = ReactDom;

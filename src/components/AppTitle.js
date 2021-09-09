@@ -1,25 +1,21 @@
 // @flow
-import * as React from 'react'
-import withSideEffect from 'react-side-effect'
-import { setTitle } from '../store/actions/title'
-import core from '../coreInstance'
-import * as R from 'ramda'
+import React from 'react';
+import withSideEffect from 'react-side-effect';
+import * as R from 'ramda';
+
+import core from '../coreInstance';
+import { setTitle } from '../store/actions/title';
 
 const reducePropsToState = (propsList: AppTitleProps[]): { title: string, propsList: AppTitleProps[] } => {
-  return { title: (R.last(propsList) || { title: '' }).title, propsList: propsList || [] }
-}
+  return { title: (R.last(propsList) || { title: '' }).title, propsList: propsList || [] };
+};
 
 const handleStateChange = ({ title, propsList = [] }: { title: string, propsList: AppTitleProps[] }): void => {
-  core.dispatch('dispatchToken', setTitle({ title, propsList }))
-}
+  core.dispatch('dispatchToken', setTitle({ title, propsList }));
+};
 
-const AppTitle = withSideEffect(reducePropsToState, handleStateChange)(() => null)
+const AppTitle = withSideEffect(reducePropsToState, handleStateChange)(() => null);
 
-type AppTitlePropsDeprecated = AppTitleProps & { link?: string }
+type AppTitlePropsDeprecated = AppTitleProps & { link?: string };
 
-export default ({ title, path, link }: AppTitlePropsDeprecated) => (
-  <AppTitle
-    title={title}
-    path={path || link}
-  />
-)
+export default ({ title, path, link }: AppTitlePropsDeprecated) => <AppTitle title={title} path={path || link} />;

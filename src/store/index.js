@@ -1,27 +1,32 @@
 // @flow
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import { generateInstance as generateMenuReducerInstance, type MenuState } from './reducers/menu'
-import notificationsReducer, { type NotificationState } from './reducers/notifications'
-import uiReducer from './reducers/ui'
-import { changeTitleMiddleware } from './middlewares/title'
-import pageFilterMiddleware from './middlewares/pageFilter'
-import { setAppName } from './actions/title'
-import appTitleReducer, { type AppTitleState } from './reducers/title'
-import thunk from 'redux-thunk'
-import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router'
-import { APP_PATH_PREFIX } from './history'
-import coreInstance from '../coreInstance'
-import * as constants from './constants'
-import Core, { type FSA } from '../core'
+import { RouterState, connectRouter, routerMiddleware } from 'connected-react-router';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import thunk from 'redux-thunk';
+
+import Core from '../core';
+import type { FSA } from '../core';
+import coreInstance from '../coreInstance';
+import { setAppName } from './actions/title';
+import * as constants from './constants';
+import { APP_PATH_PREFIX } from './history';
 import {
   notificationStorageKey,
   saveNotificationsMiddleware,
   startTimerCheckNotifications,
-  unzipData
-} from './middlewares/notifications'
-import type { UiState } from './reducers/ui'
-import type { PageFilterState } from './reducers/pageFilter'
-import pageFilterReducer from './reducers/pageFilter'
+  unzipData,
+} from './middlewares/notifications';
+import pageFilterMiddleware from './middlewares/pageFilter';
+import { changeTitleMiddleware } from './middlewares/title';
+import type { MenuState } from './reducers/menu';
+import { generateInstance as generateMenuReducerInstance } from './reducers/menu';
+import notificationsReducer from './reducers/notifications';
+import type { NotificationState } from './reducers/notifications';
+import type { PageFilterState } from './reducers/pageFilter';
+import pageFilterReducer from './reducers/pageFilter';
+import appTitleReducer from './reducers/title';
+import type { AppTitleState } from './reducers/title';
+import uiReducer from './reducers/ui';
+import type { UiState } from './reducers/ui';
 
 export type State = {
   menu: MenuState,
@@ -29,10 +34,10 @@ export type State = {
   notifications: NotificationState,
   ui: UiState,
   pageFilter: PageFilterState,
-  router: RouterState
-}
+  router: RouterState,
+};
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const createCoreStore = (core: Core) => {
   const menuReducer = generateMenuReducerInstance();
@@ -43,11 +48,11 @@ export const createCoreStore = (core: Core) => {
         appTitle: appTitleReducer,
         ui: uiReducer,
         notifications: notificationsReducer,
-        pageFilter: pageFilterReducer
+        pageFilter: pageFilterReducer,
       })
     ),
     {
-      notifications: unzipData(localStorage.getItem(notificationStorageKey))
+      notifications: unzipData(localStorage.getItem(notificationStorageKey)),
     },
     composeEnhancers(
       applyMiddleware(
@@ -59,34 +64,34 @@ export const createCoreStore = (core: Core) => {
         pageFilterMiddleware
       )
     )
-  )
+  );
 
-  core.subscribe('registerModule', modules => {
+  core.subscribe('registerModule', (modules) => {
     for (const module of modules) {
-      const added = menuReducer.processModule(module)
+      const added = menuReducer.processModule(module);
       if (added) {
         store.dispatch({
           type: constants.RESET,
           payload: {
             namespace: module.namespace,
-            path: window.location.pathname.slice(APP_PATH_PREFIX.length)
-          }
-        })
+            path: window.location.pathname.slice(APP_PATH_PREFIX.length),
+          },
+        });
       }
     }
-  })
+  });
 
   core.subscribe('setAppName', (name: string) => {
     if (typeof name === 'string' && name) {
-      store.dispatch(setAppName(name))
+      store.dispatch(setAppName(name));
     }
-  })
+  });
 
-  core.subscribe('dispatchToken', (token: FSA) => store.dispatch(token))
+  core.subscribe('dispatchToken', (token: FSA) => store.dispatch(token));
 
-  startTimerCheckNotifications(store)
+  startTimerCheckNotifications(store);
 
-  return store
-}
+  return store;
+};
 
-export default createCoreStore(coreInstance)
+export default createCoreStore(coreInstance);

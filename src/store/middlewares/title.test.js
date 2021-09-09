@@ -1,26 +1,28 @@
-import { changeTitleMiddleware } from './title'
-import { generateCoreWithStore } from '../../test-utils/coreInstance'
-import { locationAction } from '../../test-utils/reduxActions'
-import { setTitle, setAppName } from '../../store/actions/title'
-import AppTitle from '../../components/AppTitle'
-import { Route, Router, Switch } from 'react-router-dom'
+import React from 'react';
+import { Route, Router, Switch } from 'react-router-dom';
+
+import AppTitle from '../../components/AppTitle';
+import { setAppName, setTitle } from '../../store/actions/title';
+import { generateCoreWithStore } from '../../test-utils/coreInstance';
+import { locationAction } from '../../test-utils/reduxActions';
+import { changeTitleMiddleware } from './title';
 
 describe('Title middlware', () => {
-  const fakeNext = () => { };
+  const fakeNext = () => void 0;
   const fakeStore = (appName, title) => ({
     getState: () => ({
-      appTitle: { appName, title }
-    })
+      appTitle: { appName, title },
+    }),
   });
 
   it('should be set title', () => {
-    changeTitleMiddleware(fakeStore('appName', 'title'))(fakeNext)({ type: 'Nothing' })
+    changeTitleMiddleware(fakeStore('appName', 'title'))(fakeNext)({ type: 'Nothing' });
 
     expect(document.title).toBe('appName: title');
-  })
+  });
 
   it('should be changed onClick', () => {
-    const { coreInstance: newCore, store: newStore } = generateCoreWithStore()
+    const { coreInstance: newCore, store: newStore } = generateCoreWithStore();
     newCore.register(
       'test',
       [
@@ -30,7 +32,7 @@ describe('Title middlware', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: []
+          items: [],
         },
         {
           label: 'two',
@@ -38,22 +40,22 @@ describe('Title middlware', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: []
-        }
+          items: [],
+        },
       ],
       () => null,
       'react'
-    )
+    );
 
-    newStore.dispatch(setAppName('SampleApp'))
-    newStore.dispatch(locationAction('/one'))
-    expect(document.title).toBe('SampleApp: one')
-    newStore.dispatch(locationAction('/two'))
-    expect(document.title).toBe('SampleApp: two')
-  })
+    newStore.dispatch(setAppName('SampleApp'));
+    newStore.dispatch(locationAction('/one'));
+    expect(document.title).toBe('SampleApp: one');
+    newStore.dispatch(locationAction('/two'));
+    expect(document.title).toBe('SampleApp: two');
+  });
 
   it('should be correct work with appTitle', () => {
-    const { coreInstance: newCore, store: newStore } = generateCoreWithStore()
+    const { coreInstance: newCore, store: newStore } = generateCoreWithStore();
 
     const RootComponent = () => (
       <div>
@@ -66,7 +68,7 @@ describe('Title middlware', () => {
           </Switch>
         </Router>
       </div>
-    )
+    );
     newCore.register(
       'test',
       [
@@ -76,7 +78,7 @@ describe('Title middlware', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: []
+          items: [],
         },
         {
           label: 'two',
@@ -84,20 +86,20 @@ describe('Title middlware', () => {
           selected: false,
           expanded: false,
           loading: false,
-          items: []
-        }
+          items: [],
+        },
       ],
       RootComponent,
       'react'
-    )
+    );
 
-    newStore.dispatch(setAppName('SampleApp'))
-    newStore.dispatch(setTitle({ title: 'AppTitle' }))
+    newStore.dispatch(setAppName('SampleApp'));
+    newStore.dispatch(setTitle({ title: 'AppTitle' }));
 
-    newStore.dispatch(locationAction('/one'))
-    expect(document.title).toBe('SampleApp: AppTitle')
+    newStore.dispatch(locationAction('/one'));
+    expect(document.title).toBe('SampleApp: AppTitle');
 
-    newStore.dispatch(locationAction('/two'))
-    expect(document.title).toBe('SampleApp: AppTitle')
-  })
-})
+    newStore.dispatch(locationAction('/two'));
+    expect(document.title).toBe('SampleApp: AppTitle');
+  });
+});

@@ -1,12 +1,18 @@
 [ignore]
+*.ts
+*.tsx
 <PROJECT_ROOT>/node_modules/graphql
 
 [include]
 
 [libs]
 ./flow-typed/
+
 [lints]
 
 [options]
+module.file_ext=.ts
+module.file_ext=.tsx
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+
 [strict]

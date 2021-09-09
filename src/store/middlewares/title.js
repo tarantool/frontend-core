@@ -1,12 +1,12 @@
 // @flow
-import { selectAppName, selectTitle } from '../selectors'
-import { type FSA } from '../../core'
+import type { FSA } from '../../core';
+import { selectAppName, selectTitle } from '../selectors';
 
 let cachedAppName = '';
 let cachedTitle = '';
 
 export const changeTitleMiddleware = (store: Object) => (next: Function) => (action: FSA) => {
-  const result = next(action)
+  const result = next(action);
 
   const state = store.getState();
   const appName = selectAppName(state);
@@ -19,4 +19,4 @@ export const changeTitleMiddleware = (store: Object) => (next: Function) => (act
   }
 
   return result;
-}
+};

@@ -1,41 +1,40 @@
 // @flow
-import { APP_NAME_SET, TITLE_SET, TITLE_RESET } from '../constants'
-
-import type { SetAppNameAction, SetTitleAction, ResetTitleAction } from '../actions/title'
+import type { ResetTitleAction, SetAppNameAction, SetTitleAction } from '../actions/title';
+import { APP_NAME_SET, TITLE_RESET, TITLE_SET } from '../constants';
 
 export type AppTitleState = {
   appName: ?string,
   title: string,
-  propsList: Array<AppTitleProps>
-}
+  propsList: Array<AppTitleProps>,
+};
 
-type Action = SetAppNameAction | SetTitleAction | ResetTitleAction
+type Action = SetAppNameAction | SetTitleAction | ResetTitleAction;
 
 const initialState = {
   appName: null,
   title: '',
-  propsList: []
-}
+  propsList: [],
+};
 
 export default (state: AppTitleState = initialState, action: Action): AppTitleState => {
   switch (action.type) {
     case APP_NAME_SET:
       return {
         ...state,
-        appName: action.payload
-      }
+        appName: action.payload,
+      };
 
     case TITLE_SET:
       return {
         ...state,
         title: action.payload.title,
-        propsList: action.payload.propsList
-      }
+        propsList: action.payload.propsList,
+      };
 
     case TITLE_RESET:
-      return initialState
+      return initialState;
 
     default:
-      return state
+      return state;
   }
-}
+};

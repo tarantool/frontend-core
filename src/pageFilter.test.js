@@ -1,29 +1,29 @@
-import { generateCoreWithStore } from './test-utils/coreInstance'
+import { generateCoreWithStore } from './test-utils/coreInstance';
 
 test('page filter', () => {
-  const { coreInstance } = generateCoreWithStore()
+  const { coreInstance } = generateCoreWithStore();
 
   const testPage = {
-    path: '/test'
-  }
+    path: '/test',
+  };
 
-  const fnApply = jest.fn()
-  const fnApplied = jest.fn()
+  const fnApply = jest.fn();
+  const fnApplied = jest.fn();
 
-  coreInstance.subscribe('core:pageFilter:apply', fnApply)
-  coreInstance.subscribe('core:pageFilter:applied', fnApplied)
+  coreInstance.subscribe('core:pageFilter:apply', fnApply);
+  coreInstance.subscribe('core:pageFilter:applied', fnApplied);
 
-  const unregisterFilter = coreInstance.pageFilter.registerFilter(() => false)
+  const unregisterFilter = coreInstance.pageFilter.registerFilter(() => false);
 
-  expect(fnApply).toBeCalled()
-  expect(fnApplied).toBeCalled()
+  expect(fnApply).toBeCalled();
+  expect(fnApplied).toBeCalled();
 
-  expect(coreInstance.pageFilter.filterPage(testPage)).toBe(false)
+  expect(coreInstance.pageFilter.filterPage(testPage)).toBe(false);
 
-  unregisterFilter()
+  unregisterFilter();
 
-  expect(fnApply).toBeCalledTimes(2)
-  expect(fnApplied).toBeCalledTimes(2)
+  expect(fnApply).toBeCalledTimes(2);
+  expect(fnApplied).toBeCalledTimes(2);
 
-  expect(coreInstance.pageFilter.filterPage(testPage)).toBe(true)
-})
+  expect(coreInstance.pageFilter.filterPage(testPage)).toBe(true);
+});

@@ -1,16 +1,17 @@
-import React from 'react'
-import { selectMenu } from '../selectors'
-import { generateCoreWithStore } from '../../test-utils/coreInstance'
+import React from 'react';
+
+import { generateCoreWithStore } from '../../test-utils/coreInstance';
+import { selectMenu } from '../selectors';
 
 class Test extends React.Component {
   render() {
-    return <div></div>
+    return <div></div>;
   }
 }
 
 describe('page filter', () => {
   it('filter out page', () => {
-    const { coreInstance: newCore, store: newStore } = generateCoreWithStore()
+    const { coreInstance: newCore, store: newStore } = generateCoreWithStore();
 
     newCore.register(
       'test',
@@ -18,24 +19,24 @@ describe('page filter', () => {
         {
           label: 'Simple Title Example',
           path: '/test/test',
-          icon: 'hdd'
+          icon: 'hdd',
         },
         {
           label: 'Меня не видно',
-          path: '/test/icon/6'
-        }
+          path: '/test/icon/6',
+        },
       ],
       Test,
       'react',
       null
-    )
+    );
 
-    const unsubFilter = newCore.pageFilter.registerFilter(({ path }) => !path.includes('/test/icon/6'))
+    const unsubFilter = newCore.pageFilter.registerFilter(({ path }) => !path.includes('/test/icon/6'));
 
-    unsubFilter()
+    unsubFilter();
 
-    const fullMenu = selectMenu(newStore.getState())
+    const fullMenu = selectMenu(newStore.getState());
 
-    expect(fullMenu).toHaveLength(2)
-  })
-})
+    expect(fullMenu).toHaveLength(2);
+  });
+});

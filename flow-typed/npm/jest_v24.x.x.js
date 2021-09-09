@@ -49,17 +49,13 @@ type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
    * that come from itself -- the only difference is that the implementation
    * will also be executed when the mock is called.
    */
-  mockImplementation(
-    fn: (...args: TArguments) => TReturn
-  ): JestMockFn<TArguments, TReturn>,
+  mockImplementation(fn: (...args: TArguments) => TReturn): JestMockFn<TArguments, TReturn>,
   /**
    * Accepts a function that will be used as an implementation of the mock for
    * one call to the mocked function. Can be chained so that multiple function
    * calls produce different results.
    */
-  mockImplementationOnce(
-    fn: (...args: TArguments) => TReturn
-  ): JestMockFn<TArguments, TReturn>,
+  mockImplementationOnce(fn: (...args: TArguments) => TReturn): JestMockFn<TArguments, TReturn>,
   /**
    * Accepts a string to use in test result output in place of "jest.fn()" to
    * indicate which mock function is being referenced.
@@ -84,9 +80,7 @@ type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
   /**
    * Sugar for jest.fn().mockImplementationOnce(() => Promise.resolve(value))
    */
-  mockResolvedValueOnce(
-    value: TReturn
-  ): JestMockFn<TArguments, Promise<TReturn>>,
+  mockResolvedValueOnce(value: TReturn): JestMockFn<TArguments, Promise<TReturn>>,
   /**
    * Sugar for jest.fn().mockImplementation(() => Promise.reject(value))
    */
@@ -126,10 +120,7 @@ type JestMatcherResult = {
   pass: boolean,
 };
 
-type JestMatcher = (
-  received: any,
-  ...actual: Array<any>
-) => JestMatcherResult | Promise<JestMatcherResult>;
+type JestMatcher = (received: any, ...actual: Array<any>) => JestMatcherResult | Promise<JestMatcherResult>;
 
 type JestPromiseType = {
   /**
@@ -154,11 +145,7 @@ type JestTestName = string | Function;
  *  Plugin: jest-styled-components
  */
 
-type JestStyledComponentsMatcherValue =
-  | string
-  | JestAsymmetricEqualityType
-  | RegExp
-  | typeof undefined;
+type JestStyledComponentsMatcherValue = string | JestAsymmetricEqualityType | RegExp | typeof undefined;
 
 type JestStyledComponentsMatcherOptions = {
   media?: string,
@@ -192,21 +179,15 @@ type EnzymeMatchersType = {
   toExist(): void,
   toHaveClassName(className: string): void,
   toHaveHTML(html: string): void,
-  toHaveProp: ((propKey: string, propValue?: any) => void) &
-    ((props: {}) => void),
+  toHaveProp: ((propKey: string, propValue?: any) => void) & ((props: {}) => void),
   toHaveRef(refName: string): void,
-  toHaveState: ((stateKey: string, stateValue?: any) => void) &
-    ((state: {}) => void),
-  toHaveStyle: ((styleKey: string, styleValue?: any) => void) &
-    ((style: {}) => void),
+  toHaveState: ((stateKey: string, stateValue?: any) => void) & ((state: {}) => void),
+  toHaveStyle: ((styleKey: string, styleValue?: any) => void) & ((style: {}) => void),
   toHaveTagName(tagName: string): void,
   toHaveText(text: string): void,
   toHaveValue(value: any): void,
   toIncludeText(text: string): void,
-  toMatchElement(
-    element: React$Element<any>,
-    options?: {| ignoreProps?: boolean, verbose?: boolean |}
-  ): void,
+  toMatchElement(element: React$Element<any>, options?: {| ignoreProps?: boolean, verbose?: boolean |}): void,
   toMatchSelector(selector: string): void,
   // 7.x
   toHaveDisplayName(name: string): void,
@@ -235,10 +216,7 @@ type DomTestingLibraryType = {
   toHaveFocus(): void,
   toHaveFormValues(expectedValues: { [name: string]: any }): void,
   toHaveStyle(css: string): void,
-  toHaveTextContent(
-    text: string | RegExp,
-    options?: { normalizeWhitespace: boolean }
-  ): void,
+  toHaveTextContent(text: string | RegExp, options?: { normalizeWhitespace: boolean }): void,
   toHaveValue(value?: string | string[] | number): void,
 };
 
@@ -842,11 +820,7 @@ type JestObjectType = {
    * The third argument can be used to create virtual mocks -- mocks of modules
    * that don't exist anywhere in the system.
    */
-  mock(
-    moduleName: string,
-    moduleFactory?: any,
-    options?: Object
-  ): JestObjectType,
+  mock(moduleName: string, moduleFactory?: any, options?: Object): JestObjectType,
   /**
    * Returns the actual module instead of a mock, bypassing all checks on
    * whether the module should receive a mock implementation or not.
@@ -928,11 +902,7 @@ type JestObjectType = {
    * Creates a mock function similar to jest.fn but also tracks calls to
    * object[methodName].
    */
-  spyOn(
-    object: Object,
-    methodName: string,
-    accessType?: 'get' | 'set'
-  ): JestMockFn<any, any>,
+  spyOn(object: Object, methodName: string, accessType?: 'get' | 'set'): JestMockFn<any, any>,
   /**
    * Set the default timeout interval for tests and before/after hooks in milliseconds.
    * Note: The default timeout interval is 5 seconds if this method is not called.
@@ -950,25 +920,13 @@ type JestDoneFn = {|
 |};
 
 /** Runs this function after every test inside this context */
-declare function afterEach(
-  fn: (done: JestDoneFn) => ?Promise<mixed>,
-  timeout?: number
-): void;
+declare function afterEach(fn: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void;
 /** Runs this function before every test inside this context */
-declare function beforeEach(
-  fn: (done: JestDoneFn) => ?Promise<mixed>,
-  timeout?: number
-): void;
+declare function beforeEach(fn: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void;
 /** Runs this function after all tests have finished inside this context */
-declare function afterAll(
-  fn: (done: JestDoneFn) => ?Promise<mixed>,
-  timeout?: number
-): void;
+declare function afterAll(fn: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void;
 /** Runs this function before any tests have started inside this context */
-declare function beforeAll(
-  fn: (done: JestDoneFn) => ?Promise<mixed>,
-  timeout?: number
-): void;
+declare function beforeAll(fn: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void;
 
 /** A context for grouping tests together */
 declare var describe: {
@@ -994,11 +952,7 @@ declare var describe: {
    */
   each(
     ...table: Array<Array<mixed> | mixed> | [Array<string>, string]
-  ): (
-    name: JestTestName,
-    fn?: (...args: Array<any>) => ?Promise<mixed>,
-    timeout?: number
-  ) => void,
+  ): (name: JestTestName, fn?: (...args: Array<any>) => ?Promise<mixed>, timeout?: number) => void,
 };
 
 /** An individual test unit */
@@ -1010,11 +964,7 @@ declare var it: {
    * @param {Function} Test
    * @param {number} Timeout for the test, in milliseconds.
    */
-  (
-    name: JestTestName,
-    fn?: (done: JestDoneFn) => ?Promise<mixed>,
-    timeout?: number
-  ): void,
+  (name: JestTestName, fn?: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void,
 
   /**
    * Only run this test
@@ -1024,18 +974,10 @@ declare var it: {
    * @param {number} Timeout for the test, in milliseconds.
    */
   only: {|
-    (
-      name: JestTestName,
-      fn?: (done: JestDoneFn) => ?Promise<mixed>,
-      timeout?: number
-    ): void,
+    (name: JestTestName, fn?: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void,
     each(
       ...table: Array<Array<mixed> | mixed> | [Array<string>, string]
-    ): (
-      name: JestTestName,
-      fn?: (...args: Array<any>) => ?Promise<mixed>,
-      timeout?: number
-    ) => void
+    ): (name: JestTestName, fn?: (...args: Array<any>) => ?Promise<mixed>, timeout?: number) => void,
   |},
 
   /**
@@ -1045,11 +987,7 @@ declare var it: {
    * @param {Function} Test
    * @param {number} Timeout for the test, in milliseconds.
    */
-  skip(
-    name: JestTestName,
-    fn?: (done: JestDoneFn) => ?Promise<mixed>,
-    timeout?: number
-  ): void,
+  skip(name: JestTestName, fn?: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void,
 
   /**
    * Highlight planned tests in the summary output
@@ -1065,11 +1003,7 @@ declare var it: {
    * @param {Function} Test
    * @param {number} Timeout for the test, in milliseconds.
    */
-  concurrent(
-    name: JestTestName,
-    fn?: (done: JestDoneFn) => ?Promise<mixed>,
-    timeout?: number
-  ): void,
+  concurrent(name: JestTestName, fn?: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void,
 
   /**
    * each runs this test against array of argument arrays per each run
@@ -1078,18 +1012,10 @@ declare var it: {
    */
   each(
     ...table: Array<Array<mixed> | mixed> | [Array<string>, string]
-  ): (
-    name: JestTestName,
-    fn?: (...args: Array<any>) => ?Promise<mixed>,
-    timeout?: number
-  ) => void,
+  ): (name: JestTestName, fn?: (...args: Array<any>) => ?Promise<mixed>, timeout?: number) => void,
 };
 
-declare function fit(
-  name: JestTestName,
-  fn: (done: JestDoneFn) => ?Promise<mixed>,
-  timeout?: number
-): void;
+declare function fit(name: JestTestName, fn: (done: JestDoneFn) => ?Promise<mixed>, timeout?: number): void;
 /** An individual test unit */
 declare var test: typeof it;
 /** A disabled group of tests */
@@ -1109,9 +1035,9 @@ type JestPrettyFormatColors = {
   value: { close: string, open: string },
 };
 
-type JestPrettyFormatIndent = string => string;
+type JestPrettyFormatIndent = (string) => string;
 type JestPrettyFormatRefs = Array<any>;
-type JestPrettyFormatPrint = any => string;
+type JestPrettyFormatPrint = (any) => string;
 type JestPrettyFormatStringOrNull = string | null;
 
 type JestPrettyFormatOptions = {|
@@ -1142,7 +1068,7 @@ type JestPrettyFormatPlugin = {
     opts: JestPrettyFormatOptions,
     colors: JestPrettyFormatColors
   ) => string,
-  test: any => boolean,
+  test: (any) => boolean,
 };
 
 type JestPrettyFormatPlugins = Array<JestPrettyFormatPlugin>;
@@ -1199,10 +1125,7 @@ declare var jasmine: {
   arrayContaining(value: Array<mixed>): Array<mixed>,
   clock(): JestClockType,
   createSpy(name: string): JestSpyType,
-  createSpyObj(
-    baseName: string,
-    methodNames: Array<string>
-  ): { [methodName: string]: JestSpyType },
+  createSpyObj(baseName: string, methodNames: Array<string>): { [methodName: string]: JestSpyType },
   objectContaining(value: Object): Object,
   stringMatching(value: string): string,
 };

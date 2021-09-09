@@ -1,18 +1,21 @@
-import Routes from './Routes'
-import { generateCoreWithStore } from '../test-utils/coreInstance'
-import renderer from 'react-test-renderer'
-import React from 'react'
-import { Route, Router, Switch } from 'react-router-dom'
-import testSvg from './Notification/success-circle.svg'
-import { push } from 'connected-react-router'
-import { Provider } from 'react-redux'
+/* eslint-disable sonarjs/no-duplicate-string */
+// @flow
+import React from 'react';
+import { Provider } from 'react-redux';
+import { Route, Router, Switch } from 'react-router-dom';
+import renderer from 'react-test-renderer';
+import { push } from 'connected-react-router';
+
+import { generateCoreWithStore } from '../test-utils/coreInstance';
+import testSvg from './Notification/success-circle.svg';
+import Routes from './Routes';
 
 test('not found', () => {
-  const { coreInstance, store } = generateCoreWithStore()
+  const { coreInstance, store } = generateCoreWithStore();
 
   class NotFound extends React.Component {
     render() {
-      return <div className={'meta-not-found'}>Not found</div>
+      return <div className={'meta-not-found'}>Not found</div>;
     }
   }
 
@@ -34,7 +37,7 @@ test('not found', () => {
             </Switch>
           </Router>
         </div>
-      )
+      );
     }
   }
 
@@ -57,13 +60,13 @@ test('not found', () => {
             </Switch>
           </Router>
         </div>
-      )
+      );
     }
   }
 
   class RouteProvider extends React.Component {
     render(): React.ReactNode {
-      const { store, core } = this.props
+      const { store, core } = this.props;
       return (
         <div>
           <Provider store={store}>
@@ -72,7 +75,7 @@ test('not found', () => {
             </div>
           </Provider>
         </div>
-      )
+      );
     }
   }
 
@@ -82,12 +85,12 @@ test('not found', () => {
       {
         label: 'My Test',
         path: '/mytest/test',
-        icon: 'hdd'
-      }
+        icon: 'hdd',
+      },
     ],
     LocalTest,
     'react'
-  )
+  );
 
   coreInstance.register(
     'other',
@@ -95,29 +98,29 @@ test('not found', () => {
       {
         label: 'Other',
         path: '/other/test',
-        icon: testSvg
-      }
+        icon: testSvg,
+      },
     ],
     LocalTestTwo,
     'react'
-  )
+  );
 
-  store.dispatch(push('/other/test'))
-  const unregisterFilter = coreInstance.pageFilter.registerFilter(() => false)
-  const component = renderer.create(<RouteProvider store={store} core={coreInstance} key={'prov'} />)
+  store.dispatch(push('/other/test'));
+  const unregisterFilter = coreInstance.pageFilter.registerFilter(() => false);
+  const component = renderer.create(<RouteProvider store={store} core={coreInstance} key={'prov'} />);
 
-  expect(JSON.stringify(component.toJSON())).toContain('Not loaded')
+  expect(JSON.stringify(component.toJSON())).toContain('Not loaded');
 
-  unregisterFilter()
+  unregisterFilter();
 
-  component.update(<RouteProvider store={store} core={coreInstance} key={'prov'} />)
+  component.update(<RouteProvider store={store} core={coreInstance} key={'prov'} />);
 
-  expect(JSON.stringify(component.toJSON())).toContain('other test 2')
-  expect(component.root.findAllByType(NotFound)).toEqual([])
+  expect(JSON.stringify(component.toJSON())).toContain('other test 2');
+  expect(component.root.findAllByType(NotFound)).toEqual([]);
 
-  store.dispatch(push('/mytest/test'))
-  component.update(<RouteProvider store={store} core={coreInstance} key={'prov'} />)
+  store.dispatch(push('/mytest/test'));
+  component.update(<RouteProvider store={store} core={coreInstance} key={'prov'} />);
 
-  expect(JSON.stringify(component.toJSON())).toContain('my test 1')
-  expect(component.root.findAllByType(NotFound)).toEqual([])
-})
+  expect(JSON.stringify(component.toJSON())).toContain('my test 1');
+  expect(component.root.findAllByType(NotFound)).toEqual([]);
+});
