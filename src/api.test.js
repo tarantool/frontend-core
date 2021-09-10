@@ -4,6 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { from } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import axios from 'axios';
+// eslint-disable-next-line import/no-named-as-default
 import gql from 'graphql-tag';
 import nock from 'nock';
 

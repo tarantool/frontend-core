@@ -11,8 +11,6 @@
 [lints]
 
 [options]
-module.file_ext=.ts
-module.file_ext=.tsx
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 
 [strict]
