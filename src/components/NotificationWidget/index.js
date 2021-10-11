@@ -7,7 +7,6 @@ import { Button, IconBell, baseFontFamily } from '@tarantool.io/ui-kit';
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications';
 import type { NotificationItem } from '../../store/reducers/notifications';
 import { isExistsHiddenNonRead, selectHiddenNotifications } from '../../store/selectors';
-import { AutoScroll } from '../AutoScroll';
 import Notification from '../Notification';
 import NotificationDetails from '../NotificationDetails';
 
@@ -135,7 +134,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
         {showList && (
           <div className={styles.notificationList}>
             <div className={styles.notificationListContent}>
-              <AutoScroll maxHeight={230}>
+              <div style={{ maxHeight: 230 }}>
                 <div className={styles.notificationInner}>
                   {notifications.length === 0 ? <span className={styles.noNotification}>No notifications</span> : null}
                   {notifications.map((x) => (
@@ -147,7 +146,7 @@ class NotificationWidget extends React.PureComponent<NotificationWidgetProps, No
                     />
                   ))}
                 </div>
-              </AutoScroll>
+              </div>
             </div>
             {notifications.length > 0 && (
               <div className={styles.clearButton}>
