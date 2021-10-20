@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { css, cx } from '@emotion/css';
-import { Button, IconBell, baseFontFamily } from '@tarantool.io/ui-kit';
+import { Button, IconBell, baseFontFamily, colors } from '@tarantool.io/ui-kit';
 
 import { clearNotifications, hideNotificationList, showNotificationList } from '../../store/actions/notifications';
 import type { NotificationItem } from '../../store/reducers/notifications';
@@ -31,7 +31,7 @@ const styles = {
       top: 0px;
       right: 0px;
       transform: translate3d(50%, -50%, 0);
-      background-color: #f5222d;
+      background-color: ${colors.activeAction};
       border-radius: 6px;
     }
   `,

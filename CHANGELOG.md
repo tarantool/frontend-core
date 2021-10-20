@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.12.0]
+
+- Update dependencies to support the new branding style;
+
+- Update assets icons;
+
 ## [7.11.0]
 
 - Update dependencies;
