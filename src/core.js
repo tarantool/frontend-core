@@ -1,8 +1,6 @@
 // @flow
-import React from 'react';
 import type { ComponentType } from 'react';
-import ReactDom from 'react-dom';
-import { ReactComponentLike } from 'prop-types';
+import type { ReactComponentLike } from 'prop-types';
 
 import pageFilter from './pageFilter';
 import type { PageFilterType } from './pageFilter';
@@ -23,11 +21,11 @@ export type MenuItemType = {|
   pinBottom?: boolean,
 |};
 
-export type halfMenuItem = {|
+export type HalfMenuItem = {|
   label: string,
   path: string,
   icon?: string | Object,
-  items?: Array<halfMenuItem>,
+  items?: Array<HalfMenuItem>,
   type?: 'internal' | 'external',
   pinBottom?: boolean,
 |};
@@ -39,13 +37,13 @@ export type FSA = {
   meta?: any,
 };
 
-type menuShape = ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>) | Array<MenuItemType>;
+type MenuShape = ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>) | Array<MenuItemType>;
 
-type inputMenuShape =
+type InputMenuShape =
   | ((action: FSA, state: [MenuItemType]) => Array<MenuItemType>)
-  | Array<MenuItemType | halfMenuItem>;
+  | Array<MenuItemType | HalfMenuItem>;
 
-export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType => {
+export const refineMenuItem = (item: MenuItemType | HalfMenuItem): MenuItemType => {
   if (item.expanded) {
     return {
       selected: false,
@@ -78,14 +76,14 @@ export const refineMenuItem = (item: MenuItemType | halfMenuItem): MenuItemType 
 
 export type CoreModule = {
   namespace: string,
-  menu: menuShape,
+  menu: MenuShape,
   menuMiddleware?: (Object) => void,
   RootComponent: ComponentType<any>,
 };
 
 export type InputCoreModule = {
   namespace: string,
-  menu: inputMenuShape,
+  menu: InputMenuShape,
   menuMiddleware?: (Object) => void,
   RootComponent: ComponentType<any>,
 };
@@ -116,6 +114,10 @@ export default class Core {
     return this.header;
   }
 
+  get variables() {
+    return typeof window === 'undefined' ? {} : window.__tarantool_variables || {};
+  }
+
   waitForModule(namespace: string): Promise<boolean> {
     return new Promise((resolve) => {
       const unwait = this.subscribe('registerModule', () => {
@@ -139,7 +141,7 @@ export default class Core {
 
   register(
     namespace: string,
-    menu: inputMenuShape,
+    menu: InputMenuShape,
     RootComponent: ComponentType<any>,
     /**
      * @TODO remove "engine". Engines are deprecated since v6.5.x (april 2020),
@@ -163,7 +165,7 @@ export default class Core {
     menuMiddleware,
   }: {
     namespace: string,
-    menu: inputMenuShape,
+    menu: InputMenuShape,
     RootComponent: ComponentType<any>,
     menuMiddleware?: (Object) => void,
   }) {
@@ -218,7 +220,3 @@ export default class Core {
     this.dispatch('dispatchToken', sendNotification({ type, title, message, details, timeout }));
   }
 }
-
-// global export
-window.react = React;
-window.reactDom = ReactDom;

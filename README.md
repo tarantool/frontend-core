@@ -26,7 +26,7 @@ core.register('module', [{label: 'Module', path: '/module/'}], Root);
 
 Register main react element in #root element. In Lua part it's called by default.
 
-### window.tarantool_enteprise_core.registerModule({ namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void})
+### window.tarantool_enterprise_core.registerModule({ namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void})
 
 #### namespace
 
@@ -47,9 +47,10 @@ const matchPath = (path, link) => {
 const selected = path => menuItem => ({
   ...menuItem,
   expanded: menuItem.items.length > 0
-  ?( menuItem.path === path ? !menuItem.expanded : menuItem.expanded)
-  : false,
+    ?( menuItem.path === path ? !menuItem.expanded : menuItem.expanded)
+    : false,
 })
+
 const updateLink = path => menuItem => ({
     ...menuItem,
     selected: matchPath(path, menuItem.path)
@@ -100,7 +101,6 @@ Example with `react-router-dom`:
 
 ```
 class Root extends React.Component{
-
   render() {
     return (
       <div>
@@ -118,7 +118,7 @@ class Root extends React.Component{
 }
 ```
 
-Route should using same namespace of module. You shold start all of your routes with `/test`.
+Route should using same namespace of module. You should start all of your routes with `/test`.
 
 You can use any technology inside that you want.
 
@@ -148,11 +148,11 @@ Return registered modules.
 
 ### window.tarantool_enterprise_core.notify({ title: string, message: string, details?: string, type: 'default' | 'success' | 'error', timeout: number}) : void
 
-Show notification. Title and message are text of notication.
+Show notification. Title and message are text of notification.
 
 Type influence on view of notification.
 
-Timeout is time in miliseconds for automatic hide notification. If timeout = 0. It's infinite time. You only can close it by your hands.
+Timeout is time in milliseconds for automatic hide notification. If timeout = 0. It's infinite time. You only can close it by your hands.
 
 ### window.tarantool_enterprise_core.dispatch('setAppName', name: string)
 
@@ -310,7 +310,7 @@ effect(Function)
 
 ### window.tarantool_enterprise_core.pageFilter.registerFilter(MenuItem => boolean): unsubscribeFn
 
-Register page filter and return unsubscibe function.
+Register page filter and return unsubscribe function.
 
 ### window.tarantool_enterprise_core.pageFilter.applyFilters(MenuItemType[]):  MenuItemType[]
 
@@ -339,7 +339,7 @@ window.tarantool_enterprise_core.dispatch('dispatchToken', { type: 'ADD_CLUSTER_
 
 `core:pageFilter:apply` - Emits on modifying page filters before applying. Provides an array of filtering functions.
 
-`core:pageFilter:applied` - Emits on modifying page filters aftter applying. Provides an array of filtering functions.
+`core:pageFilter:applied` - Emits on modifying page filters after applying. Provides an array of filtering functions.
 
 ## Rock
 
@@ -426,13 +426,13 @@ Passes value from lua to browser's global object `__tarantool_variables`.
 Example:
 ```lua
 front.set_variable('authPath', 'https://sso.example.com')
-front.set_variable('thresold', 42)
+front.set_variable('threshold', 42)
 front.set_variable('editorParams', {smarttabs: true, padding: 2})
 ```
 
 ## Development usage
 
-You can use it in your frontend development mode with our npm package `@tarantoo.io/frontend-core`, but you need use external `react` and `react-dom` from our package.
+You can use it in your frontend development mode with our npm package `@tarantool.io/frontend-core`, but you need use external `react` and `react-dom` from our package.
 
 ### Install development package
 
@@ -443,7 +443,8 @@ You can use it in your frontend development mode with our npm package `@tarantoo
 ```
   externals: {
     react: 'react',
-    'react-dom': 'reactDom'
+    'react-dom': 'reactDom',
+    '@tarantool.io/frontend-core': 'tarantool_enterprise_core'
   },
 ```
 

@@ -23,13 +23,12 @@ type AnalyticModule = {
   __timerInterval: number,
 };
 
-const defaultTimerInterval = 10000;
-const defaulStorageKey: string = '__tarantool_analytics_module';
-
-const threshold = 300;
+const DEFAULT_TIMER_INTERVAL = 10000;
+const DEFAULT_STORAGE_KEY = '__tarantool_analytics_module';
+const THRESHOLD = 300;
 
 export const generateAnalyticModule = (storagePrefix: ?string = ''): AnalyticModule => {
-  const setStorageName: string = `${storagePrefix || ''}${defaulStorageKey}`;
+  const setStorageName: string = `${storagePrefix || ''}${DEFAULT_STORAGE_KEY}`;
   let storedActionName: { [key: string]: 1 } = {};
   let storedSessionActionName: { [key: string]: 1 } = {};
   try {
@@ -70,9 +69,9 @@ export const generateAnalyticModule = (storagePrefix: ?string = ''): AnalyticMod
   };
 
   return {
-    __timerInterval: defaultTimerInterval,
+    __timerInterval: DEFAULT_TIMER_INTERVAL,
     sendEvent(event: AnalyticsEvent) {
-      if (effects.length === 0 && storage.length > threshold) {
+      if (effects.length === 0 && storage.length > THRESHOLD) {
         storage = storage.splice(0, storage.length);
         storedActionName = {};
         storedSessionActionName = {};
