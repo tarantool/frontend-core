@@ -28,8 +28,7 @@ core.install = () => {
 if (typeof window !== 'undefined') {
   window.tarantool_enterprise_core = core;
   window.react = React;
-  window.reactDom = ReactDom;
+  window.reactDom = ReactDOM;
 }
 
 export default core;
-module.exports = core;

@@ -71,6 +71,7 @@ export declare class Core {
   pageFilter: PageFilterType;
   history: History;
   variables: Record<string, unknown>;
+  adminPrefix: string;
   //
   logo: string;
   components: {

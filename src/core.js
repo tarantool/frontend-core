@@ -118,6 +118,10 @@ export default class Core {
     return typeof window === 'undefined' ? {} : window.__tarantool_variables || {};
   }
 
+  get adminPrefix() {
+    return typeof window === 'undefined' ? '' : window.__tarantool_admin_prefix || '';
+  }
+
   waitForModule(namespace: string): Promise<boolean> {
     return new Promise((resolve) => {
       const unwait = this.subscribe('registerModule', () => {
