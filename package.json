@@ -6,7 +6,8 @@
     "url": "https://github.com/tarantool/frontend-core.git"
   },
   "license": "MIT",
-  "main": "compiled_module/core.js",
+  "main": "./compiled_module/core.js",
+  "types": "./code.d.ts",
   "scripts": {
     "build": "node ./scripts/build.js",
     "build_module": "node ./scripts/build_module.js",
@@ -23,6 +24,7 @@
     "@babel/runtime": "^7.14.0",
     "@emotion/css": "^11.1.3",
     "@tarantool.io/ui-kit": "^0.50.0",
+    "@types/react": "^16.14.0",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
     "apollo-link": "^1.2.14",

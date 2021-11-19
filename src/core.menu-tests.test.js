@@ -1,13 +1,13 @@
 // @flow
 import { refineMenuItem } from './core';
-import type { CoreModule, halfMenuItem } from './core';
+import type { CoreModule, HalfMenuItem } from './core';
 import { generateCoreWithStore, registerModule } from './test-utils/coreInstance';
 
 const RootComponent = () => '';
 
 const genModuleWithFilter = (() => {
   let namespaceId = 0;
-  return (menu: halfMenuItem[]): CoreModule => ({
+  return (menu: HalfMenuItem[]): CoreModule => ({
     namespace: `namespace-${namespaceId++}`,
     menu: menu.map(refineMenuItem),
     RootComponent,
@@ -18,7 +18,7 @@ const genModuleWithFilter = (() => {
 
 describe('page filter multi-module', () => {
   const { coreInstance: core } = generateCoreWithStore();
-  const pageToHide: halfMenuItem = {
+  const pageToHide: HalfMenuItem = {
     path: '/test',
     label: 'Page to hide',
   };

@@ -6,7 +6,7 @@ import { registerModule } from './test-utils/coreInstance';
 import { didPromiseResolve } from './test-utils/promise';
 
 const RootComponent = () => '';
-const genModuleWithNamespace = (namespace): InputCoreModule => ({
+const genModuleWithNamespace = (namespace: string): InputCoreModule => ({
   namespace,
   menu: [],
   RootComponent,
@@ -58,7 +58,7 @@ describe('register()', () => {
   });
 });
 
-describe('resgiterModule()', () => {
+describe('registerModule()', () => {
   it('should register module', () => {
     const core = new Core();
     const module = genModuleWithNamespace('some-namespace');
@@ -114,7 +114,7 @@ describe('subscribe() and dispatch()', () => {
     expect(handler.mock.calls[1][0]).toBe(eventData2);
   });
 
-  it('should NOT call listerens of other events', () => {
+  it('should NOT call listeners of other events', () => {
     const core = new Core();
     const eventTypeDispatched = 'some-event';
     const eventTypeOther = 'other-event';
