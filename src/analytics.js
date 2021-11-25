@@ -39,7 +39,7 @@ export const generateAnalyticModule = (storagePrefix: ?string = ''): AnalyticMod
   }
 
   try {
-    if (window.sessionStorage) {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
       const sessionStorageItem = window.sessionStorage.getItem(setStorageName);
       if (sessionStorageItem) storedSessionActionName = JSON.parse(sessionStorageItem);
     }
@@ -113,5 +113,3 @@ export const generateAnalyticModule = (storagePrefix: ?string = ''): AnalyticMod
     __storage: storage,
   };
 };
-
-export default generateAnalyticModule();

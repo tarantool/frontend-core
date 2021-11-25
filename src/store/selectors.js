@@ -9,7 +9,7 @@ import type { NotificationItem } from './reducers/notifications';
 import type { PageFilterState } from './reducers/pageFilter';
 
 export const flattenMenu = (menuItems: MenuItemType[] = []): MenuItemType[] =>
-  menuItems.reduce((acc, { items }) => (items ? [...acc, ...items] : acc), menuItems);
+  menuItems.reduce((acc, value) => (value && value.items ? [...acc, ...value.items] : acc), menuItems);
 
 export const selectMenu = createSelector(
   (state) => state.pageFilter,
@@ -17,8 +17,8 @@ export const selectMenu = createSelector(
   (filter: PageFilterState, menu: MenuItemType[]): MenuItemType[] => {
     const predicates = filter.map((predicateKey) => getFnByKey(predicateKey));
     const filteredMenu = R.filter(R.allPass(predicates))(menu);
-    return filteredMenu.map((item) => {
-      if (item.items && item.items.length) {
+    return filteredMenu.filter(Boolean).map((item) => {
+      if (item && item.items && item.items.length > 0) {
         return {
           ...item,
           items: R.filter(R.allPass(predicates))(item.items),

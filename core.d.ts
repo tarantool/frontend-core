@@ -63,6 +63,12 @@ export declare type PageFilterType = {
   filterPage: (menu: MenuItemType) => boolean;
 };
 
+export declare type Store = {
+  get: (key: string) => string;
+  set: (key: string, value: string) => void;
+  remove: (key: string) => void;
+};
+
 export declare class Core {
   modules: Array<CoreModule>;
   notifiers: {
@@ -72,10 +78,13 @@ export declare class Core {
   history: History;
   variables: Record<string, unknown>;
   adminPrefix: string;
+  ls: Store;
+  ss: Store;
   //
+  version: string;
   logo: string;
   components: {
-    AppTitle: ComponentType;
+    AppTitle: ComponentType<{ title: string }>;
   };
   apiMethods: any;
   analyticModule: any;
@@ -87,8 +96,11 @@ export declare class Core {
   setHeaderComponent(headerComponent: any): void;
   getHeaderComponent(): ComponentType | null | undefined;
   waitForModule(namespace: string): Promise<boolean>;
-  install(): void;
+  install(elementId?: string): void;
   dispatch(eventType: string, event: Object | null | undefined): void;
+  /**
+   * @deprecated Use registerModule instead
+   */
   register(
     namespace: string,
     menu: InputMenuShape,
@@ -98,7 +110,7 @@ export declare class Core {
      * @TODO remove "engine". Engines are deprecated since v6.5.x (april 2020),
      * we decided to use only React
      */
-    engine: string,
+    engine?: string,
     menuMiddleware?: (value: Object) => void
   ): void;
 
@@ -120,5 +132,8 @@ export declare class Core {
   }): void;
 }
 
-declare const _default: Core;
-export default _default;
+export declare const core: Core;
+export declare const useCore: () => Core | null;
+export declare const withCore: <T extends { core: Core }>(
+  component: ComponentType<T>
+) => ComponentType<Omit<T, 'core'>>;

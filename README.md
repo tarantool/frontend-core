@@ -17,9 +17,13 @@ Module can be described by module namespace, react root component and menu descr
 Example of integration register a module:
 
 ```
-const Root = () => <div>Module</div>;
 const core = window.tarantool_enterprise_core;
-core.register('module', [{label: 'Module', path: '/module/'}], Root);
+const RootComponent = () => <div>Module</div>;
+core.registerModule({
+  namespace: 'module',
+  menu: [{label: 'Module', path: '/module/'}],
+  RootComponent,
+});
 ```
 
 ### window.tarantool_enterprise_core.install()
@@ -128,7 +132,7 @@ This is a redux middleware for dispatch some custom events or add reaction on yo
 
 It should be using if you want do async loading of menu elements or some another dynamic changes. Or you want dispatch action on menu events from other modules.
 
-### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, menuMiddleware?: (Object) => void, menuFilter?: (MenuItem) => boolean)
+### window.tarantool_enterprise_core.register(namespace: string, menu: menuShape, RootComponent: ComponentType<any>, engine?: string, menuMiddleware?: (Object) => void)
 
 Deprecated method. Arguments type same as new method.
 
@@ -265,23 +269,23 @@ new ApolloClient({
 })
 ```
 
-### window.tarantool_enteprise_core.analyticModule
+### window.tarantool_enterprise_core.analyticModule
 
 We add our analytic abstraction module. It support 2 types of event: Pageview and Action. By default it doesn't send any information.
 
 You could send event with sendEvent and add own implementation of analytic by usage effect.
 
 ```
-window.tarantool_enteprise_core.analyticModule.sendEvent({
+window.tarantool_enterprise_core.analyticModule.sendEvent({
     type: 'pageview',
     url: 'https://tarantool.io'
 })
 
-const unsub = window.tarantool_enterprise.analyticModule.effect((event) => {
+const unsubscribe = window.tarantool_enterprise.analyticModule.effect((event) => {
     axios.post('https://myanalytics.io', { pageview: event.url })
 })
 
-unsub() // unsubscribe from effect
+unsubscribe() // unsubscribe from effect
 ```
 
 
@@ -444,7 +448,8 @@ You can use it in your frontend development mode with our npm package `@tarantoo
   externals: {
     react: 'react',
     'react-dom': 'reactDom',
-    '@tarantool.io/frontend-core': 'tarantool_enterprise_core'
+    '@tarantool.io/frontend-core': 'tarantool_frontend_core_module',
+    '@tarantool.io/ui-kit': 'tarantool_frontend_ui_kit_module',
   },
 ```
 

@@ -1,39 +1,21 @@
 // @flow
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Route, Router, Switch } from 'react-router-dom';
 import { IconEdit, IconInfo, IconTask, IconTrash } from '@tarantool.io/ui-kit';
 
-import App from './App';
-import AppTitle from './components/AppTitle';
-import core from './coreInstance';
-import store from './store/index';
+import { core } from './module';
 
-const rootElement = document.getElementById('root');
-if (rootElement) {
-  ReactDOM.render(<App store={store} core={core} />, rootElement);
-}
+const { AppTitle } = core.components;
 
-// eslint-disable-next-line sonarjs/no-unused-collection
-const textElements = [];
-
-for (let i = 0; i < 100; i++) {
-  textElements.push(
-    <div style={{ marginBottom: '20px' }} key={i}>
-      Test text overflow row: {i}
-    </div>
-  );
-}
-
-class Test extends React.Component<null> {
+class TestOne extends React.Component<{}> {
   render() {
     return (
       <div>
-        <AppTitle title={'my test'} />
+        <AppTitle title="my test" />
         <Router history={core.history}>
           <Switch>
-            <Route path={'/mytest/test'} component={() => <div>1</div>} />
-            <Route path={'/'} component={() => <div>Not found</div>} />
+            <Route path="/mytest/test" component={() => <div>1</div>} />
+            <Route path="/" component={() => <div>Not found</div>} />
           </Switch>
         </Router>
       </div>
@@ -41,11 +23,11 @@ class Test extends React.Component<null> {
   }
 }
 
-class TestTwo extends React.Component<null> {
+class TestTwo extends React.Component<{}> {
   render() {
     return (
       <div>
-        <AppTitle title={'TestTwo Root'} path="/other" />
+        <AppTitle title="TestTwo Root" path="/other" />
         <Router history={core.history}>
           <Switch>
             <Route path="/other/test" component={() => <div>1</div>} />
@@ -64,7 +46,7 @@ class TestTwo extends React.Component<null> {
               path="/other/test4/subtest1"
               render={() => (
                 <div>
-                  <AppTitle title="Subpage" propsList={[{ title: 'adasd', path: '/other/dasd' }]} />
+                  <AppTitle title="Subpage" />
                   4-1
                 </div>
               )}
@@ -77,22 +59,21 @@ class TestTwo extends React.Component<null> {
   }
 }
 
-core.register(
-  'mytest',
-  [
+core.registerModule({
+  namespace: 'mytest',
+  menu: [
     {
       label: 'My Test',
       path: '/mytest/test',
       icon: 'hdd',
     },
   ],
-  Test,
-  'react'
-);
+  RootComponent: TestOne,
+});
 
-core.register(
-  'other',
-  [
+core.registerModule({
+  namespace: 'other',
+  menu: [
     {
       label: 'Other',
       path: '/other/test',
@@ -154,9 +135,8 @@ core.register(
       pinBottom: true,
     },
   ],
-  TestTwo,
-  'react'
-);
+  RootComponent: TestTwo,
+});
 
 setTimeout(
   () =>
@@ -215,3 +195,5 @@ const unregisterFilter = core.pageFilter.registerFilter(() => false);
 setTimeout(() => {
   unregisterFilter();
 }, 1000);
+
+core.install();

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { generateCoreWithStore } from '../../test-utils/coreInstance';
+import Core from '../../core';
 import { selectMenu } from '../selectors';
 
 class Test extends React.Component {
@@ -11,11 +11,10 @@ class Test extends React.Component {
 
 describe('page filter', () => {
   it('filter out page', () => {
-    const { coreInstance: newCore, store: newStore } = generateCoreWithStore();
-
-    newCore.register(
-      'test',
-      [
+    const core = new Core();
+    core.registerModule({
+      namespace: 'test',
+      menu: [
         {
           label: 'Simple Title Example',
           path: '/test/test',
@@ -26,16 +25,14 @@ describe('page filter', () => {
           path: '/test/icon/6',
         },
       ],
-      Test,
-      'react',
-      null
-    );
+      RootComponent: Test,
+    });
 
-    const unsubFilter = newCore.pageFilter.registerFilter(({ path }) => !path.includes('/test/icon/6'));
+    const unsubFilter = core.pageFilter.registerFilter(({ path }) => !path.includes('/test/icon/6'));
 
     unsubFilter();
 
-    const fullMenu = selectMenu(newStore.getState());
+    const fullMenu = selectMenu(core.store.getState());
 
     expect(fullMenu).toHaveLength(2);
   });

@@ -1,8 +1,7 @@
 // @flow
-
 import * as R from 'ramda';
 
-import Core from './core';
+import type Core from './core';
 import type { MenuItemType } from './core';
 import { PAGE_FILTER_ADD, PAGE_FILTER_REMOVE } from './store/constants';
 

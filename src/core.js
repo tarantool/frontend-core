@@ -1,11 +1,21 @@
 // @flow
 import type { ComponentType } from 'react';
+import { createElement } from 'react';
+import ReactDOM from 'react-dom';
 import type { ReactComponentLike } from 'prop-types';
 
-import pageFilter from './pageFilter';
+import pkg from '../package.json';
+import { generateAnalyticModule } from './analytics';
+import { generateApiMethod } from './api';
+import App from './App';
+import logo from './assets/tarantool-logo-full.svg';
+import AppTitle from './components/AppTitle';
+import { generateFilterApi } from './pageFilter';
 import type { PageFilterType } from './pageFilter';
+import { createCoreStore } from './store';
 import { sendNotification } from './store/actions/notifications';
 import { createHistory } from './store/history';
+import { createStorage } from './utils/storage';
 
 export type MenuItemTypes = 'internal' | 'external';
 
@@ -77,29 +87,38 @@ export const refineMenuItem = (item: MenuItemType | HalfMenuItem): MenuItemType 
 export type CoreModule = {
   namespace: string,
   menu: MenuShape,
-  menuMiddleware?: (Object) => void,
   RootComponent: ComponentType<any>,
+  menuMiddleware?: (Object) => void,
 };
 
 export type InputCoreModule = {
   namespace: string,
   menu: InputMenuShape,
-  menuMiddleware?: (Object) => void,
   RootComponent: ComponentType<any>,
+  menuMiddleware?: (Object) => void,
 };
 
 export default class Core {
-  modules: Array<CoreModule>;
-  notifiers: { [string]: Array<Function> };
-  history: History;
-  header: ?ReactComponentLike;
-  pageFilter: PageFilterType;
-  constructor() {
-    this.modules = [];
-    this.notifiers = {};
-    this.history = createHistory();
-    this.header = null;
-    this.pageFilter = pageFilter(this);
+  logo = logo;
+  version = pkg.version;
+  components = {
+    AppTitle,
+  };
+
+  store: Object;
+  modules: Array<CoreModule> = [];
+  notifiers: { [string]: Array<Function> } = {};
+  header: ?ReactComponentLike = null;
+  history: History = createHistory();
+  ls = createStorage('local');
+  ss = createStorage('session');
+
+  apiMethods = generateApiMethod();
+  analyticModule = generateAnalyticModule();
+  pageFilter: PageFilterType = generateFilterApi(this);
+
+  constructor({ store }: { store?: Object } = {}) {
+    this.store = store || createCoreStore(this);
   }
 
   /**
@@ -110,7 +129,7 @@ export default class Core {
     this.dispatch('setHeaderComponent');
   }
 
-  getHeaderComponent() {
+  getHeaderComponent(): ?ReactComponentLike {
     return this.header;
   }
 
@@ -124,10 +143,10 @@ export default class Core {
 
   waitForModule(namespace: string): Promise<boolean> {
     return new Promise((resolve) => {
-      const unwait = this.subscribe('registerModule', () => {
+      const unsubscribe = this.subscribe('registerModule', () => {
         const modules = this.getModules().filter((x) => x.namespace === namespace);
         if (modules.length > 0) {
-          unwait();
+          unsubscribe();
           resolve(true);
         }
       });
@@ -143,17 +162,21 @@ export default class Core {
     }
   }
 
+  /**
+   * @deprecated Use registerModule instead
+   */
   register(
     namespace: string,
     menu: InputMenuShape,
     RootComponent: ComponentType<any>,
     /**
      * @TODO remove "engine". Engines are deprecated since v6.5.x (april 2020),
-     * we desided to use only React
+     * we decided to use only React
      */
-    engine: string,
+    engine?: string = 'react',
     menuMiddleware?: (Object) => void
   ) {
+    void engine;
     return this.registerModule({
       namespace,
       menu,
@@ -222,5 +245,14 @@ export default class Core {
     timeout?: number,
   }) {
     this.dispatch('dispatchToken', sendNotification({ type, title, message, details, timeout }));
+  }
+
+  install() {
+    const root = document.getElementById('root');
+    if (root) {
+      ReactDOM.render(createElement(App, { store: this.store, core: this }), root);
+    } else {
+      throw new Error(`Unable to find the root element (#root)`);
+    }
   }
 }
