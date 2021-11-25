@@ -96,7 +96,7 @@ export declare class Core {
   setHeaderComponent(headerComponent: any): void;
   getHeaderComponent(): ComponentType | null | undefined;
   waitForModule(namespace: string): Promise<boolean>;
-  install(elementId?: string): void;
+  install(): void;
   dispatch(eventType: string, event: Object | null | undefined): void;
   /**
    * @deprecated Use registerModule instead
