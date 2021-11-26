@@ -5,7 +5,6 @@ import thunk from 'redux-thunk';
 
 import Core from '../core';
 import type { FSA } from '../core';
-import coreInstance from '../coreInstance';
 import { setAppName } from './actions/title';
 import * as constants from './constants';
 import { APP_PATH_PREFIX } from './history';
@@ -37,7 +36,8 @@ export type State = {
   router: RouterState,
 };
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers =
+  (typeof window !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null) || compose;
 
 export const createCoreStore = (core: Core) => {
   const menuReducer = generateMenuReducerInstance();
@@ -93,5 +93,3 @@ export const createCoreStore = (core: Core) => {
 
   return store;
 };
-
-export default createCoreStore(coreInstance);

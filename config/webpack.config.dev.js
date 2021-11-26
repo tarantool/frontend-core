@@ -65,6 +65,9 @@ module.exports = {
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+    library: 'tt_module',
+    libraryTarget: 'umd',
+    globalObject: "(typeof self !== 'undefined' ? self : this)",
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.

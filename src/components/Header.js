@@ -1,11 +1,12 @@
 // @flow
-import React from 'react';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { AppHeader } from '@tarantool.io/ui-kit';
 
-import core from '../coreInstance';
+import { useCore } from '../context';
 import { selectBreadcrumbs } from '../store/selectors';
+import { useForceUpdate } from '../utils/hooks';
 import NotificationWidget from './NotificationWidget';
 
 type HeaderProps = {
@@ -14,29 +15,37 @@ type HeaderProps = {
   dispatch: Function,
 };
 
-class Header extends React.Component<HeaderProps> {
-  componentDidMount() {
-    core.subscribe('setHeaderComponent', () => {
-      this.forceUpdate();
+const Header = memo(({ appName, breadcrumbs, dispatch }: HeaderProps) => {
+  const core = useCore();
+  const forceUpdate = useForceUpdate();
+
+  useEffect(() => {
+    if (!core) {
+      return;
+    }
+
+    return core.subscribe('setHeaderComponent', () => {
+      forceUpdate();
     });
-  }
+  }, [core, forceUpdate]);
 
-  render() {
-    const { appName, breadcrumbs, dispatch } = this.props;
+  const onLinkClick = useCallback((path: string) => dispatch(push(path)), []);
 
-    const onLinkClick = (path: string) => dispatch(push(path));
+  const controls = useMemo(
+    () => [<NotificationWidget key={0} />, core ? core.getHeaderComponent() : null].filter(Boolean),
+    [core]
+  );
 
-    return (
-      <AppHeader
-        appName={appName}
-        breadcrumbs={breadcrumbs}
-        className="test__Header"
-        controls={[<NotificationWidget key={0} />, core.getHeaderComponent()]}
-        onLinkClick={onLinkClick}
-      />
-    );
-  }
-}
+  return (
+    <AppHeader
+      appName={appName}
+      breadcrumbs={breadcrumbs}
+      className="test__Header"
+      controls={controls}
+      onLinkClick={onLinkClick}
+    />
+  );
+});
 
 const mapStateToProps = (state) => ({
   appName: state.appTitle.appName,

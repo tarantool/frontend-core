@@ -1,7 +1,7 @@
-import { generateCoreWithStore } from './test-utils/coreInstance';
+import Core from './core';
 
 test('page filter', () => {
-  const { coreInstance } = generateCoreWithStore();
+  const core = new Core();
 
   const testPage = {
     path: '/test',
@@ -10,20 +10,20 @@ test('page filter', () => {
   const fnApply = jest.fn();
   const fnApplied = jest.fn();
 
-  coreInstance.subscribe('core:pageFilter:apply', fnApply);
-  coreInstance.subscribe('core:pageFilter:applied', fnApplied);
+  core.subscribe('core:pageFilter:apply', fnApply);
+  core.subscribe('core:pageFilter:applied', fnApplied);
 
-  const unregisterFilter = coreInstance.pageFilter.registerFilter(() => false);
+  const unregisterFilter = core.pageFilter.registerFilter(() => false);
 
   expect(fnApply).toBeCalled();
   expect(fnApplied).toBeCalled();
 
-  expect(coreInstance.pageFilter.filterPage(testPage)).toBe(false);
+  expect(core.pageFilter.filterPage(testPage)).toBe(false);
 
   unregisterFilter();
 
   expect(fnApply).toBeCalledTimes(2);
   expect(fnApplied).toBeCalledTimes(2);
 
-  expect(coreInstance.pageFilter.filterPage(testPage)).toBe(true);
+  expect(core.pageFilter.filterPage(testPage)).toBe(true);
 });

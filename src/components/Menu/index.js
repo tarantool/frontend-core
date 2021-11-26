@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { css } from '@emotion/css';
 import { push } from 'connected-react-router';
@@ -7,6 +7,7 @@ import { SideMenu } from '@tarantool.io/ui-kit';
 
 import logoCompact from '../../assets/tarantool-logo-compact.svg';
 import logo from '../../assets/tarantool-logo-full.svg';
+import { useCore } from '../../context';
 import type { MenuItemType } from '../../core';
 import { expand } from '../../store/actions/menu';
 import { APP_PATH_PREFIX } from '../../store/history';
@@ -24,12 +25,19 @@ const logoStyle = css`
 `;
 
 const renderLogo = (collapsed) => (
-  <img alt="Logo" className={!collapsed && logoStyle} src={collapsed ? logoCompact : logo} />
+  <img alt="Logo" className={!collapsed ? logoStyle : undefined} src={collapsed ? logoCompact : logo} />
 );
 
-export function Index(props: MenuProps) {
-  const { menu, dispatch, path, className } = props;
+export function Index({ menu, dispatch, path, className }: MenuProps) {
+  const core = useCore();
   const [isInited, setIsInited] = useState(path !== '/');
+  const [isCollapsed, setIsCollapsed] = useState(core ? core.ls.get('menu_collapsed') === '1' : false);
+
+  useEffect(() => {
+    if (core) {
+      core.ls.set('menu_collapsed', isCollapsed ? '1' : '0');
+    }
+  }, [isCollapsed, core]);
 
   if (!isInited && menu.length > 0) {
     const notSelected = menu.filter((x) => x.selected).length === 0;
@@ -41,7 +49,7 @@ export function Index(props: MenuProps) {
   }
 
   const onClick = (path, type) => {
-    if (type === 'external') {
+    if (type === 'external' && typeof window !== 'undefined') {
       window.open(path, '_blank');
 
       return;
@@ -63,6 +71,8 @@ export function Index(props: MenuProps) {
       className={className}
       pathPrefix={APP_PATH_PREFIX}
       renderMenuLogo={renderLogo}
+      isCollapsed={isCollapsed}
+      onCollapse={setIsCollapsed}
     />
   );
 }

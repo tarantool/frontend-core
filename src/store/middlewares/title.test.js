@@ -2,12 +2,12 @@ import React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 
 import AppTitle from '../../components/AppTitle';
+import Core from '../../core';
 import { setAppName, setTitle } from '../../store/actions/title';
-import { generateCoreWithStore } from '../../test-utils/coreInstance';
 import { locationAction } from '../../test-utils/reduxActions';
 import { changeTitleMiddleware } from './title';
 
-describe('Title middlware', () => {
+describe('Title middleware', () => {
   const fakeNext = () => void 0;
   const fakeStore = (appName, title) => ({
     getState: () => ({
@@ -22,10 +22,10 @@ describe('Title middlware', () => {
   });
 
   it('should be changed onClick', () => {
-    const { coreInstance: newCore, store: newStore } = generateCoreWithStore();
-    newCore.register(
-      'test',
-      [
+    const core = new Core();
+    core.registerModule({
+      namespace: 'test',
+      menu: [
         {
           label: 'one',
           path: '/one',
@@ -43,35 +43,33 @@ describe('Title middlware', () => {
           items: [],
         },
       ],
-      () => null,
-      'react'
-    );
+      RootComponent: () => null,
+    });
 
-    newStore.dispatch(setAppName('SampleApp'));
-    newStore.dispatch(locationAction('/one'));
+    core.store.dispatch(setAppName('SampleApp'));
+    core.store.dispatch(locationAction('/one'));
     expect(document.title).toBe('SampleApp: one');
-    newStore.dispatch(locationAction('/two'));
+    core.store.dispatch(locationAction('/two'));
     expect(document.title).toBe('SampleApp: two');
   });
 
   it('should be correct work with appTitle', () => {
-    const { coreInstance: newCore, store: newStore } = generateCoreWithStore();
-
+    const core = new Core();
     const RootComponent = () => (
       <div>
-        <AppTitle title={'AppTitle'} />
-        <Router history={newCore.history}>
+        <AppTitle title="AppTitle" />
+        <Router history={core.history}>
           <Switch>
-            <Route path={'/test/one'} component={() => <div>1</div>} />
-            <Route path={'/test/two'} component={() => <div>2</div>} />
-            <Route path={'/'} component={() => <div>Not found</div>} />
+            <Route path="/test/one" component={() => <div>1</div>} />
+            <Route path="/test/two" component={() => <div>2</div>} />
+            <Route path="/" component={() => <div>Not found</div>} />
           </Switch>
         </Router>
       </div>
     );
-    newCore.register(
-      'test',
-      [
+    core.registerModule({
+      namespace: 'test',
+      menu: [
         {
           label: 'one',
           path: '/one',
@@ -90,16 +88,15 @@ describe('Title middlware', () => {
         },
       ],
       RootComponent,
-      'react'
-    );
+    });
 
-    newStore.dispatch(setAppName('SampleApp'));
-    newStore.dispatch(setTitle({ title: 'AppTitle' }));
+    core.store.dispatch(setAppName('SampleApp'));
+    core.store.dispatch(setTitle({ title: 'AppTitle' }));
 
-    newStore.dispatch(locationAction('/one'));
+    core.store.dispatch(locationAction('/one'));
     expect(document.title).toBe('SampleApp: AppTitle');
 
-    newStore.dispatch(locationAction('/two'));
+    core.store.dispatch(locationAction('/two'));
     expect(document.title).toBe('SampleApp: AppTitle');
   });
 });

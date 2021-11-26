@@ -1,9 +1,10 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import renderer from 'react-test-renderer';
 import * as R from 'ramda';
 import { combineReducers, createStore } from 'redux';
 
+import AppProvider from '../AppProvider';
+import Core from '../core';
 import { disposableFunctionKey } from '../utils/disposableFnMap';
 import Header from './Header';
 
@@ -55,7 +56,7 @@ describe('Header component', () => {
   };
 
   it('use current menu item label, if appTitle is empty', () => {
-    const mockStore = createStore(
+    const store = createStore(
       combineReducers({
         menu: (state = initialState.menu) => state,
         appTitle: (state = initialState.appTitle) => state,
@@ -65,10 +66,14 @@ describe('Header component', () => {
       })
     );
 
+    const core = new Core({
+      store,
+    });
+
     const component = renderer.create(
-      <Provider store={mockStore}>
+      <AppProvider core={core}>
         <Header />
-      </Provider>
+      </AppProvider>
     );
 
     expect(component.root.findAllByType('span').map((el) => el.children)).toEqual([['/'], ['Cluster']]);
@@ -76,7 +81,7 @@ describe('Header component', () => {
   });
 
   it('display appTitle.title and appName', () => {
-    const mockStore = createStore(
+    const store = createStore(
       combineReducers({
         menu: (state = initialStateWithTitle.menu) => state,
         appTitle: (state = initialStateWithTitle.appTitle) => state,
@@ -86,10 +91,14 @@ describe('Header component', () => {
       })
     );
 
+    const core = new Core({
+      store,
+    });
+
     const component = renderer.create(
-      <Provider store={mockStore}>
+      <AppProvider core={core}>
         <Header />
-      </Provider>
+      </AppProvider>
     );
 
     expect(component.root.findAllByType('span')[0].children[0]).toEqual('App Name');

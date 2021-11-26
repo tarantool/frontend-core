@@ -108,5 +108,3 @@ export const generateApiMethod = () => {
     apolloLinkAfterware,
   };
 };
-
-export default generateApiMethod();

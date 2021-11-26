@@ -1,4 +1,4 @@
-export const didPromiseResolve = async (promiseToTest, timeout = 0) => {
+export const didPromiseResolve = (promiseToTest, timeout = 0) => {
   let didResolve = false;
   promiseToTest.then(() => {
     didResolve = true;

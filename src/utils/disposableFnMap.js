@@ -4,10 +4,6 @@ import nanoid from './nanoid';
 const fnMap: { [string]: Function } = {};
 const fnKeyMap = new Map<Function, string>();
 
-// to hash table
-fnMap['1'] = 1;
-delete fnMap['1'];
-
 export const getKeyByFn = (fn: ?Function): ?string => (fn ? fnKeyMap.get(fn) : undefined);
 
 export const disposableFunctionKey = (fn: Function): string => {

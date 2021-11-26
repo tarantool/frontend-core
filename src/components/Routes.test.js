@@ -1,41 +1,32 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import React from 'react';
-import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 import { push } from 'connected-react-router';
 
-import { generateCoreWithStore } from '../test-utils/coreInstance';
+import AppProvider from '../AppProvider';
+import Core from '../core';
 import testSvg from './Notification/success-circle.svg';
 import Routes from './Routes';
 
 test('not found', () => {
-  const { coreInstance, store } = generateCoreWithStore();
+  const core = new Core();
 
   class NotFound extends React.Component {
     render() {
-      return <div className={'meta-not-found'}>Not found</div>;
+      return <div className="meta-not-found">Not found</div>;
     }
   }
 
-  class LocalTest extends React.Component<null> {
+  class LocalTestOne extends React.Component<null> {
     render() {
       return (
-        <div>
-          <Router history={coreInstance.history}>
-            <Switch>
-              <Route path={'/mytest/test'} component={() => <div className={'meta-content'}>my test 1</div>} />
-              <Route
-                path={'/'}
-                component={() => (
-                  <div>
-                    <NotFound />
-                  </div>
-                )}
-              />
-            </Switch>
-          </Router>
-        </div>
+        <Router history={core.history}>
+          <Switch>
+            <Route path="/mytest/test" component={() => <div className="meta-content">my test 1</div>} />
+            <Route path="/" component={() => <NotFound />} />
+          </Switch>
+        </Router>
       );
     }
   }
@@ -43,82 +34,74 @@ test('not found', () => {
   class LocalTestTwo extends React.Component<null> {
     render() {
       return (
-        <div>
-          <Router history={coreInstance.history}>
-            <Switch>
-              <Route path={'/other/test'} component={() => <div className={'meta-content'}>other test 2</div>} />
-              <Route
-                path={'/'}
-                component={() => (
-                  <div>
-                    <NotFound />
-                    <wbr />
-                  </div>
-                )}
-              />
-            </Switch>
-          </Router>
-        </div>
+        <Router history={core.history}>
+          <Switch>
+            <Route path="/other/test" component={() => <div className="meta-content">other test 2</div>} />
+            <Route
+              path="/"
+              component={() => (
+                <div>
+                  <NotFound />
+                  <wbr />
+                </div>
+              )}
+            />
+          </Switch>
+        </Router>
       );
     }
   }
 
   class RouteProvider extends React.Component {
     render() {
-      const { store, core } = this.props;
+      const { core } = this.props;
       return (
-        <div>
-          <Provider store={store}>
-            <div>
-              <Routes key={'routes'} core={core} />
-            </div>
-          </Provider>
-        </div>
+        <AppProvider core={core}>
+          <Routes />
+        </AppProvider>
       );
     }
   }
 
-  coreInstance.register(
-    'mytest',
-    [
+  core.registerModule({
+    namespace: 'mytest',
+    menu: [
       {
         label: 'My Test',
         path: '/mytest/test',
         icon: 'hdd',
       },
     ],
-    LocalTest,
-    'react'
-  );
+    RootComponent: LocalTestOne,
+  });
 
-  coreInstance.register(
-    'other',
-    [
+  core.registerModule({
+    namespace: 'other',
+    menu: [
       {
         label: 'Other',
         path: '/other/test',
         icon: testSvg,
       },
     ],
-    LocalTestTwo,
-    'react'
-  );
+    RootComponent: LocalTestTwo,
+  });
 
-  store.dispatch(push('/other/test'));
-  const unregisterFilter = coreInstance.pageFilter.registerFilter(() => false);
-  const component = renderer.create(<RouteProvider store={store} core={coreInstance} key={'prov'} />);
+  core.store.dispatch(push('/other/test'));
+  const unregisterFilter = core.pageFilter.registerFilter(() => false);
+  const component = renderer.create(<RouteProvider core={core} />);
 
   expect(JSON.stringify(component.toJSON())).toContain('Not loaded');
 
   unregisterFilter();
 
-  component.update(<RouteProvider store={store} core={coreInstance} key={'prov'} />);
+  component.update(<RouteProvider core={core} />);
 
   expect(JSON.stringify(component.toJSON())).toContain('other test 2');
   expect(component.root.findAllByType(NotFound)).toEqual([]);
 
-  store.dispatch(push('/mytest/test'));
-  component.update(<RouteProvider store={store} core={coreInstance} key={'prov'} />);
+  core.store.dispatch(push('/mytest/test'));
+  component.update(<RouteProvider core={core} />);
 
   expect(JSON.stringify(component.toJSON())).toContain('my test 1');
   expect(component.root.findAllByType(NotFound)).toEqual([]);
