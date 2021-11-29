@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.13.0]
+
+- Add to core the ability to work with localsStorage and sessionStorage;
+
+- Memorize the opening states of the side menu in sessionStorage;
+
+- Add the ability to use core as an npm module;
+
+- Add react hook useCore and HOC withCore to access core inside components;
+
 ## [7.12.1]
 
-- Add typescript types
+- Add typescript types;
 
 ## [7.12.0]
 

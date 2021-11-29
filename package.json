@@ -1,6 +1,6 @@
 {
   "name": "@tarantool.io/frontend-core",
-  "version": "7.12.1",
+  "version": "7.13.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/tarantool/frontend-core.git"
