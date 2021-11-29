@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [7.13.0]
+## [8.0.0]
 
 - Add to core the ability to work with localsStorage and sessionStorage;
 
