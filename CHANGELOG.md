@@ -7,14 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Update `@tarantool.io/ui-kit` version to ^0.50.4
+
 ## [8.0.0]
 
 - Add to core the ability to work with localsStorage and sessionStorage;
-
 - Memorize the opening states of the side menu in sessionStorage;
-
 - Add the ability to use core as an npm module;
-
 - Add react hook useCore and HOC withCore to access core inside components;
 
 ## [7.12.1]
@@ -24,15 +23,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [7.12.0]
 
 - Update dependencies to support the new branding style;
-
 - Update assets icons;
 
 ## [7.11.0]
 
 - Update dependencies;
-
 - Update prettier and eslint configurations;
-
 - Lock `react` and `react-dom` to `^16.14.0` version;
 
 ## [7.10.0]
@@ -59,7 +55,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Updated Tarantool favicon.
 
-- Updated popup nitifications.
+- Updated popup notifications.
 
 - Updated vulnerable dependencies.
 
