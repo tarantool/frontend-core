@@ -99,6 +99,7 @@ export type InputCoreModule = {
 };
 
 export default class Core {
+  reactTreeKey = 0;
   logo = logo;
   version = pkg.version;
   components = {
@@ -119,6 +120,10 @@ export default class Core {
 
   constructor({ store }: { store?: Object } = {}) {
     this.store = store || createCoreStore(this);
+
+    this.subscribe('core:updateReactTreeKey', () => {
+      this.reactTreeKey = this.reactTreeKey + 1;
+    });
   }
 
   /**
