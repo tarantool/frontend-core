@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import { IconEdit, IconInfo, IconTask, IconTrash } from '@tarantool.io/ui-kit';
 
-import { core } from './module';
+import { core, useCore } from './module';
 
 const { AppTitle } = core.components;
 
@@ -23,41 +23,48 @@ class TestOne extends React.Component<{}> {
   }
 }
 
-class TestTwo extends React.Component<{}> {
-  render() {
-    return (
-      <div>
-        <AppTitle title="TestTwo Root" path="/other" />
-        <Router history={core.history}>
-          <Switch>
-            <Route path="/other/test" component={() => <div>1</div>} />
-            <Route path="/other/test2" component={() => <div>2</div>} />
-            <Route path="/other/test3" component={() => <div>3</div>} />
-            <Route
-              path="/other/test4"
-              exact
-              render={() => (
-                <div>
-                  <AppTitle title="my test4" path="/other/test4" />4
-                </div>
-              )}
-            />
-            <Route
-              path="/other/test4/subtest1"
-              render={() => (
-                <div>
-                  <AppTitle title="Subpage" />
-                  4-1
-                </div>
-              )}
-            />
-            <Route path="/" component={() => <div>Not found</div>} />
-          </Switch>
-        </Router>
-      </div>
-    );
-  }
-}
+const TestTwo = () => {
+  const core = useCore();
+
+  return (
+    <div>
+      <AppTitle title="TestTwo Root" path="/other" />
+      <Router history={core.history}>
+        <Switch>
+          <Route path="/other/test" component={() => <div>1</div>} />
+          <Route path="/other/test2" component={() => <div>2</div>} />
+          <Route
+            path="/other/test3"
+            component={() => (
+              <div>
+                <button onClick={() => core.dispatch('core:updateReactTreeKey')}>core:updateReactTreeKey</button>
+              </div>
+            )}
+          />
+          <Route
+            path="/other/test4"
+            exact
+            render={() => (
+              <div>
+                <AppTitle title="my test4" path="/other/test4" />4
+              </div>
+            )}
+          />
+          <Route
+            path="/other/test4/subtest1"
+            render={() => (
+              <div>
+                <AppTitle title="Subpage" />
+                4-1
+              </div>
+            )}
+          />
+          <Route path="/" component={() => <div>Not found</div>} />
+        </Switch>
+      </Router>
+    </div>
+  );
+};
 
 core.registerModule({
   namespace: 'mytest',

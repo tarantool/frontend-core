@@ -148,3 +148,15 @@ describe('waitForModule()', () => {
     return expect(didPromiseResolve(waitPromise)).resolves.toBe(false);
   });
 });
+
+describe('reactTreeKey and core:updateReactTreeKey event', () => {
+  it('should increase the value of the core.reactTreeKey property on the core:updateReactTreeKey event', () => {
+    const core = new Core();
+    expect(core.reactTreeKey).toBe(0);
+    core.dispatch('core:updateReactTreeKey');
+    expect(core.reactTreeKey).toBe(1);
+    expect(core.reactTreeKey).toBe(1);
+    core.dispatch('core:updateReactTreeKey');
+    expect(core.reactTreeKey).toBe(2);
+  });
+});
