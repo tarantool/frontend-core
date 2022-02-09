@@ -3,12 +3,12 @@ import type { ComponentType } from 'react';
 import { createElement } from 'react';
 import ReactDOM from 'react-dom';
 import type { ReactComponentLike } from 'prop-types';
+import { TarantoolLogoFull } from '@tarantool.io/ui-kit';
 
 import pkg from '../package.json';
 import { generateAnalyticModule } from './analytics';
 import { generateApiMethod } from './api';
 import App from './App';
-import logo from './assets/tarantool-logo-full.svg';
 import AppTitle from './components/AppTitle';
 import { generateFilterApi } from './pageFilter';
 import type { PageFilterType } from './pageFilter';
@@ -100,7 +100,7 @@ export type InputCoreModule = {
 
 export default class Core {
   reactTreeKey = 0;
-  logo = logo;
+  logo = TarantoolLogoFull;
   version = pkg.version;
   components = {
     AppTitle,

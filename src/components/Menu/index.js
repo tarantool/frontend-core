@@ -1,12 +1,9 @@
 // @flow
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { css } from '@emotion/css';
 import { push } from 'connected-react-router';
-import { SideMenu } from '@tarantool.io/ui-kit';
+import { SideMenu, SideMenuRenderMenuLogo } from '@tarantool.io/ui-kit';
 
-import logoCompact from '../../assets/tarantool-logo-compact.svg';
-import logo from '../../assets/tarantool-logo-full.svg';
 import { useCore } from '../../context';
 import type { MenuItemType } from '../../core';
 import { expand } from '../../store/actions/menu';
@@ -19,14 +16,6 @@ type MenuProps = {
   path: string,
   className: string,
 };
-
-const logoStyle = css`
-  margin-left: 24px;
-`;
-
-const renderLogo = (collapsed) => (
-  <img alt="Logo" className={!collapsed ? logoStyle : undefined} src={collapsed ? logoCompact : logo} />
-);
 
 export function Index({ menu, dispatch, path, className }: MenuProps) {
   const core = useCore();
@@ -70,7 +59,7 @@ export function Index({ menu, dispatch, path, className }: MenuProps) {
       toggleExpand={onExpand}
       className={className}
       pathPrefix={APP_PATH_PREFIX}
-      renderMenuLogo={renderLogo}
+      renderMenuLogo={SideMenuRenderMenuLogo}
       isCollapsed={isCollapsed}
       onCollapse={setIsCollapsed}
     />
