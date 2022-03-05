@@ -16,7 +16,7 @@ Module can be described by module namespace, react root component and menu descr
 
 Example of integration register a module:
 
-```
+```js
 const core = window.tarantool_enterprise_core;
 const RootComponent = () => <div>Module</div>;
 core.registerModule({
@@ -42,7 +42,7 @@ It can be [reducer](https://redux.js.org/basics/reducers) for your menu or some 
 
 Default reducer(you can use something like this):
 
-```
+```js
 const matchPath = (path, link) => {
   const point = link.indexOf(path)
   return point === 0 && (link.length === path.length || link[path.length] === '/')
@@ -78,13 +78,13 @@ const defaultReducer = (defaultState = []) => (state = defaultState, {type, payl
 
 Example of static menu:
 
-```
+```js
 [{label: 'Module', path: '/module/'}]
 ```
 
 Or can be described in more way:
 
-```
+```js
   label: string,
   path: string,
   selected: boolean,
@@ -103,7 +103,7 @@ using history from core component for menu updating.
 
 Example with `react-router-dom`:
 
-```
+```js
 class Root extends React.Component{
   render() {
     return (
@@ -172,7 +172,7 @@ Subscribe to events of certain type. This can be used for cross module reaction.
 
 Example:
 
-```
+```js
 const unwait = this.subscribe('registerModule', () => {
     const modules = this.getModules().filter(x => x.namespace === namespace)
     if (modules.length > 0) {
@@ -199,7 +199,7 @@ Example:
 
 Register axios handler. It's use a single responsibility chain inside. Handler should looks like:
 
-```
+```js
 (r, next) => next(r + 1)
 ```
 
@@ -221,7 +221,7 @@ window.tarantool_enterprise_core.apiMethods.axiosWizard(axiosInstance)
 
 Register handler for Apollo. Handler should looks like it:
 
-```
+```js
 (r, next) => next(r + 1)
 ```
 
@@ -241,7 +241,7 @@ Link middleware. Should use for working handlers.
 
 Example of usage:
 
-```
+```js
 import { from } from 'apollo-link'
 
 new ApolloClient({
@@ -258,7 +258,7 @@ Link afterware. Should use for working handlers.
 
 Example of usage:
 
-```
+```js
 import { from } from 'apollo-link'
 
 new ApolloClient({
@@ -275,7 +275,7 @@ We add our analytic abstraction module. It support 2 types of event: Pageview an
 
 You could send event with sendEvent and add own implementation of analytic by usage effect.
 
-```
+```js
 window.tarantool_enterprise_core.analyticModule.sendEvent({
     type: 'pageview',
     url: 'https://tarantool.io'
@@ -291,7 +291,7 @@ unsubscribe() // unsubscribe from effect
 
 Typings:
 
-```
+```js
 type Action = {
   type: 'action',
   action: string,
@@ -333,7 +333,7 @@ Object contains values passed from lua part.
 `dispatchToken` - transmits action to core redux store.
 
 Example:
-```
+```js
 window.tarantool_enterprise_core.dispatch('dispatchToken', { type: 'ADD_CLUSTER_USERS_MENU_ITEM' });
 ```
 
@@ -376,7 +376,7 @@ Bundle usually contains a table
 
 ## Lua
 
-```
+```lua
 local http = require('http.server')
 local httpd = http.new('0.0.0.0', '5050')
 httpd:start()
@@ -392,7 +392,7 @@ This start a Tarantool Enterprise Admin without modules.
 
 You can register a module in this way:
 
-```
+```lua
 local my_module_bundle = require('my_module.bundle')
 front.add('module_namespace', my_module_bundle)
 ```
@@ -444,7 +444,7 @@ You can use it in your frontend development mode with our npm package `@tarantoo
 
 ### Part of webpack config example
 
-```
+```js
   externals: {
     react: 'react',
     'react-dom': 'reactDom',
