@@ -1,4 +1,4 @@
-const { core } = require('../compiled_module/core');
+const { core } = require('../');
 
 test('install', () => {
   document.body.innerHTML = '<div id="root"></div>';

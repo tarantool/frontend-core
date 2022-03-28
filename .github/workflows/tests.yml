@@ -65,9 +65,10 @@ jobs:
 
       ##################################################################
       # Run js tests
+      - run: npm -v
+      - run: npm ci
       - run: npm run lint
       - run: npm run flow
-      - run: npm ci
       - run: npm run build_module
       - run: npm run test_once
 

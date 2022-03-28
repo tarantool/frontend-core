@@ -4,6 +4,6 @@
   "exclude": ["**/*.js", "**/*.spec.*", "**/*.test.*"],
   "compilerOptions": {
     "noImplicitAny": false, // TODO: Remove after all migrations (flow -> typescript)
-    "outDir": "./dist"
+    "outDir": "./build"
   }
 }
