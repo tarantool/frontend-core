@@ -2,6 +2,7 @@
 *.ts
 *.tsx
 <PROJECT_ROOT>/node_modules/graphql
+.*/malformed_package_json/package.json
 
 [include]
 

@@ -29,7 +29,7 @@ const Header = memo(({ appName, breadcrumbs, dispatch }: HeaderProps) => {
     });
   }, [core, forceUpdate]);
 
-  const onLinkClick = useCallback((path: string) => dispatch(push(path)), []);
+  const onLinkClick = useCallback((path: string) => dispatch(push(path)), [dispatch]);
 
   const controls = useMemo(
     () => [<NotificationWidget key={0} />, core ? core.getHeaderComponent() : null].filter(Boolean),

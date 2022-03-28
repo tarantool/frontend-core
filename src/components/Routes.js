@@ -24,7 +24,7 @@ const Routes = ({ routeIsAllowed }: RoutesProps) => {
     }
 
     return core.subscribe('registerModule', forceUpdate);
-  }, [core]);
+  }, [core, forceUpdate]);
 
   if (!core) {
     return null;
