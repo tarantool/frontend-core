@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.1.0]
+
 - Update `@tarantool.io/ui-kit` version to ^0.51.0
 - Update dependencies to fix audit issues.
 
