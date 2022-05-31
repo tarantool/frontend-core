@@ -15,8 +15,8 @@ export const changeTitleMiddleware = (store: Object) => (next: Function) => (act
   if (cachedAppName !== appName || cachedTitle !== title) {
     cachedAppName = appName;
     cachedTitle = title;
-    if (typeof window !== 'undefined') {
-      window.document.title = appName ? `${appName}: ${title}` : title;
+    if (typeof document !== 'undefined') {
+      document.title = appName ? `${appName}: ${title}` : title;
     }
   }
 
