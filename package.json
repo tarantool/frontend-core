@@ -1,6 +1,6 @@
 {
   "name": "@tarantool.io/frontend-core",
-  "version": "8.1.1",
+  "version": "8.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/tarantool/frontend-core.git"
@@ -18,8 +18,8 @@
     "lint": "eslint ./src",
     "prepublishOnly": "npm ci && npm run build_module",
     "start": "cross-env NODE_ENV=development tt-webpack serve",
-    "test": "node ./scripts/test.js test --env=jsdom",
-    "test_once": "node ./scripts/test.js test --env=jsdom --once --silent"
+    "test": "node ./scripts/test.js test",
+    "test_once": "node ./scripts/test.js test --once --silent"
   },
   "dependencies": {
     "@emotion/css": "11.7.1",
@@ -57,7 +57,7 @@
     "@tarantool.io/import-sort-style": "1.0.4",
     "@tarantool.io/prettier-config": "1.0.4",
     "@tarantool.io/typescript": "1.0.3",
-    "@tarantool.io/webpack-config": "2.0.4",
+    "@tarantool.io/webpack-config": "2.0.7",
     "babel-jest": "27.5.1",
     "cross-env": "7.0.3",
     "flow-bin": "0.120.1",

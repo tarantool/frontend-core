@@ -74,7 +74,7 @@ export const createCoreStore = (core: Core) => {
           type: constants.RESET,
           payload: {
             namespace: module.namespace,
-            path: window.location.pathname.slice(APP_PATH_PREFIX.length),
+            path: typeof window !== 'undefined' ? window.location.pathname.slice(APP_PATH_PREFIX.length) : '',
           },
         });
       }

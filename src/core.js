@@ -253,7 +253,7 @@ export default class Core {
   }
 
   install() {
-    const root = document.getElementById('root');
+    const root = typeof document !== 'undefined' ? document.getElementById('root') : undefined;
     if (root) {
       ReactDOM.render(createElement(App, { store: this.store, core: this }), root);
     } else {

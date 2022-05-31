@@ -1,6 +1,9 @@
 const { core } = require('../');
 
 test('install', () => {
-  document.body.innerHTML = '<div id="root"></div>';
+  if (typeof document !== 'undefined') {
+    document.body.innerHTML = '<div id="root"></div>';
+  }
+
   core.install();
 });
