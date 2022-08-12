@@ -3,7 +3,6 @@ import type { ComponentType } from 'react';
 import { createElement } from 'react';
 import ReactDOM from 'react-dom';
 import type { ReactComponentLike } from 'prop-types';
-import { TarantoolLogoFull } from '@tarantool.io/ui-kit';
 
 import pkg from '../package.json';
 import { generateAnalyticModule } from './analytics';
@@ -100,7 +99,6 @@ export type InputCoreModule = {
 
 export default class Core {
   reactTreeKey = 0;
-  logo = TarantoolLogoFull;
   version = pkg.version;
   components = {
     AppTitle,
