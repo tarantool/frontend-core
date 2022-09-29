@@ -51,7 +51,7 @@ export default ({ title, message, details, onDetailsClick, type, initedAt, class
     <div className={cx(styles.container, className)}>
       {iconMap[type] ? <img src={iconMap[type]} className={styles.icon} alt="icon" /> : null}
       <div className={styles.content}>{title}</div>
-      {message ? <div className={styles.content} dangerouslySetInnerHTML={{ __html: message }}></div> : null}
+      {message ? <div className={styles.content}>{message}</div> : null}
       <div className={styles.infoBlock}>
         {details && (
           <Button onClick={() => onDetailsClick(details)} intent="base" size="s">
