@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.2.2]
+
+- Fix xss in notifications widget
+
 ## [8.2.0 - 8.2.1]
 
 - Update dependencies.
